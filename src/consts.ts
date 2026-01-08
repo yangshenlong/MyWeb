@@ -6,27 +6,27 @@ export const SITE_DESCRIPTION = 'Technical Artist | Shader开发 | 渲染技术 
 
 export const AUTHOR = {
 	name: '杨慎龙',
-	email: 'your.email@example.com',
+	email: 'xgg000303@136.com',
 	github: 'https://github.com/yangshenlong',
-	location: '中国',
-	bio: 'Technical Artist，专注于实时渲染、Shader开发和工具链优化。'
+	location: '中国/南京市',
+	bio: '一个喜欢使用UE的小TA'
 };
 
 export const SOCIAL_LINKS = [
 	{
 		name: 'GitHub',
-		url: 'https://github.com/yangshenlong',
+		url: 'https://github.com/username',
 		icon: 'github'
 	},
 	{
-		name: 'ArtStation',
-		url: 'https://www.artstation.com',
-		icon: 'artstation'
+		name: 'Bilibili',
+		url: 'https://www.bilibili.com',
+		icon: 'bilibili'
 	},
 	{
-		name: 'LinkedIn',
-		url: 'https://linkedin.com',
-		icon: 'linkedin'
+		name: '知乎',
+		url: 'https://www.zhihu.com',
+		icon: 'zhihu'
 	}
 ];
 
