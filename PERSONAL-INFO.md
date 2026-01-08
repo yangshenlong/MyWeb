@@ -10,7 +10,7 @@
 ```yaml
 姓名: [杨慎龙]
 职位: Technical Artist
-邮箱: [xgg000303@136.com]
+邮箱: [xgg000303@163.com]
 GitHub: [https://github.com/username]    先留下占位符。
 bilibili: [https://www.artstation.com/username]   先留下占位符。
 知乎: [https://linkedin.com/in/username]           先留下占位符。

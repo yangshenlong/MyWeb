@@ -196,6 +196,45 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			</div>
 		</section>
 
+		<!-- Contact Section -->
+		<section class="contact-section">
+			<div class="contact-container">
+				<div class="section-header">
+					<div class="header-label">
+						<span class="label-line"></span>
+						<span class="label-text">联系方式</span>
+					</div>
+					<h2 class="section-title">联系我</h2>
+				</div>
+
+				<div class="contact-grid">
+					<GlassCard class="contact-card">
+						<div class="contact-icon">✉</div>
+						<h3 class="contact-title">邮箱</h3>
+						<a href="mailto:xgg000303@136.com" class="contact-value">xgg000303@136.com</a>
+					</GlassCard>
+
+					<GlassCard class="contact-card">
+						<div class="contact-icon">QQ</div>
+						<h3 class="contact-title">QQ</h3>
+						<span class="contact-value">2427900391</span>
+					</GlassCard>
+
+					<GlassCard class="contact-card">
+						<div class="contact-icon">💬</div>
+						<h3 class="contact-title">微信</h3>
+						<span class="contact-value">18365912171</span>
+					</GlassCard>
+
+					<GlassCard class="contact-card">
+						<div class="contact-icon">📱</div>
+						<h3 class="contact-title">手机</h3>
+						<span class="contact-value">+86 18365912171</span>
+					</GlassCard>
+				</div>
+			</div>
+		</section>
+
 		<!-- Footer -->
 		<footer class="arch-footer">
 			<div class="footer-content">
@@ -518,11 +557,74 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				color: rgba(255, 255, 255, 0.8);
 			}
 
+			/* Contact Section */
+			.contact-section {
+				padding: 6em 4em;
+				background: linear-gradient(
+					180deg,
+					#050505 0%,
+					#0a0a0a 50%,
+					#050505 100%
+				);
+			}
+
+			.contact-container {
+				max-width: 1200px;
+				margin: 0 auto;
+			}
+
+			.contact-grid {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 1.5em;
+			}
+
+			.contact-card {
+				min-height: 180px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 1em;
+				text-align: center;
+				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+			}
+
+			.contact-card:hover {
+				transform: translateY(-8px);
+			}
+
+			.contact-icon {
+				font-size: 2em;
+				opacity: 0.8;
+			}
+
+			.contact-title {
+				font-size: 0.9em;
+				font-weight: 400;
+				letter-spacing: 0.2em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.5);
+				margin: 0;
+			}
+
+			.contact-value {
+				font-size: 1.1em;
+				color: rgba(255, 255, 255, 0.9);
+				font-family: 'Space Mono', monospace;
+				word-break: break-all;
+			}
+
+			.contact-value:hover {
+				color: rgba(255, 255, 255, 1);
+			}
+
 			/* Responsive */
 			@media (max-width: 1024px) {
 				.page-header-section,
 				.skills-section,
-				.experience-section {
+				.experience-section,
+				.contact-section {
 					padding-left: 2em;
 					padding-right: 2em;
 				}
@@ -543,10 +645,18 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				.skills-grid {
 					grid-template-columns: repeat(2, 1fr);
 				}
+
+				.contact-grid {
+					grid-template-columns: repeat(2, 1fr);
+				}
 			}
 
 			@media (max-width: 768px) {
 				.skills-grid {
+					grid-template-columns: 1fr;
+				}
+
+				.contact-grid {
 					grid-template-columns: 1fr;
 				}
 
