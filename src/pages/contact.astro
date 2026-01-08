@@ -63,7 +63,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				</div>
 			</div>
 			<div class="header-decoration">
-				<span class="deco-number">03</span>
+				<span class="deco-number">05</span>
 			</div>
 		</section>
 
@@ -72,52 +72,41 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			<div class="contact-container">
 				<!-- Contact Info -->
 				<div class="contact-info">
-					<GlassCard class="info-card">
-						<div class="info-header">
-							<span class="info-number">01</span>
-							<h3 class="info-title">联系信息</h3>
+					<div class="contact-section-title">联系方式</div>
+					<div class="contact-links-simple">
+						<a href="mailto:xgg000303@163.com" class="contact-link-simple" data-copy="xgg000303@163.com">
+							<span class="contact-label-simple">邮箱</span>
+							<span class="contact-value-simple">xgg000303@163.com</span>
+						</a>
+						<div class="contact-link-simple" data-copy="2427900391">
+							<span class="contact-label-simple">QQ</span>
+							<span class="contact-value-simple">2427900391</span>
 						</div>
-						<div class="info-content">
-							<div class="info-item">
-								<span class="info-label">邮箱</span>
-								<a href="mailto:xgg000303@163.com" class="info-value">
-									xgg000303@163.com
-								</a>
-							</div>
-							<div class="info-item">
-								<span class="info-label">位置</span>
-								<span class="info-value">China</span>
-							</div>
-							<div class="info-item">
-								<span class="info-label">状态</span>
-								<span class="info-value">开放合作</span>
-							</div>
+						<div class="contact-link-simple" data-copy="18365912171">
+							<span class="contact-label-simple">微信</span>
+							<span class="contact-value-simple">18365912171</span>
 						</div>
-					</GlassCard>
+						<div class="contact-link-simple" data-copy="+86 18365912171">
+							<span class="contact-label-simple">手机</span>
+							<span class="contact-value-simple">+86 18365912171</span>
+						</div>
+					</div>
 
-					<GlassCard class="info-card">
-						<div class="info-header">
-							<span class="info-number">02</span>
-							<h3 class="info-title">社交媒体</h3>
-						</div>
-						<div class="social-links">
-							<a href="https://github.com/username" target="_blank" class="social-link">
-								<span class="social-icon">⌘</span>
-								<span class="social-text">GitHub</span>
-								<span class="social-arrow">→</span>
-							</a>
-							<a href="https://www.bilibili.com" target="_blank" class="social-link">
-								<span class="social-icon">◐</span>
-								<span class="social-text">Bilibili</span>
-								<span class="social-arrow">→</span>
-							</a>
-							<a href="https://www.zhihu.com" target="_blank" class="social-link">
-								<span class="social-icon">知</span>
-								<span class="social-text">知乎</span>
-								<span class="social-arrow">→</span>
-							</a>
-						</div>
-					</GlassCard>
+					<div class="contact-section-title">社交媒体</div>
+					<div class="social-links-simple">
+						<a href="https://github.com/username" target="_blank" class="social-link-simple">
+							<span class="social-label">GitHub</span>
+							<span class="social-arrow">→</span>
+						</a>
+						<a href="https://www.bilibili.com" target="_blank" class="social-link-simple">
+							<span class="social-label">Bilibili</span>
+							<span class="social-arrow">→</span>
+						</a>
+						<a href="https://www.zhihu.com" target="_blank" class="social-link-simple">
+							<span class="social-label">知乎</span>
+							<span class="social-arrow">→</span>
+						</a>
+					</div>
 				</div>
 
 				<!-- Contact Form -->
@@ -199,6 +188,39 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 		</footer>
 
 		<BackToTop />
+
+		<div class="copy-toast" id="copyToast">已复制</div>
+
+		<script>
+			// 点击复制功能
+			const contactLinks = document.querySelectorAll('.contact-link-simple');
+			const toast = document.getElementById('copyToast');
+
+			contactLinks.forEach(link => {
+				link.addEventListener('click', async (e) => {
+					// 对于邮箱链接，只在用户按住 Ctrl/Cmd 时才打开邮件客户端
+					if (link.tagName === 'A' && !e.ctrlKey && !e.metaKey) {
+						e.preventDefault();
+					} else if (link.tagName === 'A' && (e.ctrlKey || e.metaKey)) {
+						return; // 允许默认的邮件客户端打开
+					}
+
+					const textToCopy = link.getAttribute('data-copy');
+					if (textToCopy) {
+						try {
+							await navigator.clipboard.writeText(textToCopy);
+							// 显示复制提示
+							toast.classList.add('show');
+							setTimeout(() => {
+								toast.classList.remove('show');
+							}, 1500);
+						} catch (err) {
+							console.error('复制失败:', err);
+						}
+					}
+				});
+			});
+		</script>
 
 		<style>
 			.page-header-section {
@@ -290,92 +312,77 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			.contact-info {
 				display: flex;
 				flex-direction: column;
-				gap: 2em;
+				gap: 3em;
 			}
 
-			.info-card {
-				min-height: auto;
-			}
-
-			.info-header {
-				display: flex;
-				align-items: center;
-				gap: 1em;
-				margin-bottom: 2em;
-				padding-bottom: 1.5em;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-			}
-
-			.info-number {
+			.contact-section-title {
 				font-size: 0.7em;
-				font-weight: 300;
-				letter-spacing: 0.2em;
-				color: rgba(255, 255, 255, 0.3);
+				letter-spacing: 0.3em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.4);
+				margin-bottom: 1.5em;
 				font-family: 'Space Mono', monospace;
 			}
 
-			.info-title {
-				font-size: 1.2em;
-				font-weight: 400;
-				color: rgba(255, 255, 255, 0.9);
-				margin: 0;
-			}
-
-			.info-content {
+			.contact-links-simple {
 				display: flex;
 				flex-direction: column;
-				gap: 1.5em;
+				gap: 1em;
 			}
 
-			.info-item {
+			.contact-link-simple {
 				display: flex;
-				flex-direction: column;
-				gap: 0.5em;
+				align-items: center;
+				gap: 1em;
+				cursor: pointer;
+				transition: all 0.3s ease;
 			}
 
-			.info-label {
+			.contact-link-simple:hover {
+				transform: translateX(5px);
+			}
+
+			.contact-label-simple {
 				font-size: 0.75em;
 				letter-spacing: 0.15em;
 				text-transform: uppercase;
 				color: rgba(255, 255, 255, 0.4);
+				font-family: 'Space Mono', monospace;
+				min-width: 3em;
 			}
 
-			.info-value {
-				font-size: 1em;
+			.contact-value-simple {
+				font-size: 0.95em;
 				color: rgba(255, 255, 255, 0.8);
+				font-family: 'Space Mono', monospace;
 				transition: color 0.3s ease;
 			}
 
-			.info-value:hover {
+			.contact-link-simple:hover .contact-value-simple {
 				color: rgba(255, 255, 255, 1);
 			}
 
-			.social-links {
+			.social-links-simple {
 				display: flex;
 				flex-direction: column;
 				gap: 1em;
 			}
 
-			.social-link {
+			.social-link-simple {
 				display: flex;
 				align-items: center;
-				gap: 1em;
-				padding: 1em 0;
+				justify-content: space-between;
+				padding: 0.75em 0;
 				color: rgba(255, 255, 255, 0.7);
 				transition: all 0.3s ease;
 			}
 
-			.social-link:hover {
+			.social-link-simple:hover {
 				color: rgba(255, 255, 255, 1);
 				transform: translateX(5px);
 			}
 
-			.social-icon {
-				font-size: 1.2em;
-			}
-
-			.social-text {
-				flex: 1;
+			.social-label {
 				font-size: 0.9em;
 			}
 
@@ -384,9 +391,31 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				transition: opacity 0.3s ease, transform 0.3s ease;
 			}
 
-			.social-link:hover .social-arrow {
+			.social-link-simple:hover .social-arrow {
 				opacity: 1;
 				transform: translateX(5px);
+			}
+
+			.copy-toast {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				padding: 1em 2em;
+				background: rgba(255, 255, 255, 0.95);
+				color: #050505;
+				font-size: 0.9em;
+				font-weight: 500;
+				letter-spacing: 0.1em;
+				border-radius: 2px;
+				opacity: 0;
+				pointer-events: none;
+				transition: all 0.3s ease;
+				z-index: 1000;
+			}
+
+			.copy-toast.show {
+				opacity: 1;
 			}
 
 			/* Form */
