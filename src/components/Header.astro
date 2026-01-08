@@ -73,34 +73,45 @@ import HeaderLink from './HeaderLink.astro';
 	.internal-links {
 		display: flex;
 		gap: 0.5em;
+		position: relative;
+		padding: 0.3em;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 50px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
 	}
 
 	.internal-links a {
 		background: transparent;
 		color: rgba(255, 255, 255, 0.7);
-		padding: 0.6em 1.2em;
-		border: 1px solid rgba(255, 255, 255, 0.1);
-		transition: all 0.3s ease;
+		padding: 0.6em 1.5em;
+		border: none;
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 		font-weight: 500;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		font-size: 0.85em;
 		text-decoration: none;
 		display: inline-block;
-		border-radius: 8px;
+		border-radius: 50px;
+		position: relative;
+		z-index: 2;
 	}
 
 	.internal-links a:hover {
-		background: rgba(255, 255, 255, 0.1);
 		color: #ffffff;
-		border-color: rgba(255, 255, 255, 0.2);
-		transform: translateY(-2px);
+		transform: scale(1.05);
 	}
 
 	.internal-links a.active {
-		background: rgba(99, 102, 241, 0.2);
+		background: #FF4F00;
 		color: #ffffff;
-		border-color: rgba(99, 102, 241, 0.5);
+		box-shadow: 0 4px 15px rgba(255, 79, 0, 0.4);
+		transform: scale(1.05);
+	}
+
+	.internal-links a.active:hover {
+		box-shadow: 0 6px 20px rgba(255, 79, 0, 0.6);
+		transform: scale(1.08);
 	}
 
 	.social-links {
