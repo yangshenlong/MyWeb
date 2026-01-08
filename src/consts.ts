@@ -6,7 +6,7 @@ export const SITE_DESCRIPTION = 'Technical Artist | Shader开发 | 渲染技术 
 
 export const AUTHOR = {
 	name: '杨慎龙',
-	email: 'xgg000303@136.com',
+	email: 'xgg000303@163.com',
 	github: 'https://github.com/yangshenlong',
 	location: '中国/南京市',
 	bio: '一个喜欢使用UE的小TA'
