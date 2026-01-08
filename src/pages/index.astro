@@ -12,6 +12,7 @@ import ParallaxSection from '../components/ParallaxSection.astro';
 import MagneticButton from '../components/MagneticButton.astro';
 import GradientText from '../components/GradientText.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
+import CountUpNumber from '../components/CountUpNumber.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
@@ -395,11 +396,11 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 									</p>
 							<div class="showcase-stats">
 								<div class="stat-item">
-									<div class="stat-number">5+</div>
+									<div class="stat-number"><CountUpNumber target={5} suffix="+" /></div>
 									<div class="stat-label">文章</div>
 								</div>
 								<div class="stat-item">
-									<div class="stat-number">3</div>
+									<div class="stat-number"><CountUpNumber target={3} /></div>
 									<div class="stat-label">分类</div>
 								</div>
 							</div>

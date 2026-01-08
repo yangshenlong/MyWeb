@@ -5,6 +5,10 @@ import Header from '../../components/Header.astro';
 import PageLoader from '../../components/PageLoader.astro';
 import ScrollProgress from '../../components/ScrollProgress.astro';
 import BackToTop from '../../components/BackToTop.astro';
+import CursorGlow from '../../components/CursorGlow.astro';
+import ScrollReveal from '../../components/ScrollReveal.astro';
+import GradientText from '../../components/GradientText.astro';
+import MagneticButton from '../../components/MagneticButton.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 ---
 
@@ -47,24 +51,28 @@ const education = [
 	<body class="dark">
 		<PageLoader />
 		<ScrollProgress />
+		<CursorGlow />
 		<Header />
 
 		<main class="resume-page">
-			<div class="page-header">
-				<div class="header-content">
-					<div class="header-label">RESUME</div>
-					<h1 class="header-title">杨慎龙</h1>
-					<p class="header-subtitle">热爱技术的开发者 · 追求卓越</p>
+			<ScrollReveal>
+				<div class="page-header">
+					<div class="header-content">
+						<div class="header-label">RESUME</div>
+						<h1 class="header-title"><GradientText>杨慎龙</GradientText></h1>
+						<p class="header-subtitle">热爱技术的开发者 · 追求卓越</p>
+					</div>
 				</div>
-			</div>
+			</ScrollReveal>
 
 			<div class="resume-content">
 				<!-- 基本信息 -->
-				<section class="resume-section">
-					<h2 class="section-title">
-						<span class="title-icon">👤</span>
-						关于我
-					</h2>
+				<ScrollReveal delay={0}>
+					<section class="resume-section">
+						<h2 class="section-title">
+							<span class="title-icon">👤</span>
+							关于我
+						</h2>
 					<div class="section-content">
 						<p class="bio">
 							我是一名热爱技术的开发者，专注于前端开发和 Web 技术。
@@ -95,13 +103,15 @@ const education = [
 						</div>
 					</div>
 				</section>
+				</ScrollReveal>
 
 				<!-- 技能 -->
-				<section class="resume-section">
-					<h2 class="section-title">
-						<span class="title-icon">💻</span>
-						专业技能
-					</h2>
+				<ScrollReveal delay={100}>
+					<section class="resume-section">
+						<h2 class="section-title">
+							<span class="title-icon">💻</span>
+							专业技能
+						</h2>
 					<div class="section-content">
 						{skills.map((skillGroup) => (
 							<div class="skill-group">
@@ -115,13 +125,15 @@ const education = [
 						))}
 					</div>
 				</section>
+				</ScrollReveal>
 
 				<!-- 工作经历 -->
-				<section class="resume-section">
-					<h2 class="section-title">
-						<span class="title-icon">💼</span>
-						工作经历
-					</h2>
+				<ScrollReveal delay={200}>
+					<section class="resume-section">
+						<h2 class="section-title">
+							<span class="title-icon">💼</span>
+							工作经历
+						</h2>
 					<div class="section-content">
 						<div class="timeline">
 							{experience.map((job) => (
@@ -138,13 +150,15 @@ const education = [
 						</div>
 					</div>
 				</section>
+				</ScrollReveal>
 
 				<!-- 教育背景 -->
-				<section class="resume-section">
-					<h2 class="section-title">
-						<span class="title-icon">🎓</span>
-						教育背景
-					</h2>
+				<ScrollReveal delay={300}>
+					<section class="resume-section">
+						<h2 class="section-title">
+							<span class="title-icon">🎓</span>
+							教育背景
+						</h2>
 					<div class="section-content">
 						<div class="timeline">
 							{education.map((edu) => (
@@ -161,30 +175,33 @@ const education = [
 						</div>
 					</div>
 				</section>
+				</ScrollReveal>
 			</div>
 
 			<!-- 下载简历 -->
-			<div class="cta-section">
-				<h2 class="cta-title">想要我的简历？</h2>
-				<p class="cta-description">可以下载 PDF 版本的简历，或通过邮件联系我</p>
-				<div class="cta-buttons">
-					<a href="#" class="cta-button primary">
-						<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-							<polyline points="7 10 12 15 17 10"></polyline>
-							<line x1="12" y1="15" x2="12" y2="3"></line>
-						</svg>
-						下载 PDF
-					</a>
-					<a href="mailto:your.email@example.com" class="cta-button secondary">
-						<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-							<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-							<polyline points="22,6 12,13 2,6"></polyline>
-						</svg>
-						联系我
-					</a>
+			<ScrollReveal>
+				<div class="cta-section">
+					<h2 class="cta-title">想要我的简历？</h2>
+					<p class="cta-description">可以下载 PDF 版本的简历，或通过邮件联系我</p>
+					<div class="cta-buttons">
+						<MagneticButton href="#" class="cta-button primary">
+							<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+								<polyline points="7 10 12 15 17 10"></polyline>
+								<line x1="12" y1="15" x2="12" y2="3"></line>
+							</svg>
+							下载 PDF
+						</MagneticButton>
+						<MagneticButton href="mailto:your.email@example.com" class="cta-button secondary">
+							<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+								<polyline points="22,6 12,13 2,6"></polyline>
+							</svg>
+							联系我
+						</MagneticButton>
+					</div>
 				</div>
-			</div>
+			</ScrollReveal>
 		</main>
 
 		<BackToTop />

@@ -8,6 +8,9 @@ import Header from '../../components/Header.astro';
 import PageLoader from '../../components/PageLoader.astro';
 import ScrollProgress from '../../components/ScrollProgress.astro';
 import BackToTop from '../../components/BackToTop.astro';
+import CursorGlow from '../../components/CursorGlow.astro';
+import ScrollReveal from '../../components/ScrollReveal.astro';
+import GradientText from '../../components/GradientText.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
@@ -170,36 +173,41 @@ const posts = (await getCollection('blog')).sort(
 	<body class="dark">
 		<PageLoader />
 		<ScrollProgress />
+		<CursorGlow />
 		<Header />
 		<main>
-			<div class="page-header">
-				<span class="page-label">BLOG</span>
-				<h1>技术文章</h1>
-				<p style="color: rgba(255, 255, 255, 0.6); font-size: 1.1em; max-width: 600px; margin: 0 auto;">
-					分享技术心得，记录学习历程，探索编程世界
-				</p>
-			</div>
+			<ScrollReveal>
+				<div class="page-header">
+					<span class="page-label">BLOG</span>
+					<h1><GradientText>技术文章</GradientText></h1>
+					<p style="color: rgba(255, 255, 255, 0.6); font-size: 1.1em; max-width: 600px; margin: 0 auto;">
+						分享技术心得，记录学习历程，探索编程世界
+					</p>
+				</div>
+			</ScrollReveal>
 
 			<ul class="posts-grid">
-				{posts.map((post) => (
-					<li class="post-card">
-						<a href={`/blog/${post.id}/`}>
-							{post.data.heroImage && (
-								<div class="post-image">
-									<Image width={720} height={360} src={post.data.heroImage} alt="" />
-								</div>
-							)}
-							<div class="post-content">
-								<h2 class="post-title">{post.data.title}</h2>
-								<div class="post-date">
-									<FormattedDate date={post.data.pubDate} />
-								</div>
-								{post.data.description && (
-									<p class="post-description">{post.data.description}</p>
+				{posts.map((post, index) => (
+					<ScrollReveal delay={index * 100}>
+						<li class="post-card">
+							<a href={`/blog/${post.id}/`}>
+								{post.data.heroImage && (
+									<div class="post-image">
+										<Image width={720} height={360} src={post.data.heroImage} alt="" />
+									</div>
 								)}
-							</div>
-						</a>
-					</li>
+								<div class="post-content">
+									<h2 class="post-title">{post.data.title}</h2>
+									<div class="post-date">
+										<FormattedDate date={post.data.pubDate} />
+									</div>
+									{post.data.description && (
+										<p class="post-description">{post.data.description}</p>
+									)}
+								</div>
+							</a>
+						</li>
+					</ScrollReveal>
 				))}
 			</ul>
 		</main>

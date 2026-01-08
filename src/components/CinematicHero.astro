@@ -31,7 +31,7 @@ const {
 	<div class="hero-content">
 		<div class="title-wrapper">
 			<h1 class="hero-title">
-				<span class="title-line">{title}</span>
+				<span class="title-line typing-text">{title}</span>
 			</h1>
 			<div class="title-decoration"></div>
 		</div>
@@ -71,6 +71,31 @@ const {
 		<div class="particle"></div>
 	</div>
 </section>
+
+<script>
+	const typingText = document.querySelector('.typing-text');
+	if (typingText) {
+		const text = typingText.textContent;
+		typingText.textContent = '';
+		let index = 0;
+
+		function type() {
+			if (index < text.length) {
+				typingText.textContent += text.charAt(index);
+				index++;
+				setTimeout(type, 100);
+			} else {
+				// 打字完成后移除光标效果
+				setTimeout(() => {
+					typingText.style.borderRight = 'none';
+				}, 1000);
+			}
+		}
+
+		// 延迟开始打字动画
+		setTimeout(type, 500);
+	}
+</script>
 
 <style>
 	.cinematic-hero {
@@ -257,6 +282,23 @@ const {
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
 		animation: titleGlow 3s ease-in-out infinite alternate;
+	}
+
+	.typing-text {
+		border-right: 3px solid rgba(255, 255, 255, 0.7);
+		animation: blink 0.7s step-end infinite;
+		white-space: nowrap;
+		overflow: hidden;
+		display: inline-block;
+	}
+
+	@keyframes blink {
+		0%, 50% {
+			border-color: rgba(255, 255, 255, 0.7);
+		}
+		51%, 100% {
+			border-color: transparent;
+		}
 	}
 
 	@keyframes titleGlow {

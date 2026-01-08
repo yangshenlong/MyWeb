@@ -1,0 +1,66 @@
+---
+/**
+ * 数字滚动动画组件
+ * 数字从0滚动到目标值
+ */
+
+interface Props {
+	target: number;
+	duration?: number;
+	suffix?: string;
+}
+
+const { target, duration = 2000, suffix = '' } = Astro.props;
+---
+
+<span class="count-up" data-target={target} data-duration={duration} data-suffix={suffix}>0</span>
+
+<style>
+	.count-up {
+		font-variant-numeric: tabular-nums;
+	}
+</style>
+
+<script>
+	document.querySelectorAll('.count-up').forEach(el => {
+		const target = parseFloat(el.dataset.target || '0');
+		const duration = parseInt(el.dataset.duration || '2000');
+		const suffix = el.dataset.suffix || '';
+		const startTime = performance.now();
+		const startValue = 0;
+
+		function update(currentTime) {
+			const elapsed = currentTime - startTime;
+			const progress = Math.min(elapsed / duration, 1);
+
+			// 使用 easeOutQuart 缓动函数
+			const easeProgress = 1 - Math.pow(1 - progress, 4);
+			const currentValue = startValue + (target - startValue) * easeProgress;
+
+			// 格式化数字
+			if (Number.isInteger(target)) {
+				el.textContent = Math.floor(currentValue) + suffix;
+			} else {
+				el.textContent = currentValue.toFixed(1) + suffix;
+			}
+
+			if (progress < 1) {
+				requestAnimationFrame(update);
+			} else {
+				el.textContent = target + suffix;
+			}
+		}
+
+		// 使用 IntersectionObserver 在元素进入视口时开始动画
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					requestAnimationFrame(update);
+					observer.unobserve(entry.target);
+				}
+			});
+		}, { threshold: 0.5 });
+
+		observer.observe(el);
+	});
+</script>
