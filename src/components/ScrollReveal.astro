@@ -67,7 +67,7 @@ const {
 	};
 
 	const observer = new IntersectionObserver((entries) => {
-	_entries.forEach(entry => {
+		entries.forEach(entry => {
 			if (entry.isIntersecting) {
 				entry.target.classList.add('revealed');
 				// 可选：观察后停止观察

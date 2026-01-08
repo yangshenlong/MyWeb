@@ -1,0 +1,417 @@
+---
+import HeaderArchitectural from '../components/HeaderArchitectural.astro';
+import GlassCard from '../components/GlassCard.astro';
+import BackToTop from '../components/BackToTop.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+// 博客文章列表 - 使用新的 API
+const posts = await import.meta.glob('./blog/**/*.md', { eager: true });
+const allPosts = Object.values(posts);
+
+// 按日期排序
+const sortedPosts = allPosts.sort((a, b) =>
+	Math.floor(new Date(b.frontmatter.date).getTime() / 1000) -
+	Math.floor(new Date(a.frontmatter.date).getTime() / 1000)
+);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>博客 | {SITE_TITLE}</title>
+		<meta name="description" content={SITE_DESCRIPTION} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+		<style is:global>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+				background: #050505;
+				color: rgba(255, 255, 255, 0.9);
+				line-height: 1.6;
+			}
+
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<ScrollProgress />
+		<HeaderArchitectural />
+
+		<!-- Page Header -->
+		<section class="page-header">
+			<div class="header-content">
+				<div class="breadcrumb">
+					<span class="breadcrumb-item">
+						<a href="/">首页</a>
+					</span>
+					<span class="breadcrumb-separator">/</span>
+					<span class="breadcrumb-item current">博客</span>
+				</div>
+				<h1 class="page-title">技术文章</h1>
+				<p class="page-subtitle">Technical Articles</p>
+			</div>
+			<div class="header-decoration">
+				<span class="deco-number">06</span>
+			</div>
+		</section>
+
+		<!-- Blog Grid -->
+		<section class="blog-section">
+			<div class="blog-container">
+				{sortedPosts.length > 0 ? (
+					<div class="posts-grid">
+						{sortedPosts.map((post, index) => (
+							<article class="post-item" style={`--delay: ${index * 100}ms`}>
+								<a href={post.url} class="post-link">
+									<GlassCard class="post-card">
+										<div class="post-meta">
+											<time class="post-date">
+												{new Date(post.frontmatter.date).toLocaleDateString('zh-CN', {
+													year: 'numeric',
+													month: '2-digit',
+													day: '2-digit'
+												})}
+											</time>
+											{post.frontmatter.category && (
+												<span class="post-category">{post.frontmatter.category}</span>
+											)}
+										</div>
+										<h2 class="post-title">{post.frontmatter.title}</h2>
+										{post.frontmatter.description && (
+											<p class="post-description">{post.frontmatter.description}</p>
+										)}
+										{post.frontmatter.tags && (
+											<div class="post-tags">
+												{post.frontmatter.tags.map((tag: string) => (
+													<span class="tag">{tag}</span>
+												))}
+											</div>
+										)}
+									</GlassCard>
+								</a>
+							</article>
+						))}
+					</div>
+				) : (
+					<div class="empty-state">
+						<div class="empty-message">
+							<h3>暂无文章</h3>
+							<p>敬请期待更多技术分享</p>
+						</div>
+					</div>
+				)}
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer class="arch-footer">
+			<div class="footer-content">
+				<div class="footer-left">
+					<span class="footer-text">© 2024 杨慎龙</span>
+					<span class="footer-divider">·</span>
+					<span class="footer-text">Technical Artist</span>
+				</div>
+				<div class="footer-right">
+					<a href="https://github.com/yangshenlong" target="_blank" class="footer-link">GitHub</a>
+					<a href="https://www.artstation.com" target="_blank" class="footer-link">ArtStation</a>
+					<a href="https://linkedin.com" target="_blank" class="footer-link">LinkedIn</a>
+				</div>
+			</div>
+		</footer>
+
+		<BackToTop />
+
+		<style>
+			.page-header {
+				padding: 180px 4em 6em;
+				background: #050505;
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				max-width: 1600px;
+				margin: 0 auto;
+			}
+
+			.header-content {
+				flex: 1;
+			}
+
+			.breadcrumb {
+				display: flex;
+				align-items: center;
+				gap: 0.75em;
+				margin-bottom: 1.5em;
+			}
+
+			.breadcrumb-item {
+				font-size: 0.75em;
+				letter-spacing: 0.2em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.4);
+				transition: color 0.3s ease;
+			}
+
+			.breadcrumb-item:hover {
+				color: rgba(255, 255, 255, 0.7);
+			}
+
+			.breadcrumb-item.current {
+				color: rgba(255, 255, 255, 0.7);
+			}
+
+			.breadcrumb-separator {
+				color: rgba(255, 255, 255, 0.2);
+			}
+
+			.page-title {
+				font-size: clamp(3em, 8vw, 6em);
+				font-weight: 200;
+				letter-spacing: -0.03em;
+				line-height: 1;
+				margin: 0 0 0.5em 0;
+			}
+
+			.page-subtitle {
+				font-size: 1em;
+				letter-spacing: 0.2em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.4);
+				margin: 0;
+			}
+
+			.header-decoration {
+				position: relative;
+			}
+
+			.deco-number {
+				font-size: 8em;
+				font-weight: 100;
+				color: rgba(255, 255, 255, 0.03);
+				font-family: 'Space Mono', monospace;
+				line-height: 1;
+			}
+
+			/* Blog Section */
+			.blog-section {
+				padding: 6em 4em;
+				background: #050505;
+			}
+
+			.blog-container {
+				max-width: 1200px;
+				margin: 0 auto;
+			}
+
+			.posts-grid {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 2em;
+			}
+
+			.post-item {
+				animation: fadeInUp 0.6s ease-out backwards;
+				animation-delay: var(--delay);
+			}
+
+			@keyframes fadeInUp {
+				from {
+					opacity: 0;
+					transform: translateY(30px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			.post-link {
+				display: block;
+			}
+
+			.post-card {
+				height: 100%;
+				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+			}
+
+			.post-card:hover {
+				transform: translateY(-8px);
+			}
+
+			.post-meta {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 1.5em;
+				padding-bottom: 1em;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+			}
+
+			.post-date {
+				font-size: 0.8em;
+				color: rgba(255, 255, 255, 0.5);
+				font-family: 'Space Mono', monospace;
+			}
+
+			.post-category {
+				font-size: 0.7em;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.4);
+				padding: 0.3em 0.8em;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+			}
+
+			.post-title {
+				font-size: 1.5em;
+				font-weight: 300;
+				letter-spacing: -0.02em;
+				color: rgba(255, 255, 255, 0.95);
+				margin: 0 0 1em 0;
+				line-height: 1.4;
+			}
+
+			.post-description {
+				font-size: 0.95em;
+				line-height: 1.7;
+				color: rgba(255, 255, 255, 0.6);
+				margin: 0 0 1.5em 0;
+			}
+
+			.post-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5em;
+			}
+
+			.tag {
+				font-size: 0.7em;
+				letter-spacing: 0.1em;
+				padding: 0.3em 0.8em;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				color: rgba(255, 255, 255, 0.5);
+			}
+
+			/* Empty State */
+			.empty-state {
+				text-align: center;
+				padding: 8em 0;
+			}
+
+			.empty-message h3 {
+				font-size: 2em;
+				font-weight: 300;
+				color: rgba(255, 255, 255, 0.7);
+				margin-bottom: 1em;
+			}
+
+			.empty-message p {
+				font-size: 1em;
+				color: rgba(255, 255, 255, 0.5);
+			}
+
+			/* Footer */
+			.arch-footer {
+				padding: 3em 4em;
+				background: #030303;
+				border-top: 1px solid rgba(255, 255, 255, 0.05);
+			}
+
+			.footer-content {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.footer-left {
+				display: flex;
+				align-items: center;
+				gap: 1em;
+			}
+
+			.footer-text {
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.4);
+			}
+
+			.footer-divider {
+				color: rgba(255, 255, 255, 0.2);
+			}
+
+			.footer-right {
+				display: flex;
+				gap: 2em;
+			}
+
+			.footer-link {
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.5);
+				transition: color 0.3s ease;
+			}
+
+			.footer-link:hover {
+				color: rgba(255, 255, 255, 0.8);
+			}
+
+			/* Responsive */
+			@media (max-width: 1024px) {
+				.page-header,
+				.blog-section {
+					padding-left: 2em;
+					padding-right: 2em;
+				}
+
+				.page-header {
+					flex-direction: column;
+					gap: 2em;
+				}
+
+				.header-decoration {
+					align-self: flex-end;
+				}
+
+				.deco-number {
+					font-size: 4em;
+				}
+
+				.posts-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			@media (max-width: 768px) {
+				.footer-content {
+					flex-direction: column;
+					gap: 1.5em;
+					text-align: center;
+				}
+
+				.footer-left {
+					flex-direction: column;
+					gap: 0.5em;
+				}
+
+				.footer-right {
+					gap: 1.5em;
+				}
+			}
+		</style>
+	</body>
+</html>

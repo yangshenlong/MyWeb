@@ -1,0 +1,485 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import PageLoader from '../components/PageLoader.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import BackToTop from '../components/BackToTop.astro';
+import CursorGlow from '../components/CursorGlow.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+import GradientText from '../components/GradientText.astro';
+import MagneticButton from '../components/MagneticButton.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+const shaders = [
+	{
+		name: 'Water Surface Shader',
+		category: 'Environment',
+		description: '基于Gerstner波的实时水面效果，支持反射、折射和泡沫',
+		technique: 'Gerstner Wave, SSR, GrabPass',
+		thumbnail: '/assets/water-shader-thumb.jpg',
+		video: '/assets/water-shader-demo.mp4',
+		tags: ['Water', 'Simulation', 'Physics'],
+		complexity: 'Advanced'
+	},
+	{
+		name: 'Hologram Effect',
+		category: 'VFX',
+		description: '全息投影效果，包含扫描线、色差和glow效果',
+		technique: 'Fresnel, RGB Shift, Scanlines',
+		thumbnail: '/assets/hologram-thumb.jpg',
+		tags: ['Sci-Fi', 'Post-Process', 'UI'],
+		complexity: 'Intermediate'
+	},
+	{
+		name: 'Volumetric Clouds',
+		category: 'Environment',
+		description: '体积云渲染，支持动态光照和阴影投射',
+		technique: 'Raymarching, Noise, Light Scattering',
+		thumbnail: '/assets/clouds-thumb.jpg',
+		tags: ['Clouds', 'Atmosphere', 'Sky'],
+		complexity: 'Advanced'
+	},
+	{
+		name: 'Dissolve Effect',
+		category: 'VFX',
+		description: '可自定义的消融效果，支持边缘发光和粒子发射',
+		technique: 'Clip, Noise, Rim Light',
+		thumbnail: '/assets/dissolve-thumb.jpg',
+		tags: ['Destruction', 'Transition', 'VFX'],
+		complexity: 'Beginner'
+	},
+	{
+		name: 'Toon Shader',
+		category: 'Stylized',
+		description: '卡通渲染着色器，支持Ramp贴图和轮廓线',
+		technique: 'Cel Shading, Ramp Texture, Sobel',
+		thumbnail: '/assets/toon-thumb.jpg',
+		tags: ['NPR', 'Anime', 'Stylized'],
+		complexity: 'Intermediate'
+	},
+	{
+		name: 'Fur Shader',
+		category: 'Character',
+		description: '基于Geometry Shader的毛发渲染系统',
+		technique: 'Geometry Shader, Fin Simulation, Shell Method',
+		thumbnail: '/assets/fur-thumb.jpg',
+		tags: ['Hair', 'Fur', 'Character'],
+		complexity: 'Advanced'
+	},
+	{
+		name: 'Portal Effect',
+		category: 'VFX',
+		description: '传送门效果，包含粒子扭曲和空间扭曲',
+		technique: 'Distortion, Particle System, UV Animation',
+		thumbnail: '/assets/portal-thumb.jpg',
+		tags: ['Sci-Fi', 'VFX', 'Magic'],
+		complexity: 'Intermediate'
+	},
+	{
+		name: 'Ice Shader',
+		category: 'Environment',
+		description: '冰材质着色器，包含次表面散射和折射',
+		technique: 'SSS, Refraction, Caustics',
+		thumbnail: '/assets/ice-thumb.jpg',
+		tags: ['Ice', 'SSS', 'Transparent'],
+		complexity: 'Advanced'
+	},
+	{
+		name: 'Force Field',
+		category: 'VFX',
+		description: '力场可视化效果，用于编辑器调试',
+		technique: 'Geometry Shader, Flow Field',
+		thumbnail: '/assets/forcefield-thumb.jpg',
+		tags: ['Debug', 'Visualization', 'Editor'],
+		complexity: 'Beginner'
+	}
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`Shader画廊 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+	</head>
+	<body class="dark">
+		<PageLoader />
+		<ScrollProgress />
+		<CursorGlow />
+		<Header />
+
+		<main class="shaders-page">
+			<ScrollReveal>
+				<div class="page-header">
+					<div class="header-content">
+						<div class="header-label">SHADER GALLERY</div>
+						<h1 class="header-title"><GradientText>Shader作品集</GradientText></h1>
+						<p class="header-description">
+							展示各种Shader效果和技术实现，从基础到高级，
+							涵盖环境、角色、特效等多个领域。
+						</p>
+					</div>
+				</div>
+			</ScrollReveal>
+
+			<!-- 分类筛选 -->
+			<ScrollReveal delay={100}>
+				<div class="filter-section">
+					<button class="filter-btn active" data-filter="all">全部</button>
+					<button class="filter-btn" data-filter="Environment">环境</button>
+					<button class="filter-btn" data-filter="Character">角色</button>
+					<button class="filter-btn" data-filter="VFX">特效</button>
+					<button class="filter-btn" data-filter="Stylized">风格化</button>
+				</div>
+			</ScrollReveal>
+
+			<!-- Shader网格 -->
+			<div class="shaders-grid">
+				{shaders.map((shader, index) => (
+					<ScrollReveal delay={index * 50}>
+						<div class="shader-card" data-category={shader.category}>
+							<div class="shader-preview">
+								<div class="preview-placeholder">
+									<span class="preview-icon">▶</span>
+								</div>
+								<div class="shader-overlay">
+									<span class="complexity-badge">{shader.complexity}</span>
+								</div>
+							</div>
+							<div class="shader-content">
+								<div class="shader-category">{shader.category}</div>
+								<h3 class="shader-name">{shader.name}</h3>
+								<p class="shader-description">{shader.description}</p>
+								<div class="shader-technique">
+									<span class="technique-label">技术：</span>
+									<span>{shader.technique}</span>
+								</div>
+								<div class="shader-tags">
+									{shader.tags.map(tag => (
+										<span class="tag">{tag}</span>
+									))}
+								</div>
+							</div>
+						</div>
+					</ScrollReveal>
+				))}
+			</div>
+
+			<!-- CTA区域 -->
+			<ScrollReveal>
+				<div class="cta-section">
+					<div class="cta-content">
+						<h2 class="cta-title">想要了解更多？</h2>
+						<p class="cta-description">
+							查看我的GitHub仓库，获取Shader源代码和实现细节
+						</p>
+						<div class="cta-buttons">
+							<MagneticButton href="https://github.com/yangshenlong" target="_blank">
+								<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+									<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+								</svg>
+								查看GitHub
+							</MagneticButton>
+							<MagneticButton href="/contact">
+								联系我
+							</MagneticButton>
+						</div>
+					</div>
+				</div>
+			</ScrollReveal>
+		</main>
+
+		<BackToTop />
+		<Footer />
+
+		<style>
+			.shaders-page {
+				min-height: 100vh;
+				background: #0a0a0a;
+			}
+
+			.page-header {
+				padding: 6em 2em 4em;
+				text-align: center;
+				background: linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
+				border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+			}
+
+			.header-content {
+				max-width: 800px;
+				margin: 0 auto;
+			}
+
+			.header-label {
+				display: inline-block;
+				padding: 0.5em 1.5em;
+				background: rgba(99, 102, 241, 0.2);
+				border: 1px solid rgba(99, 102, 241, 0.3);
+				color: rgba(255, 255, 255, 0.9);
+				font-size: 0.85em;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin-bottom: 1.5em;
+				border-radius: 50px;
+			}
+
+			.header-title {
+				font-size: clamp(2.5em, 8vw, 5em);
+				font-weight: 800;
+				color: #ffffff;
+				margin: 0 0 0.5em 0;
+				line-height: 1.1;
+				letter-spacing: -0.02em;
+			}
+
+			.header-description {
+				font-size: 1.2em;
+				color: rgba(255, 255, 255, 0.6);
+				line-height: 1.7;
+				max-width: 600px;
+				margin: 0 auto;
+			}
+
+			/* 分类筛选 */
+			.filter-section {
+				display: flex;
+				justify-content: center;
+				gap: 1em;
+				padding: 2em;
+				flex-wrap: wrap;
+			}
+
+			.filter-btn {
+				padding: 0.75em 1.5em;
+				background: rgba(255, 255, 255, 0.05);
+				color: rgba(255, 255, 255, 0.7);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 50px;
+				font-size: 0.9em;
+				font-weight: 500;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.filter-btn:hover {
+				background: rgba(99, 102, 241, 0.2);
+				border-color: rgba(99, 102, 241, 0.3);
+				color: #ffffff;
+			}
+
+			.filter-btn.active {
+				background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+				border-color: transparent;
+				color: #ffffff;
+			}
+
+			/* Shader网格 */
+			.shaders-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+				gap: 2em;
+				max-width: 1400px;
+				margin: 0 auto;
+				padding: 4em 2em;
+			}
+
+			.shader-card {
+				background: rgba(255, 255, 255, 0.02);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 16px;
+				overflow: hidden;
+				transition: all 0.4s ease;
+			}
+
+			.shader-card:hover {
+				transform: translateY(-8px);
+				border-color: rgba(99, 102, 241, 0.3);
+				box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(99, 102, 241, 0.2);
+			}
+
+			.shader-preview {
+				width: 100%;
+				height: 240px;
+				position: relative;
+				background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+				overflow: hidden;
+			}
+
+			.preview-placeholder {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: rgba(0, 0, 0, 0.3);
+			}
+
+			.preview-icon {
+				font-size: 3em;
+				color: rgba(255, 255, 255, 0.3);
+			}
+
+			.shader-overlay {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.5) 100%);
+				display: flex;
+				align-items: flex-start;
+				justify-content: flex-end;
+				padding: 1em;
+			}
+
+			.complexity-badge {
+				padding: 0.3em 0.8em;
+				background: rgba(255, 255, 255, 0.1);
+				backdrop-filter: blur(10px);
+				border-radius: 20px;
+				font-size: 0.75em;
+				font-weight: 600;
+				color: rgba(255, 255, 255, 0.9);
+			}
+
+			.shader-content {
+				padding: 2em;
+			}
+
+			.shader-category {
+				display: inline-block;
+				padding: 0.3em 0.8em;
+				background: rgba(99, 102, 241, 0.2);
+				color: rgba(255, 255, 255, 0.9);
+				font-size: 0.75em;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				border-radius: 6px;
+				margin-bottom: 1em;
+			}
+
+			.shader-name {
+				font-size: 1.5em;
+				font-weight: 700;
+				color: #ffffff;
+				margin: 0 0 0.75em 0;
+			}
+
+			.shader-description {
+				color: rgba(255, 255, 255, 0.6);
+				line-height: 1.6;
+				margin-bottom: 1.5em;
+			}
+
+			.shader-technique {
+				color: rgba(255, 255, 255, 0.7);
+				font-size: 0.9em;
+				margin-bottom: 1em;
+			}
+
+			.technique-label {
+				font-weight: 600;
+				color: rgba(99, 102, 241, 0.9);
+			}
+
+			.shader-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5em;
+			}
+
+			.tag {
+				padding: 0.3em 0.7em;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 6px;
+				font-size: 0.8em;
+				color: rgba(255, 255, 255, 0.7);
+			}
+
+			.cta-section {
+				background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.1) 100%);
+				padding: 6em 2em;
+				text-align: center;
+				border-top: 1px solid rgba(255, 255, 255, 0.05);
+			}
+
+			.cta-content {
+				max-width: 600px;
+				margin: 0 auto;
+			}
+
+			.cta-title {
+				font-size: clamp(2em, 5vw, 3.5em);
+				font-weight: 800;
+				color: #ffffff;
+				margin: 0 0 1em 0;
+			}
+
+			.cta-description {
+				font-size: 1.1em;
+				color: rgba(255, 255, 255, 0.6);
+				margin-bottom: 2em;
+			}
+
+			.cta-buttons {
+				display: flex;
+				gap: 1em;
+				justify-content: center;
+				flex-wrap: wrap;
+			}
+
+			@media (max-width: 768px) {
+				.shaders-grid {
+					grid-template-columns: 1fr;
+				}
+
+				.filter-section {
+					padding: 1em;
+				}
+
+				.cta-buttons {
+					flex-direction: column;
+				}
+			}
+		</style>
+
+		<script>
+			// 分类筛选功能
+			const filterBtns = document.querySelectorAll('.filter-btn');
+			const shaderCards = document.querySelectorAll('.shader-card');
+
+			filterBtns.forEach(btn => {
+				btn.addEventListener('click', () => {
+					// 更新按钮状态
+					filterBtns.forEach(b => b.classList.remove('active'));
+					btn.classList.add('active');
+
+					// 筛选卡片
+					const filter = btn.dataset.filter;
+
+					shaderCards.forEach(card => {
+						if (filter === 'all' || card.dataset.category === filter) {
+							card.style.display = 'block';
+							card.style.animation = 'fadeIn 0.3s ease';
+						} else {
+							card.style.display = 'none';
+						}
+					});
+				});
+			});
+
+			// 添加淡入动画
+			const style = document.createElement('style');
+			style.textContent = `
+				@keyframes fadeIn {
+					from { opacity: 0; transform: translateY(20px); }
+					to { opacity: 1; transform: translateY(0); }
+				}
+			`;
+			document.head.appendChild(style);
+		</script>
+	</body>
+</html>

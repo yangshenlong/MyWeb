@@ -1,16 +1,15 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import Header from '../../components/Header.astro';
-import PageLoader from '../../components/PageLoader.astro';
-import ScrollProgress from '../../components/ScrollProgress.astro';
-import BackToTop from '../../components/BackToTop.astro';
-import CursorGlow from '../../components/CursorGlow.astro';
-import ScrollReveal from '../../components/ScrollReveal.astro';
-import GradientText from '../../components/GradientText.astro';
-import MagneticButton from '../../components/MagneticButton.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
----
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import PageLoader from '../components/PageLoader.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import BackToTop from '../components/BackToTop.astro';
+import CursorGlow from '../components/CursorGlow.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+import GradientText from '../components/GradientText.astro';
+import MagneticButton from '../components/MagneticButton.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 const skills = [
 	{ category: '前端开发', items: ['HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Vue', 'Astro'] },
@@ -102,7 +101,7 @@ const education = [
 							</div>
 						</div>
 					</div>
-				</section>
+					</section>
 				</ScrollReveal>
 
 				<!-- 技能 -->
@@ -124,7 +123,7 @@ const education = [
 							</div>
 						))}
 					</div>
-				</section>
+					</section>
 				</ScrollReveal>
 
 				<!-- 工作经历 -->
@@ -149,7 +148,7 @@ const education = [
 							))}
 						</div>
 					</div>
-				</section>
+					</section>
 				</ScrollReveal>
 
 				<!-- 教育背景 -->
@@ -174,7 +173,7 @@ const education = [
 							))}
 						</div>
 					</div>
-				</section>
+					</section>
 				</ScrollReveal>
 			</div>
 

@@ -1,73 +1,570 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import HeaderArchitectural from '../components/HeaderArchitectural.astro';
+import GlassCard from '../components/GlassCard.astro';
+import BackToTop from '../components/BackToTop.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 ---
 
-<Layout
-	title="关于我"
-	description="了解更多关于我的信息"
-	pubDate={new Date('2024-01-01')}
-	heroImage={AboutHeroImage}
->
-	<h2>👋 你好！</h2>
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>About | {SITE_TITLE}</title>
+		<meta name="description" content={SITE_DESCRIPTION} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-	<p>
-		欢迎来到我的个人博客。我是一名热爱技术的开发者，
-		喜欢探索新技术、学习新知识，并在这里分享我的经验和见解。
-	</p>
+		<style is:global>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
 
-	<h2>🚀 技术热情</h2>
+			body {
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+				background: #050505;
+				color: rgba(255, 255, 255, 0.9);
+				line-height: 1.6;
+			}
 
-	<p>
-		在技术领域，我对前端开发、Web技术和用户体验设计特别感兴趣。
-		我喜欢尝试新的框架和工具，Astro 就是我最近发现的一个很棒的项目，
-		所以用它来搭建了这个博客。
-	</p>
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
+		</style>
+	</head>
 
-	<p>
-		我相信通过写作和分享，不仅可以帮助他人，也能加深自己对知识的理解。
-		这个博客是我记录学习历程、分享技术心得的地方。
-	</p>
+	<body>
+		<ScrollProgress />
+		<HeaderArchitectural />
 
-	<h2>🌟 技术栈</h2>
+		<!-- Page Header -->
+		<section class="page-header-section">
+			<div class="header-container">
+				<div class="header-top">
+					<div class="header-label">
+						<span class="label-line"></span>
+						<span class="label-text">关于</span>
+					</div>
+					<h1 class="page-title">{AUTHOR.name}</h1>
+				</div>
+				<div class="header-bottom">
+					<p class="page-subtitle">技术美术</p>
+					<p class="page-description">{AUTHOR.bio}</p>
+				</div>
+			</div>
+			<div class="header-decoration">
+				<span class="deco-number">02</span>
+			</div>
+		</section>
 
-	<p>
-		我主要关注的技术包括：
-	</p>
+		<!-- Skills Section -->
+		<section class="skills-section">
+			<div class="skills-container">
+				<div class="section-header">
+					<div class="header-label">
+						<span class="label-line"></span>
+						<span class="label-text">专业技能</span>
+					</div>
+					<h2 class="section-title">技能与技术</h2>
+				</div>
 
-	<ul>
-		<li><strong>前端框架：</strong> Astro, React, Vue, Next.js</li>
-		<li><strong>编程语言：</strong> TypeScript, JavaScript, Python</li>
-		<li><strong>样式方案：</strong> CSS, Tailwind CSS, Sass</li>
-		<li><strong>工具链：</strong> Git, Vite, Webpack, ESLint</li>
-	</ul>
+				<div class="skills-grid">
+					<GlassCard class="skill-card">
+						<div class="skill-header">
+							<span class="skill-icon">▣</span>
+							<h3 class="skill-title">Shader Development</h3>
+						</div>
+						<ul class="skill-list">
+							<li>HLSL / GLSL</li>
+							<li>Unity URP / HDRP</li>
+							<li>Shader Graph</li>
+							<li>Compute Shader</li>
+							<li>Post Processing</li>
+						</ul>
+					</GlassCard>
 
-	<h2>🎨 生活兴趣</h2>
+					<GlassCard class="skill-card">
+						<div class="skill-header">
+							<span class="skill-icon">⚡</span>
+							<h3 class="skill-title">Rendering</h3>
+						</div>
+						<ul class="skill-list">
+							<li>PBR Rendering</li>
+							<li>Deferred / Forward</li>
+							<li>Real-time GI</li>
+							<li>Lighting Systems</li>
+							<li>Performance Opt</li>
+						</ul>
+					</GlassCard>
 
-	<p>
-		除了技术，我也热爱生活。在工作之余，我喜欢：
-	</p>
+					<GlassCard class="skill-card">
+						<div class="skill-header">
+							<span class="skill-icon">🔧</span>
+							<h3 class="skill-title">Tools & Pipeline</h3>
+						</div>
+						<ul class="skill-list">
+							<li>Python / PyQt</li>
+							<li>C# / .NET</li>
+							<li>Maya / Houdini</li>
+							<li>Blender API</li>
+							<li>Workflow Design</li>
+						</ul>
+					</GlassCard>
 
-	<ul>
-		<li>📚 阅读 - 拓展视野，获取灵感</li>
-		<li>✈️ 旅行 - 探索新的地方和文化</li>
-		<li>📷 摄影 - 记录美好瞬间</li>
-		<li>🎮 游戏 - 放松身心，体验故事</li>
-		<li>🎵 音乐 - 享受旋律，调节情绪</li>
-	</ul>
+					<GlassCard class="skill-card">
+						<div class="skill-header">
+							<span class="skill-icon">🎨</span>
+							<h3 class="skill-title">Creative</h3>
+						</div>
+						<ul class="skill-list">
+							<li>Visual Design</li>
+							<li>VFX Creation</li>
+							<li>Art Direction</li>
+							<li>3D Modeling</li>
+							<li>Texturing</li>
+						</ul>
+					</GlassCard>
+				</div>
+			</div>
+		</section>
 
-	<h2>💬 联系交流</h2>
+		<!-- Experience Section -->
+		<section class="experience-section">
+			<div class="experience-container">
+				<div class="section-header">
+					<div class="header-label">
+						<span class="label-line"></span>
+						<span class="label-text">经历</span>
+					</div>
+					<h2 class="section-title">工作经历</h2>
+				</div>
 
-	<p>
-		如果你对我的文章有任何想法或建议，欢迎通过以下方式与我交流：
-	</p>
+				<div class="timeline">
+					<div class="timeline-item">
+						<div class="timeline-marker">
+							<span class="marker-year">2022</span>
+						</div>
+						<div class="timeline-content">
+							<GlassCard class="timeline-card">
+								<div class="card-header">
+									<h3 class="card-title">Technical Artist</h3>
+									<span class="card-company">某游戏公司</span>
+									<span class="card-period">2022 - Present</span>
+								</div>
+								<p class="card-description">
+									负责实时渲染项目的技术美术工作，包括Shader开发、渲染管线优化和工具链开发。
+									主导多个核心系统的技术实现，大幅提升团队生产效率。
+								</p>
+								<div class="card-tags">
+									<span class="tag">Unity</span>
+									<span class="tag">HLSL</span>
+									<span class="tag">Python</span>
+								</div>
+							</GlassCard>
+						</div>
+					</div>
 
-	<ul>
-		<li>GitHub: <a href="https://github.com/yangshenlong" target="_blank">@yangshenlong</a></li>
-		<li>Email: your.email@example.com</li>
-	</ul>
+					<div class="timeline-item">
+						<div class="timeline-marker">
+							<span class="marker-year">2021</span>
+						</div>
+						<div class="timeline-content">
+							<GlassCard class="timeline-card">
+								<div class="card-header">
+									<h3 class="card-title">Technical Artist Intern</h3>
+									<span class="card-company">某创业公司</span>
+									<span class="card-period">2021 - 2022</span>
+								</div>
+								<p class="card-description">
+									参与多个项目的美术技术支持工作，协助建立标准化工作流程，
+									开发自动化工具提升团队效率。
+								</p>
+								<div class="card-tags">
+									<span class="tag">Maya</span>
+									<span class="tag">Pipeline</span>
+									<span class="tag">Tools</span>
+								</div>
+							</GlassCard>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-	<p>
-		期待与你的互动！让我们一起学习，一起成长。🎉
-	</p>
-</Layout>
+		<!-- Footer -->
+		<footer class="arch-footer">
+			<div class="footer-content">
+				<div class="footer-left">
+					<span class="footer-text">© 2024 杨慎龙</span>
+					<span class="footer-divider">·</span>
+					<span class="footer-text">Technical Artist</span>
+				</div>
+				<div class="footer-right">
+					<a href="https://github.com/yangshenlong" target="_blank" class="footer-link">GitHub</a>
+					<a href="https://www.artstation.com" target="_blank" class="footer-link">ArtStation</a>
+					<a href="https://linkedin.com" target="_blank" class="footer-link">LinkedIn</a>
+				</div>
+			</div>
+		</footer>
+
+		<BackToTop />
+
+		<style>
+			.page-header-section {
+				padding: 180px 4em 6em;
+				background: #050505;
+				position: relative;
+			}
+
+			.header-container {
+				max-width: 1200px;
+				margin: 0 auto;
+				display: grid;
+				grid-template-columns: 1fr auto;
+				gap: 4em;
+				align-items: center;
+			}
+
+			.header-top {
+				display: flex;
+				flex-direction: column;
+				gap: 0.5em;
+			}
+
+			.header-label {
+				display: flex;
+				align-items: center;
+				gap: 1em;
+			}
+
+			.label-line {
+				width: 30px;
+				height: 1px;
+				background: rgba(255, 255, 255, 0.2);
+			}
+
+			.label-text {
+				font-size: 0.7em;
+				letter-spacing: 0.3em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.4);
+				font-family: 'Space Mono', monospace;
+			}
+
+			.page-title {
+				font-size: clamp(2.5em, 6vw, 4em);
+				font-weight: 200;
+				letter-spacing: -0.02em;
+				line-height: 1.1;
+				margin: 0;
+			}
+
+			.header-bottom {
+				display: flex;
+				flex-direction: column;
+				gap: 0.5em;
+			}
+
+			.page-subtitle {
+				font-size: 1.1em;
+				letter-spacing: 0.2em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.6);
+				margin: 0;
+			}
+
+			.page-description {
+				font-size: 1em;
+				line-height: 1.7;
+				color: rgba(255, 255, 255, 0.5);
+				max-width: 500px;
+			}
+
+			.header-decoration {
+				position: relative;
+			}
+
+			.deco-number {
+				font-size: 6em;
+				font-weight: 100;
+				color: rgba(255, 255, 255, 0.03);
+				font-family: 'Space Mono', monospace;
+				line-height: 1;
+			}
+
+			/* Skills Section */
+			.skills-section {
+				padding: 6em 4em;
+				background: #050505;
+			}
+
+			.skills-container {
+				max-width: 1200px;
+				margin: 0 auto;
+			}
+
+			.section-header {
+				margin-bottom: 3em;
+			}
+
+			.section-title {
+				font-size: clamp(2em, 4vw, 3em);
+				font-weight: 200;
+				letter-spacing: -0.02em;
+				color: rgba(255, 255, 255, 0.9);
+				margin: 0.5em 0 0 0;
+			}
+
+			.skills-grid {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 1.5em;
+			}
+
+			.skill-card {
+				min-height: 250px;
+			}
+
+			.skill-header {
+				display: flex;
+				align-items: center;
+				gap: 0.75em;
+				margin-bottom: 1.5em;
+			}
+
+			.skill-icon {
+				font-size: 1.5em;
+			}
+
+			.skill-title {
+				font-size: 1.1em;
+				font-weight: 400;
+				color: rgba(255, 255, 255, 0.95);
+				margin: 0;
+			}
+
+			.skill-list {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0.5em;
+			}
+
+			.skill-list li {
+				font-size: 0.9em;
+				color: rgba(255, 255, 255, 0.6);
+				padding-left: 1em;
+				position: relative;
+			}
+
+			.skill-list li::before {
+				content: '—';
+				position: absolute;
+				left: 0;
+				color: rgba(255, 255, 255, 0.2);
+			}
+
+			/* Experience Section */
+			.experience-section {
+				padding: 6em 4em;
+				background: linear-gradient(
+					180deg,
+					#050505 0%,
+					#0a0a0a 50%,
+					#050505 100%
+				);
+			}
+
+			.experience-container {
+				max-width: 900px;
+				margin: 0 auto;
+			}
+
+			.timeline {
+				position: relative;
+				padding-left: 2em;
+			}
+
+			.timeline::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 0;
+				bottom: 0;
+				width: 1px;
+				background: rgba(255, 255, 255, 0.1);
+			}
+
+			.timeline-item {
+				position: relative;
+				padding-bottom: 3em;
+			}
+
+			.timeline-marker {
+				position: absolute;
+				left: -2.5em;
+				top: 0;
+				width: auto;
+			}
+
+			.marker-year {
+				font-size: 0.8em;
+				font-weight: 500;
+				color: rgba(255, 255, 255, 0.5);
+				font-family: 'Space Mono', monospace;
+			}
+
+			.timeline-content {
+				position: relative;
+			}
+
+			.timeline-card {
+				width: 100%;
+			}
+
+			.card-header {
+				display: flex;
+				flex-direction: column;
+				gap: 0.25em;
+				margin-bottom: 1em;
+			}
+
+			.card-title {
+				font-size: 1.3em;
+				font-weight: 400;
+				color: rgba(255, 255, 255, 0.95);
+				margin: 0;
+			}
+
+			.card-company {
+				font-size: 0.9em;
+				color: rgba(255, 255, 255, 0.6);
+			}
+
+			.card-period {
+				font-size: 0.8em;
+				color: rgba(255, 255, 255, 0.4);
+				font-family: 'Space Mono', monospace;
+			}
+
+			.card-description {
+				font-size: 0.95em;
+				line-height: 1.7;
+				color: rgba(255, 255, 255, 0.6);
+				margin-bottom: 1.5em;
+			}
+
+			.card-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5em;
+			}
+
+			.tag {
+				font-size: 0.75em;
+				padding: 0.3em 0.8em;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				color: rgba(255, 255, 255, 0.6);
+			}
+
+			/* Footer */
+			.arch-footer {
+				padding: 3em 4em;
+				background: #030303;
+				border-top: 1px solid rgba(255, 255, 255, 0.05);
+			}
+
+			.footer-content {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.footer-left {
+				display: flex;
+				align-items: center;
+				gap: 1em;
+			}
+
+			.footer-text {
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.4);
+			}
+
+			.footer-divider {
+				color: rgba(255, 255, 255, 0.2);
+			}
+
+			.footer-right {
+				display: flex;
+				gap: 2em;
+			}
+
+			.footer-link {
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.5);
+				transition: color 0.3s ease;
+			}
+
+			.footer-link:hover {
+				color: rgba(255, 255, 255, 0.8);
+			}
+
+			/* Responsive */
+			@media (max-width: 1024px) {
+				.page-header-section,
+				.skills-section,
+				.experience-section {
+					padding-left: 2em;
+					padding-right: 2em;
+				}
+
+				.header-container {
+					grid-template-columns: 1fr;
+					gap: 2em;
+				}
+
+				.header-decoration {
+					align-self: flex-end;
+				}
+
+				.deco-number {
+					font-size: 4em;
+				}
+
+				.skills-grid {
+					grid-template-columns: repeat(2, 1fr);
+				}
+			}
+
+			@media (max-width: 768px) {
+				.skills-grid {
+					grid-template-columns: 1fr;
+				}
+
+				.footer-content {
+					flex-direction: column;
+					gap: 1.5em;
+					text-align: center;
+				}
+
+				.footer-left {
+					flex-direction: column;
+					gap: 0.5em;
+				}
+
+				.footer-right {
+					gap: 1.5em;
+				}
+			}
+		</style>
+	</body>
+</html>

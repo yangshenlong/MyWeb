@@ -70,9 +70,9 @@ const { href = '#', children, class: className, strength = 0.3 } = Astro.props;
 <script>
 	document.querySelectorAll('.magnetic-button').forEach(button => {
 		const strength = parseFloat(button.dataset.strength || '0.3');
-		const rect = button.getBoundingClientRect();
 
 		button.addEventListener('mousemove', (e) => {
+			const rect = button.getBoundingClientRect();
 			const x = e.clientX - rect.left - rect.width / 2;
 			const y = e.clientY - rect.top - rect.height / 2;
 

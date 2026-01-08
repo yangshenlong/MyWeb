@@ -1,450 +1,592 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import CinematicHero from '../components/CinematicHero.astro';
-import ProfileCard from '../components/ProfileCard.astro';
-import PageLoader from '../components/PageLoader.astro';
-import ScrollProgress from '../components/ScrollProgress.astro';
+import HeaderArchitectural from '../components/HeaderArchitectural.astro';
+import HeroArchitectural from '../components/HeroArchitectural.astro';
+import ProjectGridArchitectural from '../components/ProjectGridArchitectural.astro';
+import GlassCard from '../components/GlassCard.astro';
 import BackToTop from '../components/BackToTop.astro';
-import CursorGlow from '../components/CursorGlow.astro';
-import ParallaxSection from '../components/ParallaxSection.astro';
-import MagneticButton from '../components/MagneticButton.astro';
-import GradientText from '../components/GradientText.astro';
-import ScrollReveal from '../components/ScrollReveal.astro';
-import CountUpNumber from '../components/CountUpNumber.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+// Featured projects
+const featuredProjects = [
+	{
+		title: 'Water Shader System',
+		category: 'Shader Development',
+		year: '2024',
+		description: '基于Gerstner波的实时水面渲染系统，支持波浪模拟、反射折射和泡沫效果。',
+		tags: ['HLSL', 'Unity', 'URP', 'Water Simulation'],
+		link: '/projects'
+	},
+	{
+		title: 'Maya Auto UV Tool',
+		category: 'Tool Development',
+		year: '2024',
+		description: '使用Python和PyQt开发的Maya自动化工具，智能UV展开算法，效率提升80%。',
+		tags: ['Python', 'Maya API', 'PyQt', 'UV Unwrap'],
+		link: '/projects'
+	},
+	{
+		title: 'Volumetric GI System',
+		category: 'Rendering',
+		year: '2023',
+		description: '基于Voxel Cone Tracing的实时全局光照解决方案，支持动态光源。',
+		tags: ['Compute Shader', 'GI', 'Unity', 'Optimization'],
+		link: '/projects'
+	},
+	{
+		title: 'Custom Render Pipeline',
+		category: 'Pipeline',
+		year: '2023',
+		description: '定制的渲染管线，包含Deferred Rendering、SSAO、SSR和体积光。',
+		tags: ['Render Pipeline', 'Deferred', 'Post-Processing'],
+		link: '/projects'
+	}
+];
+
+// Skills and services
+const services = [
+	{
+		number: '01',
+		title: 'Shader Development',
+		description: 'HLSL/GLSL着色器开发，从基础材质到高级视觉效果'
+	},
+	{
+		number: '02',
+		title: 'Rendering Optimization',
+		description: '渲染管线性能优化，Draw Call批处理，GPU Instancing'
+	},
+	{
+		number: '03',
+		title: 'Tool Development',
+		description: 'DCC工具开发，Python/C#自动化脚本，工作流优化'
+	},
+	{
+		number: '04',
+		title: 'Technical Art',
+		description: '连接艺术与技术，解决视觉呈现的技术挑战'
+	}
+];
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{SITE_TITLE} - 技术美术个人作品集</title>
+		<meta name="description" content={SITE_DESCRIPTION} />
+		<meta name="keywords" content="Technical Art, Shader, Unity, 渲染, Python, Maya" />
+		<meta name="author" content="杨慎龙" />
+		<meta property="og:title" content={SITE_TITLE} />
+		<meta property="og:description" content={SITE_DESCRIPTION} />
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="zh_CN" />
+		<link rel="canonical" href="https://yourdomain.com" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+		<style is:global>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			html {
+				scroll-behavior: smooth;
+			}
+
+			body {
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+				background: #050505;
+				color: rgba(255, 255, 255, 0.9);
+				line-height: 1.6;
+				overflow-x: hidden;
+			}
+
+			/* 页面加载动画 */
+			@keyframes fadeIn {
+				from { opacity: 0; }
+				to { opacity: 1; }
+			}
+
+			body {
+				animation: fadeIn 0.5s ease-in;
+			}
+
+			/* 图片加载优化 */
+			img {
+				image-rendering: -webkit-optimize-contrast;
+			}
+
+			/* 选择样式 */
+			::selection {
+				background: rgba(255, 255, 255, 0.15);
+				color: rgba(255, 255, 255, 1);
+			}
+
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
+
+			::selection {
+				background: rgba(255, 255, 255, 0.15);
+				color: rgba(255, 255, 255, 1);
+			}
+
+			::-webkit-scrollbar {
+				width: 8px;
+			}
+
+			::-webkit-scrollbar-track {
+				background: rgba(255, 255, 255, 0.02);
+			}
+
+			::-webkit-scrollbar-thumb {
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 4px;
+			}
+
+			::-webkit-scrollbar-thumb:hover {
+				background: rgba(255, 255, 255, 0.2);
+			}
+		</style>
+	</head>
+
+	<body>
+		<ScrollProgress />
+		<HeaderArchitectural />
+
+		<HeroArchitectural />
+
+		<!-- Services Section -->
+		<section class="services-section">
+			<div class="services-grid">
+				{services.map((service, index) => (
+					<GlassCard
+						class="service-card"
+						delay={index * 100}
+					>
+						<div class="service-number">{service.number}</div>
+						<h3 class="service-title">{service.title}</h3>
+						<p class="service-description">{service.description}</p>
+					</GlassCard>
+				))}
+			</div>
+		</section>
+
+		<!-- Projects Section -->
+		<ProjectGridArchitectural projects={featuredProjects} />
+
+		<!-- About Section -->
+		<section class="about-section">
+			<div class="about-content">
+				<div class="about-text">
+					<div class="section-label">
+						<span class="label-line"></span>
+						<span class="label-text">About</span>
+					</div>
+					<h2 class="about-title">
+						技术美术<br />
+						<span class="highlight">位于中国</span>
+					</h2>
+					<p class="about-description">
+						专注于实时渲染技术、Shader开发和工具链优化。
+						致力于创造令人惊叹的视觉效果，同时保证性能表现。
+						相信艺术与技术的完美融合是创造优秀作品的关键。
+					</p>
+					<a href="/about" class="about-link">
+						<span>了解更多</span>
+						<span class="link-arrow">→</span>
+					</a>
+				</div>
+				<div class="about-visual">
+					<div class="visual-grid">
+						<div class="grid-item"></div>
+						<div class="grid-item"></div>
+						<div class="grid-item"></div>
+						<div class="grid-item"></div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Contact CTA -->
+		<section class="contact-cta">
+			<div class="cta-content">
+				<h2 class="cta-title">让我们合作</h2>
+				<p class="cta-description">
+					有项目想法或想要合作？欢迎随时联系我。
+				</p>
+				<a href="/contact" class="cta-button">
+					<span>联系我</span>
+				</a>
+			</div>
+			<div class="cta-decoration">
+				<div class="deco-line"></div>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer class="arch-footer">
+			<div class="footer-content">
+				<div class="footer-left">
+					<span class="footer-text">© 2024 杨慎龙</span>
+					<span class="footer-divider">·</span>
+					<span class="footer-text">Technical Artist</span>
+				</div>
+				<div class="footer-right">
+					<a href="https://github.com/yangshenlong" target="_blank" class="footer-link">GitHub</a>
+					<a href="https://www.artstation.com" target="_blank" class="footer-link">ArtStation</a>
+					<a href="https://linkedin.com" target="_blank" class="footer-link">LinkedIn</a>
+				</div>
+			</div>
+		</footer>
+
+		<BackToTop />
+
 		<style>
-			/* 隐藏个人信息卡片，使用新的布局 */
-			profile-card {
-				display: none;
+			/* Services Section */
+			.services-section {
+				padding: 8em 4em;
+				background: #050505;
+				position: relative;
 			}
 
-			.main-content {
-				background: #0a0a0a;
-				min-height: 100vh;
-			}
-
-			/* 内容区域 */
-			.content-section {
+			.services-grid {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 1.5em;
 				max-width: 1400px;
 				margin: 0 auto;
-				padding: 6em 3em;
 			}
 
-			.section-header {
-				text-align: center;
-				margin-bottom: 4em;
+			.service-card {
+				min-height: 280px;
+				display: flex;
+				flex-direction: column;
+				gap: 1em;
+			}
+
+			.service-number {
+				font-size: 0.7em;
+				font-weight: 300;
+				letter-spacing: 0.2em;
+				color: rgba(255, 255, 255, 0.3);
+				font-family: 'Space Mono', monospace;
+			}
+
+			.service-title {
+				font-size: 1.2em;
+				font-weight: 400;
+				letter-spacing: 0.02em;
+				color: rgba(255, 255, 255, 0.95);
+				margin: 0;
+				line-height: 1.4;
+			}
+
+			.service-description {
+				font-size: 0.9em;
+				line-height: 1.7;
+				color: rgba(255, 255, 255, 0.5);
+				margin: 0;
+			}
+
+			/* About Section */
+			.about-section {
+				padding: 10em 4em;
+				background: linear-gradient(
+					180deg,
+					#050505 0%,
+					#0a0a0a 50%,
+					#050505 100%
+				);
+				position: relative;
+			}
+
+			.about-content {
+				max-width: 1400px;
+				margin: 0 auto;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 6em;
+				align-items: center;
 			}
 
 			.section-label {
-				display: inline-block;
-				padding: 0.5em 1.5em;
-				background: rgba(255, 255, 255, 0.05);
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				color: rgba(255, 255, 255, 0.6);
-				font-size: 0.85em;
+				display: flex;
+				align-items: center;
+				gap: 1em;
+				margin-bottom: 2em;
+			}
+
+			.label-line {
+				width: 30px;
+				height: 1px;
+				background: rgba(255, 255, 255, 0.2);
+			}
+
+			.label-text {
+				font-size: 0.7em;
+				letter-spacing: 0.3em;
 				text-transform: uppercase;
-				letter-spacing: 0.2em;
-				margin-bottom: 1em;
-				backdrop-filter: blur(10px);
+				color: rgba(255, 255, 255, 0.4);
+				font-family: 'Space Mono', monospace;
 			}
 
-			.section-title {
-				font-size: clamp(2.5em, 6vw, 4em);
-				font-weight: 800;
-				color: #ffffff;
-				margin: 0;
+			.about-title {
+				font-size: clamp(2.5em, 5vw, 4em);
+				font-weight: 200;
+				letter-spacing: -0.03em;
 				line-height: 1.1;
-				letter-spacing: -0.02em;
+				margin: 0 0 1.5em 0;
 			}
 
-			/* 特色网格 */
-			.features-grid {
+			.highlight {
+				color: rgba(255, 255, 255, 0.6);
+				font-weight: 300;
+			}
+
+			.about-description {
+				font-size: 1.1em;
+				line-height: 1.8;
+				color: rgba(255, 255, 255, 0.6);
+				margin-bottom: 2em;
+			}
+
+			.about-link {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.75em;
+				font-size: 0.85em;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.8);
+				transition: all 0.3s ease;
+			}
+
+			.about-link:hover {
+				color: rgba(255, 255, 255, 1);
+			}
+
+			.link-arrow {
+				transition: transform 0.3s ease;
+			}
+
+			.about-link:hover .link-arrow {
+				transform: translateX(5px);
+			}
+
+			.about-visual {
+				position: relative;
+			}
+
+			.visual-grid {
 				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-				gap: 2em;
-				margin-bottom: 6em;
-			}
-
-			.feature-card {
-				background: rgba(255, 255, 255, 0.02);
-				border: 1px solid rgba(255, 255, 255, 0.08);
-				padding: 2.5em;
-			position: relative;
-			overflow: hidden;
-			transition: all 0.4s ease;
-		}
-
-		.feature-card::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-			opacity: 0;
-			transition: opacity 0.4s ease;
-		}
-
-		.feature-card:hover::before {
-			opacity: 1;
-		}
-
-		.feature-card:hover {
-			transform: translateY(-10px);
-			border-color: rgba(99, 102, 241, 0.3);
-			box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-		}
-
-		.feature-icon {
-			width: 60px;
-			height: 60px;
-			background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
-			border: 1px solid rgba(255, 255, 255, 0.1);
-			border-radius: 16px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 2em;
-			margin-bottom: 1.5em;
-			position: relative;
-			z-index: 1;
-		}
-
-		.feature-title {
-			font-size: 1.5em;
-			font-weight: 700;
-			color: #ffffff;
-			margin: 0 0 1em 0;
-			position: relative;
-			z-index: 1;
-		}
-
-		.feature-description {
-			color: rgba(255, 255, 255, 0.6);
-			line-height: 1.7;
-			margin: 0;
-			position: relative;
-			z-index: 1;
-		}
-
-		/* 博客展示区 */
-		.blog-showcase {
-			background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 50%, transparent 100%);
-			padding: 4em;
-			border: 1px solid rgba(255, 255, 255, 0.05);
-			margin-bottom: 6em;
-			position: relative;
-			overflow: hidden;
-		}
-
-		.blog-showcase::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
-			pointer-events: none;
-		}
-
-		.showcase-content {
-			position: relative;
-			z-index: 1;
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 4em;
-			align-items: center;
-		}
-
-		.showcase-text {
-			padding: 2em;
-		}
-
-		.showcase-title {
-			font-size: clamp(2em, 4vw, 3em);
-			font-weight: 800;
-			color: #ffffff;
-			margin: 0 0 1em 0;
-			line-height: 1.2;
-		}
-
-		.showcase-description {
-			color: rgba(255, 255, 255, 0.7);
-			font-size: 1.1em;
-			line-height: 1.8;
-			margin-bottom: 2em;
-		}
-
-		.showcase-stats {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: 2em;
-		}
-
-		.stat-item {
-			text-align: center;
-		}
-
-		.stat-number {
-			font-size: 3em;
-			font-weight: 800;
-			background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
-			background-clip: text;
-		}
-
-		.stat-label {
-			color: rgba(255, 255, 255, 0.5);
-			font-size: 0.9em;
-			text-transform: uppercase;
-			letter-spacing: 0.1em;
-		}
-
-		.showcase-visual {
-			position: relative;
-		}
-
-		.blog-preview {
-			background: rgba(255, 255, 255, 0.03);
-			border: 1px solid rgba(255, 255, 255, 0.08);
-			border-radius: 20px;
-			padding: 2em;
-			backdrop-filter: blur(10px);
-		}
-
-		.preview-card {
-			background: rgba(255, 255, 255, 0.02);
-			border: 1px solid rgba(255, 255, 255, 0.05);
-			border-radius: 12px;
-			padding: 1.5em;
-			margin-bottom: 1em;
-			transition: all 0.3s ease;
-		}
-
-		.preview-card:hover {
-			background: rgba(255, 255, 255, 0.05);
-			transform: translateX(10px);
-		}
-
-		.preview-card-title {
-			color: #ffffff;
-			font-size: 1.1em;
-			font-weight: 600;
-			margin: 0 0 0.5em 0;
-		}
-
-		.preview-card-meta {
-			color: rgba(255, 255, 255, 0.4);
-			font-size: 0.85em;
-		}
-
-		/* CTA 区域 */
-		.cta-section {
-			text-align: center;
-			padding: 6em 3em;
-			background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.1) 100%);
-			border-top: 1px solid rgba(255, 255, 255, 0.05);
-		}
-
-		.cta-title {
-			font-size: clamp(2em, 5vw, 3.5em);
-			font-weight: 800;
-			color: #ffffff;
-			margin: 0 0 1em 0;
-		}
-
-		.cta-description {
-			color: rgba(255, 255, 255, 0.6);
-			font-size: 1.2em;
-			max-width: 600px;
-			margin: 0 auto 2em auto;
-			line-height: 1.7;
-		}
-
-		.cta-button {
-			display: inline-flex;
-			align-items: center;
-			gap: 0.75em;
-			padding: 1.25em 3em;
-			background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-			color: #ffffff;
-			font-size: 1.1em;
-			font-weight: 600;
-			text-transform: uppercase;
-			letter-spacing: 0.1em;
-			text-decoration: none;
-			border-radius: 50px;
-			box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
-			transition: all 0.3s ease;
-		}
-
-		.cta-button:hover {
-			transform: translateY(-3px);
-			box-shadow: 0 20px 60px rgba(99, 102, 241, 0.6);
-		}
-
-		@media (max-width: 1024px) {
-			.content-section {
-				padding: 4em 2em;
-			}
-
-			.showcase-content {
-				grid-template-columns: 1fr;
-				gap: 3em;
-			}
-
-			.showcase-stats {
-				grid-template-columns: repeat(4, 1fr);
-			}
-		}
-
-		@media (max-width: 768px) {
-			.features-grid {
-				grid-template-columns: 1fr;
-			}
-
-			.blog-showcase {
-				padding: 2em;
-			}
-
-			.showcase-stats {
 				grid-template-columns: repeat(2, 1fr);
+				gap: 1em;
+				position: relative;
 			}
 
-			.cta-section {
-				padding: 4em 2em;
+			.grid-item {
+				aspect-ratio: 1;
+				background: rgba(255, 255, 255, 0.03);
+				border: 1px solid rgba(255, 255, 255, 0.06);
+				position: relative;
+				overflow: hidden;
+			}
+
+			.grid-item::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: linear-gradient(
+					135deg,
+					rgba(255, 255, 255, 0.05) 0%,
+					transparent 50%
+				);
+				opacity: 0.5;
+			}
+
+			/* Contact CTA */
+			.contact-cta {
+				padding: 10em 4em;
+				background: #050505;
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.cta-content {
+				text-align: center;
+				position: relative;
+				z-index: 2;
+			}
+
+			.cta-title {
+				font-size: clamp(2em, 6vw, 4em);
+				font-weight: 200;
+				letter-spacing: -0.02em;
+				color: rgba(255, 255, 255, 0.95);
+				margin: 0 0 1em 0;
+			}
+
+			.cta-description {
+				font-size: 1.1em;
+				color: rgba(255, 255, 255, 0.5);
+				margin-bottom: 2em;
 			}
 
 			.cta-button {
-				width: 100%;
-				justify-content: center;
+				display: inline-block;
+				padding: 1em 3em;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.15);
+				color: rgba(255, 255, 255, 0.9);
+				font-size: 0.85em;
+				letter-spacing: 0.2em;
+				text-transform: uppercase;
+				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+				backdrop-filter: blur(10px);
 			}
-		}
+
+			.cta-button:hover {
+				background: rgba(255, 255, 255, 0.1);
+				border-color: rgba(255, 255, 255, 0.3);
+				transform: translateY(-2px);
+			}
+
+			.cta-decoration {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 600px;
+				height: 600px;
+				pointer-events: none;
+			}
+
+			.deco-line {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 1px;
+				height: 100%;
+				background: rgba(255, 255, 255, 0.03);
+			}
+
+			.deco-line::before,
+			.deco-line::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 1px;
+				background: rgba(255, 255, 255, 0.03);
+			}
+
+			.deco-line::before {
+				top: 0;
+				transform: translateY(-50%);
+			}
+
+			.deco-line::after {
+				bottom: 0;
+				transform: translateY(50%);
+			}
+
+			/* Footer */
+			.arch-footer {
+				padding: 3em 4em;
+				background: #030303;
+				border-top: 1px solid rgba(255, 255, 255, 0.05);
+			}
+
+			.footer-content {
+				max-width: 1400px;
+				margin: 0 auto;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.footer-left {
+				display: flex;
+				align-items: center;
+				gap: 1em;
+			}
+
+			.footer-text {
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.4);
+			}
+
+			.footer-divider {
+				color: rgba(255, 255, 255, 0.2);
+			}
+
+			.footer-right {
+				display: flex;
+				gap: 2em;
+			}
+
+			.footer-link {
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.5);
+				transition: color 0.3s ease;
+			}
+
+			.footer-link:hover {
+				color: rgba(255, 255, 255, 0.8);
+			}
+
+			/* Responsive */
+			@media (max-width: 1024px) {
+				.services-section,
+				.about-section,
+				.contact-cta,
+				.arch-footer {
+					padding-left: 2em;
+					padding-right: 2em;
+				}
+
+				.services-grid {
+					grid-template-columns: repeat(2, 1fr);
+				}
+
+				.about-content {
+					grid-template-columns: 1fr;
+					gap: 4em;
+				}
+			}
+
+			@media (max-width: 768px) {
+				.services-grid {
+					grid-template-columns: 1fr;
+				}
+
+				.footer-content {
+					flex-direction: column;
+					gap: 1.5em;
+					text-align: center;
+				}
+
+				.footer-left {
+					flex-direction: column;
+					gap: 0.5em;
+				}
+
+				.footer-right {
+					gap: 1.5em;
+				}
+			}
 		</style>
-	</head>
-	<body class="dark">
-		<PageLoader />
-		<ScrollProgress />
-		<CursorGlow />
-		<Header />
-		<CinematicHero
-			title="我的博客"
-			subtitle="EXPLORE · DISCOVER · RECORD"
-			backgroundText="BLOG"
-		/>
-
-		<div class="main-content">
-			<section class="content-section">
-				<ScrollReveal>
-					<div class="section-header">
-						<span class="section-label">关于</span>
-						<h2 class="section-title"><GradientText>探索技术与生活</GradientText></h2>
-					</div>
-				</ScrollReveal>
-
-				<div class="features-grid">
-					<ScrollReveal direction="up" delay={0}>
-						<div class="feature-card">
-							<div class="feature-icon">⚡</div>
-							<h3 class="feature-title">极速体验</h3>
-							<p class="feature-description">基于 Astro 构建，毫秒级加载速度，提供流畅的浏览体验</p>
-						</div>
-					</ScrollReveal>
-					<ScrollReveal direction="up" delay={100}>
-						<div class="feature-card">
-							<div class="feature-icon">🎨</div>
-							<h3 class="feature-title">独特设计</h3>
-							<p class="feature-description">新野兽派风格，深色主题，充满动效的现代化界面</p>
-						</div>
-					</ScrollReveal>
-					<ScrollReveal direction="up" delay={200}>
-						<div class="feature-card">
-							<div class="feature-icon">📱</div>
-							<h3 class="feature-title">完美适配</h3>
-							<p class="feature-description">响应式设计，在任何设备上都能获得最佳体验</p>
-						</div>
-					</ScrollReveal>
-					<ScrollReveal direction="up" delay={300}>
-						<div class="feature-card">
-							<div class="feature-icon">📝</div>
-							<h3 class="feature-title">技术分享</h3>
-							<p class="feature-description">分享前端开发、Web 技术和编程心得</p>
-						</div>
-					</ScrollReveal>
-				</div>
-
-				<div class="blog-showcase">
-					<ParallaxSection speed={0.3}>
-						<div class="showcase-content">
-							<ScrollReveal direction="left">
-								<div class="showcase-text">
-									<h2 class="showcase-title"><GradientText>最新文章</GradientText></h2>
-									<p class="showcase-description">
-										探索技术世界，记录学习历程，分享开发经验。
-										从基础到进阶，从理论到实践，一起成长。
-									</p>
-							<div class="showcase-stats">
-								<div class="stat-item">
-									<div class="stat-number"><CountUpNumber target={5} suffix="+" /></div>
-									<div class="stat-label">文章</div>
-								</div>
-								<div class="stat-item">
-									<div class="stat-number"><CountUpNumber target={3} /></div>
-									<div class="stat-label">分类</div>
-								</div>
-							</div>
-						</div>
-						</div>
-					</ScrollReveal>
-					<ScrollReveal direction="right">
-						<div class="showcase-visual">
-							<div class="blog-preview">
-								<div class="preview-card">
-									<h4 class="preview-card-title">欢迎使用 Astro</h4>
-									<p class="preview-card-meta">2024年1月9日 · 技术分享</p>
-								</div>
-								<div class="preview-card">
-									<h4 class="preview-card-title">Markdown 样式指南</h4>
-									<p class="preview-card-meta">2024年1月9日 · 教程</p>
-								</div>
-								<div class="preview-card">
-									<h4 class="preview-card-title">第二篇文章</h4>
-									<p class="preview-card-meta">2024年1月9日 · 随笔</p>
-								</div>
-							</div>
-						</div>
-					</ScrollReveal>
-					</div>
-				</div>
-			</ParallaxSection>
-			</section>
-
-			<section class="cta-section">
-				<ScrollReveal>
-					<h2 class="cta-title">开始阅读</h2>
-					<p class="cta-description">探索我的文章，发现更多有趣的技术内容和见解</p>
-					<MagneticButton href="/blog">
-						浏览所有文章
-						<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-							<path d="M5 12h14M12 5l7 7-7 7"/>
-						</svg>
-					</MagneticButton>
-				</ScrollReveal>
-			</section>
-		</div>
-
-		<BackToTop />
-		<Footer />
 	</body>
 </html>
