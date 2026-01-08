@@ -1,0 +1,92 @@
+---
+/**
+ * 磁性按钮组件
+ * 按钮会被鼠标吸引，产生磁吸效果
+ */
+
+interface Props {
+	href?: string;
+	children: any;
+	class?: string;
+	strength?: number;
+}
+
+const { href = '#', children, class: className, strength = 0.3 } = Astro.props;
+---
+
+<a href={href} class:list={['magnetic-button', className]} data-strength={strength}>
+	<span class="button-content">{children}</span>
+	<div class="button-glow"></div>
+</a>
+
+<style>
+	.magnetic-button {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1.25em 3em;
+		background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+		color: #ffffff;
+		font-size: 1em;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		text-decoration: none;
+		border: none;
+		border-radius: 50px;
+		cursor: pointer;
+		overflow: hidden;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+		will-change: transform;
+	}
+
+	.button-content {
+		position: relative;
+		z-index: 2;
+	}
+
+	.button-glow {
+		position: absolute;
+		top: -50%;
+		left: -50%;
+		width: 200%;
+		height: 200%;
+		background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.magnetic-button:hover .button-glow {
+		opacity: 1;
+	}
+
+	.magnetic-button:hover {
+		box-shadow: 0 20px 60px rgba(99, 102, 241, 0.6);
+	}
+</style>
+
+<script>
+	document.querySelectorAll('.magnetic-button').forEach(button => {
+		const strength = parseFloat(button.dataset.strength || '0.3');
+		const rect = button.getBoundingClientRect();
+
+		button.addEventListener('mousemove', (e) => {
+			const x = e.clientX - rect.left - rect.width / 2;
+			const y = e.clientY - rect.top - rect.height / 2;
+
+			button.style.transform = `translate(${x * strength}px, ${y * strength}px) scale(1.05)`;
+
+			// 移动光晕
+			const glow = button.querySelector('.button-glow');
+			const glowX = ((e.clientX - rect.left) / rect.width) * 100;
+			const glowY = ((e.clientY - rect.top) / rect.height) * 100;
+			glow.style.background = `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(255, 255, 255, 0.4) 0%, transparent 70%)`;
+		});
+
+		button.addEventListener('mouseleave', () => {
+			button.style.transform = 'translate(0, 0) scale(1)';
+		});
+	});
+</script>

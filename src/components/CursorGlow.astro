@@ -1,0 +1,100 @@
+---
+/**
+ * 鼠标跟随光效系统
+ * 多层光晕跟随鼠标，营造电影感氛围
+ */
+---
+
+<div class="cursor-glow" id="cursorGlow">
+	<div class="glow-layer layer-1"></div>
+	<div class="glow-layer layer-2"></div>
+	<div class="glow-layer layer-3"></div>
+</div>
+
+<script>
+	const cursorGlow = document.getElementById('cursorGlow');
+	const layers = cursorGlow.querySelectorAll('.glow-layer');
+
+	let mouseX = 0;
+	let mouseY = 0;
+	let currentX = 0;
+	let currentY = 0;
+
+	document.addEventListener('mousemove', (e) => {
+		mouseX = e.clientX;
+		mouseY = e.clientY;
+	});
+
+	// 使用 requestAnimationFrame 更新位置，更流畅
+	function animate() {
+		// 不同层使用不同的延迟速度
+		const speed1 = 0.15;
+		const speed2 = 0.1;
+		const speed3 = 0.05;
+
+		currentX += (mouseX - currentX) * speed1;
+		currentY += (mouseY - currentY) * speed1;
+
+		layers[0].style.transform = `translate(${mouseX}px, ${mouseY}px)`;
+		layers[1].style.transform = `translate(${currentX * 0.9 + mouseX * 0.1}px, ${currentY * 0.9 + mouseY * 0.1}px)`;
+		layers[2].style.transform = `translate(${currentX * 0.8 + mouseX * 0.2}px, ${currentY * 0.8 + mouseY * 0.2}px)`;
+
+		requestAnimationFrame(animate);
+	}
+
+	animate();
+</script>
+
+<style>
+	.cursor-glow {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		z-index: 9998;
+		overflow: hidden;
+	}
+
+	.glow-layer {
+		position: absolute;
+		border-radius: 50%;
+		mix-blend-mode: screen;
+		pointer-events: none;
+		will-change: transform;
+	}
+
+	.layer-1 {
+		width: 400px;
+		height: 400px;
+		background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+		margin-left: -200px;
+		margin-top: -200px;
+		opacity: 0.6;
+	}
+
+	.layer-2 {
+		width: 300px;
+		height: 300px;
+		background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, transparent 70%);
+		margin-left: -150px;
+		margin-top: -150px;
+		opacity: 0.5;
+	}
+
+	.layer-3 {
+		width: 200px;
+		height: 200px;
+		background: radial-gradient(circle, rgba(255, 79, 0, 0.1) 0%, transparent 70%);
+		margin-left: -100px;
+		margin-top: -100px;
+		opacity: 0.4;
+	}
+
+	@media (max-width: 768px) {
+		.cursor-glow {
+			display: none;
+		}
+	}
+</style>

@@ -1,0 +1,86 @@
+---
+/**
+ * 滚动显示动画组件
+ * 元素进入视口时触发动画
+ */
+
+interface Props {
+	children: any;
+	class?: string;
+	delay?: number;
+	duration?: number;
+	direction?: 'up' | 'down' | 'left' | 'right' | 'fade';
+}
+
+const {
+	children,
+	class: className,
+	delay = 0,
+	duration = 0.8,
+	direction = 'up'
+} = Astro.props;
+---
+
+<div
+	class:list={['scroll-reveal', className, `direction-${direction}`]}
+	style={`--reveal-delay: ${delay}ms; --reveal-duration: ${duration}s`}
+>
+	{children}
+</div>
+
+<style>
+	.scroll-reveal {
+		opacity: 0;
+		transform: translateY(60px);
+		transition: opacity var(--reveal-duration) cubic-bezier(0.4, 0, 0.2, 1),
+					transform var(--reveal-duration) cubic-bezier(0.4, 0, 0.2, 1);
+		transition-delay: var(--reveal-delay);
+		will-change: opacity, transform;
+	}
+
+	.scroll-reveal.direction-down {
+		transform: translateY(-60px);
+	}
+
+	.scroll-reveal.direction-left {
+		transform: translateX(60px);
+	}
+
+	.scroll-reveal.direction-right {
+		transform: translateX(-60px);
+	}
+
+	.scroll-reveal.direction-fade {
+		transform: none;
+	}
+
+	.scroll-reveal.revealed {
+		opacity: 1;
+		transform: translateY(0) translateX(0);
+	}
+</style>
+
+<script>
+	const observerOptions = {
+		threshold: 0.1,
+		rootMargin: '0px 0px -50px 0px'
+	};
+
+	const observer = new IntersectionObserver((entries) => {
+	_entries.forEach(entry => {
+			if (entry.isIntersecting) {
+				entry.target.classList.add('revealed');
+				// 可选：观察后停止观察
+				// observer.unobserve(entry.target);
+			} else {
+				// 可选：移出视口时重新隐藏
+				// entry.target.classList.remove('revealed');
+			}
+		});
+	}, observerOptions);
+
+	// 观察所有滚动显示元素
+	document.querySelectorAll('.scroll-reveal').forEach(el => {
+		observer.observe(el);
+	});
+</script>

@@ -7,6 +7,11 @@ import ProfileCard from '../components/ProfileCard.astro';
 import PageLoader from '../components/PageLoader.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
 import BackToTop from '../components/BackToTop.astro';
+import CursorGlow from '../components/CursorGlow.astro';
+import ParallaxSection from '../components/ParallaxSection.astro';
+import MagneticButton from '../components/MagneticButton.astro';
+import GradientText from '../components/GradientText.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
@@ -330,6 +335,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<body class="dark">
 		<PageLoader />
 		<ScrollProgress />
+		<CursorGlow />
 		<Header />
 		<CinematicHero
 			title="我的博客"
@@ -339,42 +345,54 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 		<div class="main-content">
 			<section class="content-section">
-				<div class="section-header">
-					<span class="section-label">关于</span>
-					<h2 class="section-title">探索技术与生活</h2>
-				</div>
+				<ScrollReveal>
+					<div class="section-header">
+						<span class="section-label">关于</span>
+						<h2 class="section-title"><GradientText>探索技术与生活</GradientText></h2>
+					</div>
+				</ScrollReveal>
 
 				<div class="features-grid">
-					<div class="feature-card">
-						<div class="feature-icon">⚡</div>
-						<h3 class="feature-title">极速体验</h3>
-						<p class="feature-description">基于 Astro 构建，毫秒级加载速度，提供流畅的浏览体验</p>
-					</div>
-					<div class="feature-card">
-						<div class="feature-icon">🎨</div>
-						<h3 class="feature-title">独特设计</h3>
-						<p class="feature-description">新野兽派风格，深色主题，充满动效的现代化界面</p>
-					</div>
-					<div class="feature-card">
-						<div class="feature-icon">📱</div>
-						<h3 class="feature-title">完美适配</h3>
-						<p class="feature-description">响应式设计，在任何设备上都能获得最佳体验</p>
-					</div>
-					<div class="feature-card">
-						<div class="feature-icon">📝</div>
-						<h3 class="feature-title">技术分享</h3>
-						<p class="feature-description">分享前端开发、Web 技术和编程心得</p>
-					</div>
+					<ScrollReveal direction="up" delay={0}>
+						<div class="feature-card">
+							<div class="feature-icon">⚡</div>
+							<h3 class="feature-title">极速体验</h3>
+							<p class="feature-description">基于 Astro 构建，毫秒级加载速度，提供流畅的浏览体验</p>
+						</div>
+					</ScrollReveal>
+					<ScrollReveal direction="up" delay={100}>
+						<div class="feature-card">
+							<div class="feature-icon">🎨</div>
+							<h3 class="feature-title">独特设计</h3>
+							<p class="feature-description">新野兽派风格，深色主题，充满动效的现代化界面</p>
+						</div>
+					</ScrollReveal>
+					<ScrollReveal direction="up" delay={200}>
+						<div class="feature-card">
+							<div class="feature-icon">📱</div>
+							<h3 class="feature-title">完美适配</h3>
+							<p class="feature-description">响应式设计，在任何设备上都能获得最佳体验</p>
+						</div>
+					</ScrollReveal>
+					<ScrollReveal direction="up" delay={300}>
+						<div class="feature-card">
+							<div class="feature-icon">📝</div>
+							<h3 class="feature-title">技术分享</h3>
+							<p class="feature-description">分享前端开发、Web 技术和编程心得</p>
+						</div>
+					</ScrollReveal>
 				</div>
 
 				<div class="blog-showcase">
-					<div class="showcase-content">
-						<div class="showcase-text">
-							<h2 class="showcase-title">最新文章</h2>
-							<p class="showcase-description">
-								探索技术世界，记录学习历程，分享开发经验。
-								从基础到进阶，从理论到实践，一起成长。
-							</p>
+					<ParallaxSection speed={0.3}>
+						<div class="showcase-content">
+							<ScrollReveal direction="left">
+								<div class="showcase-text">
+									<h2 class="showcase-title"><GradientText>最新文章</GradientText></h2>
+									<p class="showcase-description">
+										探索技术世界，记录学习历程，分享开发经验。
+										从基础到进阶，从理论到实践，一起成长。
+									</p>
 							<div class="showcase-stats">
 								<div class="stat-item">
 									<div class="stat-number">5+</div>
@@ -386,6 +404,9 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 								</div>
 							</div>
 						</div>
+						</div>
+					</ScrollReveal>
+					<ScrollReveal direction="right">
 						<div class="showcase-visual">
 							<div class="blog-preview">
 								<div class="preview-card">
@@ -402,19 +423,23 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 								</div>
 							</div>
 						</div>
+					</ScrollReveal>
 					</div>
 				</div>
+			</ParallaxSection>
 			</section>
 
 			<section class="cta-section">
-				<h2 class="cta-title">开始阅读</h2>
-				<p class="cta-description">探索我的文章，发现更多有趣的技术内容和见解</p>
-				<a href="/blog" class="cta-button">
-					浏览所有文章
-					<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M5 12h14M12 5l7 7-7 7"/>
-					</svg>
-				</a>
+				<ScrollReveal>
+					<h2 class="cta-title">开始阅读</h2>
+					<p class="cta-description">探索我的文章，发现更多有趣的技术内容和见解</p>
+					<MagneticButton href="/blog">
+						浏览所有文章
+						<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M5 12h14M12 5l7 7-7 7"/>
+						</svg>
+					</MagneticButton>
+				</ScrollReveal>
 			</section>
 		</div>
 

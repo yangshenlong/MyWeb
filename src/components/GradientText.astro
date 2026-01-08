@@ -1,0 +1,45 @@
+---
+/**
+ * 渐变文字组件
+ * 带流动渐变效果的文字
+ */
+
+interface Props {
+	children: string;
+	class?: string;
+	colors?: string;
+	speed?: number;
+}
+
+const {
+	children,
+	class: className,
+	colors = '#6366f1, #a855f7, #FF4F00, #6366f1',
+	speed = 3
+} = Astro.props;
+---
+
+<span class:list={['gradient-text', className]} style={`--gradient-colors: ${colors}; --gradient-speed: ${speed}s`}>
+	{children}
+</span>
+
+<style>
+	.gradient-text {
+		background: linear-gradient(90deg, var(--gradient-colors));
+		background-size: 300% 100%;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		animation: gradientFlow var(--gradient-speed) linear infinite;
+		display: inline-block;
+	}
+
+	@keyframes gradientFlow {
+		0% {
+			background-position: 0% 50%;
+		}
+		100% {
+			background-position: 100% 50%;
+		}
+	}
+</style>

@@ -1,0 +1,56 @@
+---
+/**
+ * 视差滚动区域组件
+ * 子元素根据滚动速度产生不同深度的移动效果
+ */
+
+interface Props {
+	children: any;
+	class?: string;
+	speed?: number;
+}
+
+const { children, class: className, speed = 0.5 } = Astro.props;
+---
+
+<div class:list={['parallax-section', className]} data-speed={speed}>
+	{children}
+</div>
+
+<style>
+	.parallax-section {
+		position: relative;
+		will-change: transform;
+		transition: transform 0.1s ease-out;
+	}
+</style>
+
+<script>
+	// 平滑滚动值
+	let scrollY = 0;
+	let targetScrollY = 0;
+
+	// 监听滚动
+	window.addEventListener('scroll', () => {
+		targetScrollY = window.scrollY;
+	});
+
+	// 使用 requestAnimationFrame 平滑更新
+	function updateParallax() {
+		// 缓动效果
+		scrollY += (targetScrollY - scrollY) * 0.1;
+
+		document.querySelectorAll('.parallax-section').forEach(section => {
+			const speed = parseFloat(section.dataset.speed || '0.5');
+			const rect = section.getBoundingClientRect();
+			const sectionTop = rect.top + window.scrollY;
+			const offset = (scrollY - sectionTop) * speed;
+
+			section.style.transform = `translateY(${offset}px)`;
+		});
+
+		requestAnimationFrame(updateParallax);
+	}
+
+	updateParallax();
+</script>
