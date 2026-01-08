@@ -2,6 +2,9 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import PageLoader from '../../components/PageLoader.astro';
+import ScrollProgress from '../../components/ScrollProgress.astro';
+import BackToTop from '../../components/BackToTop.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 ---
 
@@ -42,6 +45,8 @@ const education = [
 		<BaseHead title={`简历 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 	</head>
 	<body class="dark">
+		<PageLoader />
+		<ScrollProgress />
 		<Header />
 
 		<main class="resume-page">
@@ -182,6 +187,7 @@ const education = [
 			</div>
 		</main>
 
+		<BackToTop />
 		<Footer />
 
 		<style>

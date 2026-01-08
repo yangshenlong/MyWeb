@@ -3,6 +3,9 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import PageLoader from '../../components/PageLoader.astro';
+import ScrollProgress from '../../components/ScrollProgress.astro';
+import BackToTop from '../../components/BackToTop.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 ---
 
@@ -38,6 +41,8 @@ const projects = [
 		<BaseHead title={`作品集 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 	</head>
 	<body class="dark">
+		<PageLoader />
+		<ScrollProgress />
 		<Header />
 
 		<main class="projects-page">
@@ -74,6 +79,7 @@ const projects = [
 			</div>
 		</main>
 
+		<BackToTop />
 		<Footer />
 
 		<style>

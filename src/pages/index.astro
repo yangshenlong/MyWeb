@@ -4,6 +4,9 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import CinematicHero from '../components/CinematicHero.astro';
 import ProfileCard from '../components/ProfileCard.astro';
+import PageLoader from '../components/PageLoader.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import BackToTop from '../components/BackToTop.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
@@ -325,6 +328,8 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 		</style>
 	</head>
 	<body class="dark">
+		<PageLoader />
+		<ScrollProgress />
 		<Header />
 		<CinematicHero
 			title="我的博客"
@@ -413,6 +418,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 			</section>
 		</div>
 
+		<BackToTop />
 		<Footer />
 	</body>
 </html>

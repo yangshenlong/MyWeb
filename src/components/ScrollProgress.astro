@@ -1,0 +1,47 @@
+---
+/**
+ * 滚动进度指示器组件
+ * 顶部细线显示当前页面滚动进度
+ */
+---
+
+<div class="scroll-progress" id="scrollProgress">
+	<div class="progress-bar" id="progressBar"></div>
+</div>
+
+<script>
+	const progressBar = document.getElementById('progressBar');
+
+	window.addEventListener('scroll', () => {
+		const scrollTop = window.scrollY;
+		const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		const progress = (scrollTop / docHeight) * 100;
+		progressBar.style.width = `${progress}%`;
+	});
+</script>
+
+<style>
+	.scroll-progress {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 3px;
+		background: rgba(255, 255, 255, 0.1);
+		z-index: 10000;
+	}
+
+	.progress-bar {
+		height: 100%;
+		width: 0%;
+		background: linear-gradient(90deg, #6366f1, #a855f7, #FF4F00);
+		transition: width 0.1s linear;
+		box-shadow: 0 0 10px rgba(255, 79, 0, 0.5);
+	}
+
+	@media (max-width: 768px) {
+		.scroll-progress {
+			height: 2px;
+		}
+	}
+</style>
