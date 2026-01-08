@@ -1,6 +1,5 @@
 ---
 import HeaderArchitectural from '../components/HeaderArchitectural.astro';
-import GlassCard from '../components/GlassCard.astro';
 import BackToTop from '../components/BackToTop.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
 import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
@@ -111,62 +110,60 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 
 				<!-- Contact Form -->
 				<div class="contact-form-wrapper">
-					<GlassCard class="form-card">
-						<div class="form-header">
-							<span class="form-number">03</span>
-							<h3 class="form-title">发送消息</h3>
+					<div class="form-header">
+						<span class="form-number">03</span>
+						<h3 class="form-title">发送消息</h3>
+					</div>
+					<form class="contact-form" id="contactForm">
+						<div class="form-group">
+							<label for="name" class="form-label">姓名</label>
+							<input
+								type="text"
+								id="name"
+								name="name"
+								class="form-input"
+								placeholder="您的姓名"
+								required
+							/>
 						</div>
-						<form class="contact-form" id="contactForm">
-							<div class="form-group">
-								<label for="name" class="form-label">姓名</label>
-								<input
-									type="text"
-									id="name"
-									name="name"
-									class="form-input"
-									placeholder="您的姓名"
-									required
-								/>
-							</div>
-							<div class="form-group">
-								<label for="email" class="form-label">邮箱</label>
-								<input
-									type="email"
-									id="email"
-									name="email"
-									class="form-input"
-									placeholder="your@email.com"
-									required
-								/>
-							</div>
-							<div class="form-group">
-								<label for="subject" class="form-label">主题</label>
-								<input
-									type="text"
-									id="subject"
-									name="subject"
-									class="form-input"
-									placeholder="Project inquiry"
-									required
-								/>
-							</div>
-							<div class="form-group">
-								<label for="message" class="form-label">消息</label>
-								<textarea
-									id="message"
-									name="message"
-									class="form-textarea"
-									placeholder="Tell me about your project..."
-									rows="6"
-									required
-								></textarea>
-							</div>
-							<button type="submit" class="submit-button">
-								<span class="button-text">发送消息</span>
-								<span class="button-arrow">→</span>
-							</button>
-						</form>
-					</GlassCard>
+						<div class="form-group">
+							<label for="email" class="form-label">邮箱</label>
+							<input
+								type="email"
+								id="email"
+								name="email"
+								class="form-input"
+								placeholder="your@email.com"
+								required
+							/>
+						</div>
+						<div class="form-group">
+							<label for="subject" class="form-label">主题</label>
+							<input
+								type="text"
+								id="subject"
+								name="subject"
+								class="form-input"
+								placeholder="Project inquiry"
+								required
+							/>
+						</div>
+						<div class="form-group">
+							<label for="message" class="form-label">消息</label>
+							<textarea
+								id="message"
+								name="message"
+								class="form-textarea"
+								placeholder="Tell me about your project..."
+								rows="6"
+								required
+							></textarea>
+						</div>
+						<button type="submit" class="submit-button">
+							<span class="button-text">发送消息</span>
+							<span class="button-arrow">→</span>
+						</button>
+					</form>
 				</div>
 			</div>
 		</section>
@@ -421,20 +418,14 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			/* Form */
 			.contact-form-wrapper {
 				display: flex;
-				align-items: flex-start;
-			}
-
-			.form-card {
-				width: 100%;
+				flex-direction: column;
+				gap: 2em;
 			}
 
 			.form-header {
 				display: flex;
 				align-items: center;
 				gap: 1em;
-				margin-bottom: 2em;
-				padding-bottom: 1.5em;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 			}
 
 			.form-number {
