@@ -1,16 +1,60 @@
 ---
-title: 'Third post'
-description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Jul 22 2022'
+title: 'Astro 框架初体验'
+description: '探索 Astro 静态站点生成器的强大功能'
+pubDate: '2024-01-09'
 heroImage: '../../assets/blog-placeholder-2.jpg'
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
+最近我开始探索 Astro 框架，一个现代化的静态站点生成器。经过一段时间的使用，我深深被它的设计理念和性能表现所吸引。
 
-Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc. Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra massa massa ultricies mi.
+## 为什么选择 Astro？
 
-Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
+Astro 的核心理念是"零 JS 默认"。它默认不向客户端发送任何 JavaScript，只发送纯 HTML 和 CSS。这意味着：
 
-Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id cursus metus aliquam eleifend mi.
+- **极快的加载速度** - 浏览器不需要解析和执行 JS
+- **更好的 SEO** - 搜索引擎可以直接索引 HTML 内容
+- **更好的用户体验** - 页面瞬间加载完成
 
-Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
+## 岛屿架构
+
+Astro 采用独特的"岛屿架构"（Islands Architecture）。你可以选择性地将需要交互的组件标记为"岛屿"，这些组件会水合（hydrate）并保留交互性，而其余部分保持静态。
+
+这种设计让你能够：
+- 大部分内容保持静态
+- 只在需要交互的地方使用 JS
+- 精确控制每个页面的 JS 大小
+
+## 优秀的开发体验
+
+使用 Astro 开发也非常愉快：
+
+```astro
+---
+// 服务端代码在这里运行
+const data = await fetch('api/data').then(r => r.json());
+---
+
+<!-- HTML 在这里 -->
+<div>{data.map(item => <Card {item} />)}</div>
+
+<style>
+  /* 作用域样式 */
+  div { color: red; }
+</style>
+```
+
+## 支持多种 UI 框架
+
+Astro 的另一个强大之处是它的框架无关性。你可以在同一个项目中：
+- 使用 React 组件
+- 使用 Vue 组件
+- 使用 Svelte 组件
+- 使用 Preact 组件
+
+所有这些框架可以共存，Astro 会在构建时处理它们。
+
+## 总结
+
+如果你正在寻找一个快速、现代、易用的静态站点生成器，我强烈推荐尝试 Astro。它特别适合构建博客、文档网站、作品集等以内容为主的网站。
+
+对于我来说，Astro 已经成为我的首选工具，我会继续深入探索它的更多功能。

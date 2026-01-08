@@ -1,16 +1,65 @@
 ---
-title: 'Second post'
-description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Jul 15 2022'
+title: 'Web 性能优化实践'
+description: '分享一些提升网站性能的实用技巧和最佳实践'
+pubDate: '2024-01-08'
 heroImage: '../../assets/blog-placeholder-4.jpg'
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
+在 Web 开发中，性能优化是一个永恒的话题。一个快速的网站不仅能提升用户体验，还能改善 SEO 排名。在这篇文章中，我将分享一些实用的性能优化技巧。
 
-Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc. Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra massa massa ultricies mi.
+## 图片优化
 
-Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
+图片通常是网页上最大的资源：
 
-Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id cursus metus aliquam eleifend mi.
+- **使用现代格式** - WebP 和 AVIF 通常比 JPEG 和 PNG 更小
+- **懒加载** - 只加载视口内的图片，其余的滚动到再加载
+- **响应式图片** - 使用 `srcset` 为不同设备提供合适的尺寸
+- **压缩图片** - 使用工具如 TinyPNG 或 Squoosh 压缩图片
 
-Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
+## 代码优化
+
+优化 JavaScript 和 CSS：
+
+- **压缩和混淆** - 移除空格、注释，缩短变量名
+- **Tree Shaking** - 移除未使用的代码
+- **代码分割** - 将代码分成小块，按需加载
+- **移除未使用的依赖** - 定期审查并删除不必要的库
+
+## 缓存策略
+
+良好的缓存策略可以大幅提升性能：
+
+- **浏览器缓存** - 使用 `Cache-Control` 头设置缓存
+- **CDN** - 使用内容分发网络加速资源加载
+- **Service Worker** - 实现离线缓存和渐进式 Web 应用
+- **本地存储** - 使用 localStorage 缓存计算结果
+
+## 性能监控
+
+要优化性能，首先要能测量它：
+
+- **Lighthouse** - Chrome 内置的性能审计工具
+- **Web Vitals** - 关注核心 Web 指标（LCP、FID、CLS）
+- **Performance API** - 在代码中监控关键指标
+- **RUM** - 真实用户监控数据
+
+## 实用技巧
+
+一些立即可用的技巧：
+
+1. **预加载关键资源** - 使用 `<link rel="preload">`
+2. **预连接到第三方** - 使用 `<link rel="preconnect">`
+3. **异步加载非关键 JS** - 使用 `async` 或 `defer`
+4. **优化字体加载** - 使用 `font-display: swap`
+5. **减少重排和重绘** - 批量 DOM 操作
+
+## 持续优化
+
+性能优化是一个持续的过程：
+
+- 定期审计网站性能
+- 关注 Core Web Vitals 指标
+- 监控真实用户数据
+- 保持学习新的优化技术
+
+记住，过早优化是万恶之源，但合理的性能优化能让你的网站脱颖而出。
