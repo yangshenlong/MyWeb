@@ -1,0 +1,520 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+---
+
+const skills = [
+	{ category: '前端开发', items: ['HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Vue', 'Astro'] },
+	{ category: '后端开发', items: ['Node.js', 'Python', 'MySQL', 'MongoDB'] },
+	{ category: '工具 & 其他', items: ['Git', 'VS Code', 'Figma', 'Linux'] }
+];
+
+const experience = [
+	{
+		title: '前端开发工程师',
+		company: '某科技公司',
+		period: '2022 - 至今',
+		description: '负责公司产品的前端开发工作，使用 React 和 TypeScript 构建高质量的 Web 应用。'
+	},
+	{
+		title: '全栈开发实习生',
+		company: '某创业公司',
+		period: '2021 - 2022',
+		description: '参与公司项目的全栈开发，使用 Node.js 和 Vue.js 完成多个功能模块。'
+	}
+];
+
+const education = [
+	{
+		school: '某大学',
+		degree: '计算机科学与技术 本科',
+		period: '2018 - 2022',
+		description: '主修计算机科学，学习编程基础、数据结构、算法等课程。'
+	}
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`简历 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+	</head>
+	<body class="dark">
+		<Header />
+
+		<main class="resume-page">
+			<div class="page-header">
+				<div class="header-content">
+					<div class="header-label">RESUME</div>
+					<h1 class="header-title">杨慎龙</h1>
+					<p class="header-subtitle">热爱技术的开发者 · 追求卓越</p>
+				</div>
+			</div>
+
+			<div class="resume-content">
+				<!-- 基本信息 -->
+				<section class="resume-section">
+					<h2 class="section-title">
+						<span class="title-icon">👤</span>
+						关于我
+					</h2>
+					<div class="section-content">
+						<p class="bio">
+							我是一名热爱技术的开发者，专注于前端开发和 Web 技术。
+							喜欢学习新技术，探索最佳实践，并通过代码解决问题。
+							具有良好的团队合作精神和沟通能力，乐于分享和交流。
+						</p>
+						<div class="contact-info">
+							<div class="contact-item">
+								<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+									<polyline points="22,6 12,13 2,6"></polyline>
+								</svg>
+								<span>your.email@example.com</span>
+							</div>
+							<div class="contact-item">
+								<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+									<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+								</svg>
+								<a href="https://github.com/yangshenlong" target="_blank">github.com/yangshenlong</a>
+							</div>
+							<div class="contact-item">
+								<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+									<circle cx="12" cy="10" r="3"></circle>
+								</svg>
+								<span>中国</span>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- 技能 -->
+				<section class="resume-section">
+					<h2 class="section-title">
+						<span class="title-icon">💻</span>
+						专业技能
+					</h2>
+					<div class="section-content">
+						{skills.map((skillGroup) => (
+							<div class="skill-group">
+								<h3 class="skill-category">{skillGroup.category}</h3>
+								<div class="skill-items">
+									{skillGroup.items.map((item) => (
+										<span class="skill-item">{item}</span>
+									))}
+								</div>
+							</div>
+						))}
+					</div>
+				</section>
+
+				<!-- 工作经历 -->
+				<section class="resume-section">
+					<h2 class="section-title">
+						<span class="title-icon">💼</span>
+						工作经历
+					</h2>
+					<div class="section-content">
+						<div class="timeline">
+							{experience.map((job) => (
+								<div class="timeline-item">
+									<div class="timeline-dot"></div>
+									<div class="timeline-content">
+										<div class="timeline-period">{job.period}</div>
+										<h3 class="timeline-title">{job.title}</h3>
+										<div class="timeline-company">{job.company}</div>
+										<p class="timeline-description">{job.description}</p>
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				</section>
+
+				<!-- 教育背景 -->
+				<section class="resume-section">
+					<h2 class="section-title">
+						<span class="title-icon">🎓</span>
+						教育背景
+					</h2>
+					<div class="section-content">
+						<div class="timeline">
+							{education.map((edu) => (
+								<div class="timeline-item">
+									<div class="timeline-dot"></div>
+									<div class="timeline-content">
+										<div class="timeline-period">{edu.period}</div>
+										<h3 class="timeline-title">{edu.degree}</h3>
+										<div class="timeline-company">{edu.school}</div>
+										<p class="timeline-description">{edu.description}</p>
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				</section>
+			</div>
+
+			<!-- 下载简历 -->
+			<div class="cta-section">
+				<h2 class="cta-title">想要我的简历？</h2>
+				<p class="cta-description">可以下载 PDF 版本的简历，或通过邮件联系我</p>
+				<div class="cta-buttons">
+					<a href="#" class="cta-button primary">
+						<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+							<polyline points="7 10 12 15 17 10"></polyline>
+							<line x1="12" y1="15" x2="12" y2="3"></line>
+						</svg>
+						下载 PDF
+					</a>
+					<a href="mailto:your.email@example.com" class="cta-button secondary">
+						<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+							<polyline points="22,6 12,13 2,6"></polyline>
+						</svg>
+						联系我
+					</a>
+				</div>
+			</div>
+		</main>
+
+		<Footer />
+
+		<style>
+			.resume-page {
+				min-height: 100vh;
+				background: #0a0a0a;
+			}
+
+			.page-header {
+				padding: 6em 2em 4em;
+				text-align: center;
+				background: linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
+				border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+			}
+
+			.header-content {
+				max-width: 800px;
+				margin: 0 auto;
+			}
+
+			.header-label {
+				display: inline-block;
+				padding: 0.5em 1.5em;
+				background: rgba(99, 102, 241, 0.2);
+				border: 1px solid rgba(99, 102, 241, 0.3);
+				color: rgba(255, 255, 255, 0.9);
+				font-size: 0.85em;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin-bottom: 1.5em;
+				border-radius: 50px;
+			}
+
+			.header-title {
+				font-size: clamp(3em, 10vw, 6em);
+				font-weight: 900;
+				color: #ffffff;
+				margin: 0 0 0.5em 0;
+				line-height: 1;
+				letter-spacing: -0.02em;
+				background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 50%, #ffffff 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+
+			.header-subtitle {
+				font-size: 1.3em;
+				color: rgba(255, 255, 255, 0.6);
+				letter-spacing: 0.2em;
+			}
+
+			.resume-content {
+				max-width: 900px;
+				margin: 0 auto;
+				padding: 4em 2em;
+			}
+
+			.resume-section {
+				margin-bottom: 4em;
+			}
+
+			.section-title {
+				display: flex;
+				align-items: center;
+				gap: 0.75em;
+				font-size: 2em;
+				font-weight: 700;
+				color: #ffffff;
+				margin: 0 0 2em 0;
+				padding-bottom: 0.5em;
+				border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+			}
+
+			.title-icon {
+				font-size: 1.2em;
+			}
+
+			.section-content {
+				background: rgba(255, 255, 255, 0.02);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 16px;
+				padding: 2em;
+			}
+
+			.bio {
+				color: rgba(255, 255, 255, 0.8);
+				line-height: 1.8;
+				font-size: 1.05em;
+				margin: 0 0 2em 0;
+			}
+
+			.contact-info {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 2em;
+			}
+
+			.contact-item {
+				display: flex;
+				align-items: center;
+				gap: 0.75em;
+				color: rgba(255, 255, 255, 0.7);
+				font-size: 0.95em;
+			}
+
+			.contact-item a {
+				color: rgba(99, 102, 241, 0.9);
+				text-decoration: none;
+				transition: color 0.3s ease;
+			}
+
+			.contact-item a:hover {
+				color: #a855f7;
+			}
+
+			.skill-group {
+				margin-bottom: 2em;
+			}
+
+			.skill-group:last-child {
+				margin-bottom: 0;
+			}
+
+			.skill-category {
+				font-size: 1.2em;
+				font-weight: 600;
+				color: #ffffff;
+				margin: 0 0 1em 0;
+			}
+
+			.skill-items {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.75em;
+			}
+
+			.skill-item {
+				background: rgba(99, 102, 241, 0.2);
+				color: rgba(255, 255, 255, 0.9);
+				padding: 0.5em 1em;
+				border-radius: 8px;
+				font-size: 0.95em;
+				font-weight: 500;
+				border: 1px solid rgba(99, 102, 241, 0.3);
+				transition: all 0.3s ease;
+			}
+
+			.skill-item:hover {
+				background: rgba(99, 102, 241, 0.3);
+				border-color: rgba(99, 102, 241, 0.5);
+				transform: translateY(-2px);
+			}
+
+			.timeline {
+				position: relative;
+				padding-left: 2em;
+			}
+
+			.timeline::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 0;
+				bottom: 0;
+				width: 2px;
+				background: linear-gradient(180deg, #6366f1 0%, #a855f7 100%);
+			}
+
+			.timeline-item {
+				position: relative;
+				padding-bottom: 3em;
+			}
+
+			.timeline-item:last-child {
+				padding-bottom: 0;
+			}
+
+			.timeline-dot {
+				position: absolute;
+				left: -2.4em;
+				top: 0.3em;
+				width: 1.2em;
+				height: 1.2em;
+				background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+				border: 3px solid #0a0a0a;
+				border-radius: 50%;
+				box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+			}
+
+			.timeline-content {
+				background: rgba(255, 255, 255, 0.03);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 12px;
+				padding: 1.5em;
+				transition: all 0.3s ease;
+			}
+
+			.timeline-content:hover {
+				background: rgba(255, 255, 255, 0.05);
+				border-color: rgba(99, 102, 241, 0.3);
+			}
+
+			.timeline-period {
+				display: inline-block;
+				padding: 0.3em 0.8em;
+				background: rgba(99, 102, 241, 0.2);
+				color: rgba(255, 255, 255, 0.9);
+				font-size: 0.85em;
+				font-weight: 600;
+				border-radius: 6px;
+				margin-bottom: 0.75em;
+			}
+
+			.timeline-title {
+				font-size: 1.3em;
+				font-weight: 700;
+				color: #ffffff;
+				margin: 0 0 0.5em 0;
+			}
+
+			.timeline-company {
+				color: rgba(255, 255, 255, 0.6);
+				font-size: 0.95em;
+				margin-bottom: 0.75em;
+			}
+
+			.timeline-description {
+				color: rgba(255, 255, 255, 0.7);
+				line-height: 1.7;
+				margin: 0;
+			}
+
+			.cta-section {
+				background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.1) 100%);
+				padding: 6em 2em;
+				text-align: center;
+				border-top: 1px solid rgba(255, 255, 255, 0.05);
+			}
+
+			.cta-title {
+				font-size: clamp(2em, 5vw, 3.5em);
+				font-weight: 800;
+				color: #ffffff;
+				margin: 0 0 1em 0;
+			}
+
+			.cta-description {
+				font-size: 1.1em;
+				color: rgba(255, 255, 255, 0.6);
+				margin: 0 0 2em 0;
+			}
+
+			.cta-buttons {
+				display: flex;
+				gap: 1em;
+				justify-content: center;
+				flex-wrap: wrap;
+			}
+
+			.cta-button {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.75em;
+				padding: 1.25em 2.5em;
+				font-size: 1em;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				text-decoration: none;
+				border-radius: 50px;
+				transition: all 0.3s ease;
+			}
+
+			.cta-button.primary {
+				background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+				color: #ffffff;
+				box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+			}
+
+			.cta-button.primary:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 20px 60px rgba(99, 102, 241, 0.6);
+			}
+
+			.cta-button.secondary {
+				background: rgba(255, 255, 255, 0.05);
+				color: #ffffff;
+				border: 1px solid rgba(255, 255, 255, 0.2);
+			}
+
+			.cta-button.secondary:hover {
+				background: rgba(255, 255, 255, 0.1);
+				border-color: rgba(255, 255, 255, 0.3);
+				transform: translateY(-3px);
+			}
+
+			@media (max-width: 768px) {
+				.page-header {
+					padding: 4em 1.5em 3em;
+				}
+
+				.resume-content {
+					padding: 3em 1.5em;
+				}
+
+				.section-content {
+					padding: 1.5em;
+				}
+
+				.contact-info {
+					flex-direction: column;
+					gap: 1em;
+				}
+
+				.timeline {
+					padding-left: 1.5em;
+				}
+
+				.timeline-dot {
+					left: -1.9em;
+				}
+
+				.cta-buttons {
+					flex-direction: column;
+				}
+
+				.cta-button {
+					width: 100%;
+					justify-content: center;
+				}
+			}
+		</style>
+	</body>
+</html>
