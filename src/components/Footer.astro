@@ -41,11 +41,12 @@ const today = new Date();
 </footer>
 <style>
 	footer {
-		padding: 3em 1em;
-		background: #000000;
-		color: #ffffff;
+		padding: 4em 2em;
+		background: rgba(0, 0, 0, 0.6);
+		backdrop-filter: blur(20px);
+		color: rgba(255, 255, 255, 0.7);
 		text-align: center;
-		border-top: 4px solid #000000;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
 		margin-top: 4em;
 		position: relative;
 	}
@@ -53,24 +54,18 @@ const today = new Date();
 	footer::before {
 		content: '';
 		position: absolute;
-		top: -8px;
-		left: 0;
-		right: 0;
-		height: 4px;
-		background: repeating-linear-gradient(
-			90deg,
-			#000000 0px,
-			#000000 20px,
-			#ffffff 20px,
-			#ffffff 40px
-		);
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 200px;
+		height: 3px;
+		background: linear-gradient(90deg, transparent, #6366f1, #a855f7, transparent);
 	}
 
 	footer p {
 		margin: 0 0 1.5em 0;
 		font-size: 0.9em;
-		font-weight: 600;
-		text-transform: uppercase;
+		font-weight: 500;
 		letter-spacing: 0.05em;
 	}
 
@@ -82,24 +77,24 @@ const today = new Date();
 	}
 
 	.social-links a {
-		background: #ffffff;
-		color: #000000;
+		background: rgba(255, 255, 255, 0.05);
+		color: rgba(255, 255, 255, 0.7);
 		padding: 0.75em;
-		border: 3px solid #ffffff;
-		box-shadow: 3px 3px 0px 0px rgba(255, 255, 255, 0.3);
-		transition: all 0.15s ease;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		transition: all 0.3s ease;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		text-decoration: none;
+		border-radius: 8px;
 	}
 
 	.social-links a:hover {
-		background: #000000;
+		background: rgba(99, 102, 241, 0.2);
 		color: #ffffff;
-		transform: translate(-2px, -2px);
-		box-shadow: 5px 5px 0px 0px rgba(255, 255, 255, 0.3);
-		border-color: #ffffff;
+		transform: translateY(-3px);
+		border-color: rgba(99, 102, 241, 0.5);
+		box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
 	}
 
 	.social-links a:hover svg {

@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import CinematicHero from '../components/CinematicHero.astro';
 import ProfileCard from '../components/ProfileCard.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
@@ -11,172 +12,407 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				max-width: 900px;
-				padding-left: 340px;
+			/* 隐藏个人信息卡片，使用新的布局 */
+			profile-card {
+				display: none;
 			}
 
-			.hero {
-				background: #000000;
-				color: #ffffff;
-				padding: 3em 2em;
-				border: 4px solid #000000;
-				box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
-				margin-bottom: 3em;
+			.main-content {
+				background: #0a0a0a;
+				min-height: 100vh;
+			}
+
+			/* 内容区域 */
+			.content-section {
+				max-width: 1400px;
+				margin: 0 auto;
+				padding: 6em 3em;
+			}
+
+			.section-header {
 				text-align: center;
+				margin-bottom: 4em;
 			}
 
-			.hero h1 {
-				color: #ffffff;
-				font-size: 3em;
-				margin-bottom: 0.5em;
+			.section-label {
+				display: inline-block;
+				padding: 0.5em 1.5em;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				color: rgba(255, 255, 255, 0.6);
+				font-size: 0.85em;
 				text-transform: uppercase;
-				letter-spacing: 0.1em;
+				letter-spacing: 0.2em;
+				margin-bottom: 1em;
+				backdrop-filter: blur(10px);
 			}
 
-			.hero p {
-				font-size: 1.2em;
-				opacity: 0.9;
+			.section-title {
+				font-size: clamp(2.5em, 6vw, 4em);
+				font-weight: 800;
+				color: #ffffff;
+				margin: 0;
+				line-height: 1.1;
+				letter-spacing: -0.02em;
 			}
 
-			.features {
+			/* 特色网格 */
+			.features-grid {
 				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-				gap: 1.5em;
-				margin: 2em 0;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 2em;
+				margin-bottom: 6em;
 			}
 
 			.feature-card {
-				background: #ffffff;
-				border: 4px solid #000000;
-				box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+				background: rgba(255, 255, 255, 0.02);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				padding: 2.5em;
+			position: relative;
+			overflow: hidden;
+			transition: all 0.4s ease;
+		}
+
+		.feature-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+			opacity: 0;
+			transition: opacity 0.4s ease;
+		}
+
+		.feature-card:hover::before {
+			opacity: 1;
+		}
+
+		.feature-card:hover {
+			transform: translateY(-10px);
+			border-color: rgba(99, 102, 241, 0.3);
+			box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+		}
+
+		.feature-icon {
+			width: 60px;
+			height: 60px;
+			background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			border-radius: 16px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 2em;
+			margin-bottom: 1.5em;
+			position: relative;
+			z-index: 1;
+		}
+
+		.feature-title {
+			font-size: 1.5em;
+			font-weight: 700;
+			color: #ffffff;
+			margin: 0 0 1em 0;
+			position: relative;
+			z-index: 1;
+		}
+
+		.feature-description {
+			color: rgba(255, 255, 255, 0.6);
+			line-height: 1.7;
+			margin: 0;
+			position: relative;
+			z-index: 1;
+		}
+
+		/* 博客展示区 */
+		.blog-showcase {
+			background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 50%, transparent 100%);
+			padding: 4em;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			margin-bottom: 6em;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.blog-showcase::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+			pointer-events: none;
+		}
+
+		.showcase-content {
+			position: relative;
+			z-index: 1;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 4em;
+			align-items: center;
+		}
+
+		.showcase-text {
+			padding: 2em;
+		}
+
+		.showcase-title {
+			font-size: clamp(2em, 4vw, 3em);
+			font-weight: 800;
+			color: #ffffff;
+			margin: 0 0 1em 0;
+			line-height: 1.2;
+		}
+
+		.showcase-description {
+			color: rgba(255, 255, 255, 0.7);
+			font-size: 1.1em;
+			line-height: 1.8;
+			margin-bottom: 2em;
+		}
+
+		.showcase-stats {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 2em;
+		}
+
+		.stat-item {
+			text-align: center;
+		}
+
+		.stat-number {
+			font-size: 3em;
+			font-weight: 800;
+			background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+
+		.stat-label {
+			color: rgba(255, 255, 255, 0.5);
+			font-size: 0.9em;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+		}
+
+		.showcase-visual {
+			position: relative;
+		}
+
+		.blog-preview {
+			background: rgba(255, 255, 255, 0.03);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			border-radius: 20px;
+			padding: 2em;
+			backdrop-filter: blur(10px);
+		}
+
+		.preview-card {
+			background: rgba(255, 255, 255, 0.02);
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			border-radius: 12px;
+			padding: 1.5em;
+			margin-bottom: 1em;
+			transition: all 0.3s ease;
+		}
+
+		.preview-card:hover {
+			background: rgba(255, 255, 255, 0.05);
+			transform: translateX(10px);
+		}
+
+		.preview-card-title {
+			color: #ffffff;
+			font-size: 1.1em;
+			font-weight: 600;
+			margin: 0 0 0.5em 0;
+		}
+
+		.preview-card-meta {
+			color: rgba(255, 255, 255, 0.4);
+			font-size: 0.85em;
+		}
+
+		/* CTA 区域 */
+		.cta-section {
+			text-align: center;
+			padding: 6em 3em;
+			background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.1) 100%);
+			border-top: 1px solid rgba(255, 255, 255, 0.05);
+		}
+
+		.cta-title {
+			font-size: clamp(2em, 5vw, 3.5em);
+			font-weight: 800;
+			color: #ffffff;
+			margin: 0 0 1em 0;
+		}
+
+		.cta-description {
+			color: rgba(255, 255, 255, 0.6);
+			font-size: 1.2em;
+			max-width: 600px;
+			margin: 0 auto 2em auto;
+			line-height: 1.7;
+		}
+
+		.cta-button {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.75em;
+			padding: 1.25em 3em;
+			background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+			color: #ffffff;
+			font-size: 1.1em;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			text-decoration: none;
+			border-radius: 50px;
+			box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+			transition: all 0.3s ease;
+		}
+
+		.cta-button:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 20px 60px rgba(99, 102, 241, 0.6);
+		}
+
+		@media (max-width: 1024px) {
+			.content-section {
+				padding: 4em 2em;
+			}
+
+			.showcase-content {
+				grid-template-columns: 1fr;
+				gap: 3em;
+			}
+
+			.showcase-stats {
+				grid-template-columns: repeat(4, 1fr);
+			}
+		}
+
+		@media (max-width: 768px) {
+			.features-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.blog-showcase {
 				padding: 2em;
-				transition: all 0.15s ease;
 			}
 
-			.feature-card:hover {
-				transform: translate(-3px, -3px);
-				box-shadow: 9px 9px 0px 0px rgba(0, 0, 0, 1);
+			.showcase-stats {
+				grid-template-columns: repeat(2, 1fr);
 			}
 
-			.feature-card h3 {
-				margin: 0 0 0.75em 0;
-				font-size: 1.5em;
-				text-transform: uppercase;
-				letter-spacing: 0.05em;
+			.cta-section {
+				padding: 4em 2em;
 			}
 
-			.feature-card p {
-				margin: 0;
+			.cta-button {
+				width: 100%;
+				justify-content: center;
 			}
-
-			.cta {
-				background: #ffffff;
-				border: 4px solid #000000;
-				box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
-				padding: 2em;
-				text-align: center;
-				margin: 3em 0;
-			}
-
-			.cta a {
-				background: #000000;
-				color: #ffffff;
-				padding: 0.75em 2em;
-				border: 3px solid #000000;
-				box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 1);
-				font-weight: 700;
-				text-transform: uppercase;
-				letter-spacing: 0.05em;
-				display: inline-block;
-				margin: 0.5em;
-			}
-
-			.cta a:hover {
-				transform: translate(-2px, -2px);
-				box-shadow: 5px 5px 0px 0px rgba(0, 0, 0, 1);
-			}
-
-			@media (max-width: 1024px) {
-				main {
-					padding-left: 3em;
-					padding-right: 3em;
-				}
-			}
-
-			@media (max-width: 720px) {
-				main {
-					padding-left: 1em;
-					padding-right: 1em;
-				}
-
-				.hero h1 {
-					font-size: 2em;
-				}
-
-				.features {
-					grid-template-columns: 1fr;
-				}
-			}
+		}
 		</style>
 	</head>
-	<body>
+	<body class="dark">
 		<Header />
-		<ProfileCard
-			name="杨慎龙"
-			bio="热爱技术的开发者，喜欢探索新技术、分享技术心得。"
-			avatar="👨‍💻"
-			location="中国"
-			github="https://github.com/yangshenlong"
+		<CinematicHero
+			title="我的博客"
+			subtitle="EXPLORE · DISCOVER · RECORD"
+			backgroundText="BLOG"
 		/>
-		<main>
-			<div class="hero">
-				<h1>你好，欢迎来到我的博客！</h1>
-				<p>一个现代、简洁、充满个性的个人空间</p>
-			</div>
 
-			<p>
-				这是一个基于 <strong>Astro</strong> 构建的个人博客，
-				采用新野兽派（Neobrutalism）设计风格。
-				这里将分享我的技术探索、生活感悟和一些有趣的发现。
-			</p>
-
-			<p>
-				博客特色：
-			</p>
-
-			<div class="features">
-				<div class="feature-card">
-					<h3>极简设计</h3>
-					<p>专注于内容本身，提供纯粹的阅读体验</p>
+		<div class="main-content">
+			<section class="content-section">
+				<div class="section-header">
+					<span class="section-label">关于</span>
+					<h2 class="section-title">探索技术与生活</h2>
 				</div>
-				<div class="feature-card">
-					<h3>快速加载</h3>
-					<p>优秀的性能表现，秒开页面</p>
-				</div>
-				<div class="feature-card">
-					<h3>响应式</h3>
-					<p>完美适配各种设备和屏幕尺寸</p>
-				</div>
-				<div class="feature-card">
-					<h3>现代风格</h3>
-					<p>新野兽派设计，独特而个性</p>
-				</div>
-			</div>
 
-			<div class="cta">
-				<h3>开始探索</h3>
-				<p>
-					<a href="/blog">浏览文章</a>
-					<a href="/about">关于我</a>
-				</p>
-			</div>
+				<div class="features-grid">
+					<div class="feature-card">
+						<div class="feature-icon">⚡</div>
+						<h3 class="feature-title">极速体验</h3>
+						<p class="feature-description">基于 Astro 构建，毫秒级加载速度，提供流畅的浏览体验</p>
+					</div>
+					<div class="feature-card">
+						<div class="feature-icon">🎨</div>
+						<h3 class="feature-title">独特设计</h3>
+						<p class="feature-description">新野兽派风格，深色主题，充满动效的现代化界面</p>
+					</div>
+					<div class="feature-card">
+						<div class="feature-icon">📱</div>
+						<h3 class="feature-title">完美适配</h3>
+						<p class="feature-description">响应式设计，在任何设备上都能获得最佳体验</p>
+					</div>
+					<div class="feature-card">
+						<div class="feature-icon">📝</div>
+						<h3 class="feature-title">技术分享</h3>
+						<p class="feature-description">分享前端开发、Web 技术和编程心得</p>
+					</div>
+				</div>
 
-			<p>
-				如果你对技术感兴趣，或者想和我交流，
-				可以通过社交媒体联系我。希望你能在这里找到有用的信息！
-			</p>
-		</main>
+				<div class="blog-showcase">
+					<div class="showcase-content">
+						<div class="showcase-text">
+							<h2 class="showcase-title">最新文章</h2>
+							<p class="showcase-description">
+								探索技术世界，记录学习历程，分享开发经验。
+								从基础到进阶，从理论到实践，一起成长。
+							</p>
+							<div class="showcase-stats">
+								<div class="stat-item">
+									<div class="stat-number">5+</div>
+									<div class="stat-label">文章</div>
+								</div>
+								<div class="stat-item">
+									<div class="stat-number">3</div>
+									<div class="stat-label">分类</div>
+								</div>
+							</div>
+						</div>
+						<div class="showcase-visual">
+							<div class="blog-preview">
+								<div class="preview-card">
+									<h4 class="preview-card-title">欢迎使用 Astro</h4>
+									<p class="preview-card-meta">2024年1月9日 · 技术分享</p>
+								</div>
+								<div class="preview-card">
+									<h4 class="preview-card-title">Markdown 样式指南</h4>
+									<p class="preview-card-meta">2024年1月9日 · 教程</p>
+								</div>
+								<div class="preview-card">
+									<h4 class="preview-card-title">第二篇文章</h4>
+									<p class="preview-card-meta">2024年1月9日 · 随笔</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="cta-section">
+				<h2 class="cta-title">开始阅读</h2>
+				<p class="cta-description">探索我的文章，发现更多有趣的技术内容和见解</p>
+				<a href="/blog" class="cta-button">
+					浏览所有文章
+					<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M5 12h14M12 5l7 7-7 7"/>
+					</svg>
+				</a>
+			</section>
+		</div>
+
 		<Footer />
 	</body>
 </html>
