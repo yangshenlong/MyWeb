@@ -1,11 +1,12 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
+import BlogPostGrass from '../../layouts/BlogPostGrass.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
 	return posts.map((post) => ({
-		params: { slug: post.id },
+		params: { slug: post.id.replace(/\.(md|mdx)$/, '') },
 		props: post,
 	}));
 }
@@ -13,8 +14,11 @@ type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
 const { Content } = await render(post);
+
+const layout = post.id === 'grass-technical-analysis' ? BlogPostGrass : BlogPost;
+const LayoutComponent = layout;
 ---
 
-<BlogPost {...post.data}>
+<LayoutComponent {...post.data}>
 	<Content />
-</BlogPost>
+</LayoutComponent>

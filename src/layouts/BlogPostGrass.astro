@@ -1,0 +1,981 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import HeaderArchitectural from '../components/HeaderArchitectural.astro';
+import BackToTop from '../components/BackToTop.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import CursorGlow from '../components/CursorGlow.astro';
+import GradientText from '../components/GradientText.astro';
+import { SITE_TITLE } from '../consts';
+
+type Props = CollectionEntry<'blog'>['data'] & {
+	heroImage?: ImageMetadata | string;
+};
+
+const { title, description, pubDate, updatedDate, heroImage, tags, category, author } = Astro.props;
+
+const formatDate = (date: Date) => {
+	return new Date(date).toLocaleDateString('zh-CN', {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit'
+	});
+};
+
+const formattedDate = formatDate(pubDate);
+const updatedText = updatedDate ? formatDate(updatedDate) : '';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={title} description={description} />
+		<style is:global>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			html {
+				scroll-behavior: smooth;
+			}
+
+			body {
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+				background: #050505;
+				color: rgba(255, 255, 255, 0.9);
+				line-height: 1.8;
+				overflow-x: hidden;
+			}
+
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
+
+			::-webkit-scrollbar {
+				width: 10px;
+				height: 10px;
+			}
+
+			::-webkit-scrollbar-track {
+				background: rgba(255, 255, 255, 0.02);
+			}
+
+			::-webkit-scrollbar-thumb {
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 5px;
+			}
+
+			::-webkit-scrollbar-thumb:hover {
+				background: rgba(255, 255, 255, 0.2);
+			}
+		</style>
+	</head>
+
+	<body>
+		<ScrollProgress />
+		<CursorGlow />
+		<HeaderArchitectural />
+
+		<!-- Hero Section -->
+		<section class="hero-section">
+			<div class="hero-content">
+				<div class="breadcrumb">
+					<span class="breadcrumb-item">
+						<a href="/">首页</a>
+					</span>
+					<span class="breadcrumb-separator">/</span>
+					<span class="breadcrumb-item">
+						<a href="/blog">技术文章</a>
+					</span>
+					<span class="breadcrumb-separator">/</span>
+					<span class="breadcrumb-item current">{title}</span>
+				</div>
+
+				<div class="hero-info">
+					<h1 class="hero-title">
+						<GradientText>{title}</GradientText>
+					</h1>
+					{description && (
+						<p class="hero-description">{description}</p>
+					)}
+					<div class="hero-meta">
+						<span class="meta-date">{formattedDate}</span>
+						{category && <span class="meta-category">{category}</span>}
+						{author && <span class="meta-author">{author}</span>}
+					</div>
+					{tags && tags.length > 0 && (
+						<div class="tags-list">
+							{tags.map((tag) => (
+								<span class="tag">{tag}</span>
+							))}
+						</div>
+					)}
+				</div>
+			</div>
+		</section>
+
+		<!-- Hero Image -->
+		{heroImage && (
+			<div class="hero-image-wrapper">
+				<Image width={1920} height={800} src={heroImage} alt={title} class="hero-image" />
+			</div>
+		)}
+
+		<!-- Main Content with Sidebar -->
+		<div class="content-wrapper">
+			<aside class="toc-sidebar">
+				<div class="toc-container">
+					<h3 class="toc-title">目录</h3>
+					<nav class="toc-nav" id="toc"></nav>
+				</div>
+			</aside>
+
+			<main class="article-main">
+				<article class="article-content">
+					<div class="article-body" id="article-content">
+						<slot />
+					</div>
+
+					{updatedDate && (
+						<div class="updated-info">
+							<p>最后更新: {updatedText}</p>
+						</div>
+					)}
+				</article>
+			</main>
+		</div>
+
+		<!-- Footer -->
+		<footer class="article-footer">
+			<div class="footer-content">
+				<div class="footer-left">
+					<span class="footer-text">© 2024 杨慎龙</span>
+					<span class="footer-divider">·</span>
+					<span class="footer-text">Technical Artist</span>
+				</div>
+				<div class="footer-right">
+					<a href="https://github.com/yangshenlong" target="_blank" class="footer-link">GitHub</a>
+					<a href="https://www.bilibili.com" target="_blank" class="footer-link">Bilibili</a>
+					<a href="https://www.zhihu.com" target="_blank" class="footer-link">知乎</a>
+				</div>
+			</div>
+		</footer>
+
+		<BackToTop />
+
+		<style>
+			/* Hero Section */
+			.hero-section {
+				padding: 120px 4em 4em;
+				background: #050505;
+				position: relative;
+			}
+
+			.hero-content {
+				max-width: 1400px;
+				margin: 0 auto;
+			}
+
+			.breadcrumb {
+				display: flex;
+				align-items: center;
+				gap: 0.75em;
+				margin-bottom: 1.5em;
+			}
+
+			.breadcrumb-item {
+				font-size: 0.75em;
+				letter-spacing: 0.2em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.4);
+				transition: color 0.3s ease;
+			}
+
+			.breadcrumb-item:hover {
+				color: rgba(255, 255, 255, 0.7);
+			}
+
+			.breadcrumb-item.current {
+				color: rgba(255, 255, 255, 0.7);
+			}
+
+			.breadcrumb-separator {
+				color: rgba(255, 255, 255, 0.2);
+			}
+
+			.hero-info {
+				display: flex;
+				flex-direction: column;
+				gap: 1.25em;
+			}
+
+			.hero-title {
+				font-size: clamp(2em, 4vw, 3.5em);
+				font-weight: 200;
+				letter-spacing: -0.03em;
+				line-height: 1.1;
+				margin: 0;
+			}
+
+			.hero-description {
+				font-size: 1.15em;
+				color: rgba(255, 255, 255, 0.65);
+				line-height: 1.7;
+				max-width: 900px;
+			}
+
+			.hero-meta {
+				display: flex;
+				align-items: center;
+				gap: 1.5em;
+				flex-wrap: wrap;
+			}
+
+			.meta-date,
+			.meta-category,
+			.meta-author {
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.5);
+				font-family: 'Space Mono', monospace;
+				letter-spacing: 0.1em;
+			}
+
+			.meta-category {
+				padding: 0.3em 0.8em;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+			}
+
+			.tags-list {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.75em;
+			}
+
+			.tag {
+				font-size: 0.75em;
+				padding: 0.4em 1em;
+				background: rgba(99, 102, 241, 0.15);
+				border: 1px solid rgba(99, 102, 241, 0.3);
+				color: rgba(199, 198, 255, 0.9);
+				border-radius: 4px;
+				transition: all 0.3s ease;
+			}
+
+			.tag:hover {
+				background: rgba(99, 102, 241, 0.25);
+				border-color: rgba(99, 102, 241, 0.4);
+				transform: translateY(-2px);
+			}
+
+			/* Hero Image */
+			.hero-image-wrapper {
+				width: 100%;
+				max-height: 500px;
+				overflow: hidden;
+				position: relative;
+				margin-bottom: 3em;
+			}
+
+			.hero-image {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			/* Content Wrapper */
+			.content-wrapper {
+				display: grid;
+				grid-template-columns: 200px 1fr;
+				gap: 2em;
+				max-width: 95vw;
+				margin: 0 auto;
+				padding: 0 2em 6em;
+				background: #050505;
+			}
+
+			/* TOC Sidebar */
+			.toc-sidebar {
+				position: sticky;
+				top: 80px;
+				height: fit-content;
+				max-height: calc(100vh - 120px);
+				overflow-y: auto;
+				z-index: 10;
+			}
+
+			.toc-container {
+				background: rgba(99, 102, 241, 0.08);
+				border: 2px solid rgba(99, 102, 241, 0.3);
+				border-radius: 12px;
+				padding: 1.5em;
+				backdrop-filter: blur(10px);
+				box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+			}
+
+			.toc-title {
+				font-size: 1.05em;
+				font-weight: 700;
+				color: rgba(199, 198, 255, 0.95);
+				margin: 0 0 1em 0;
+				padding-bottom: 0.75em;
+				border-bottom: 2px solid rgba(99, 102, 241, 0.4);
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				display: flex;
+				align-items: center;
+				gap: 0.5em;
+			}
+
+			.toc-title::before {
+				content: '📚';
+				font-size: 1.2em;
+			}
+
+			.toc-nav {
+				display: flex;
+				flex-direction: column;
+				gap: 0.3em;
+			}
+
+			.toc-nav a {
+				font-size: 0.9em;
+				color: rgba(255, 255, 255, 0.75);
+				padding: 0.6em 0.8em;
+				border-radius: 6px;
+				transition: all 0.2s ease;
+				display: block;
+				line-height: 1.6;
+				border-left: 3px solid transparent;
+				background: rgba(255, 255, 255, 0.02);
+			}
+
+			.toc-nav a:hover {
+				color: rgba(255, 255, 255, 0.95);
+				background: rgba(99, 102, 241, 0.2);
+				border-left-color: rgba(99, 102, 241, 0.7);
+				transform: translateX(6px);
+				box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+			}
+
+			.toc-nav a.active {
+				color: rgba(199, 198, 255, 0.95);
+				background: rgba(99, 102, 241, 0.3);
+				font-weight: 600;
+				border-left-color: rgba(199, 198, 255, 0.9);
+				padding-left: 1.1em;
+				box-shadow: 0 2px 12px rgba(99, 102, 241, 0.3);
+			}
+
+			.toc-nav .toc-h2 {
+				padding-left: 0.5em;
+			}
+
+			.toc-nav .toc-h3 {
+				padding-left: 1.5em;
+				font-size: 0.8em;
+				margin-top: 0.25em;
+			}
+
+			/* Article Main */
+			.article-main {
+				min-width: 0;
+				width: 100%;
+			}
+
+			.article-content {
+				max-width: 100%;
+				width: 100%;
+			}
+
+			.article-body {
+				padding: 1em 0;
+			}
+
+			/* Content Styles */
+			.article-body :global(h1) {
+				font-size: 2.5em;
+				font-weight: 600;
+				color: rgba(255, 255, 255, 0.95);
+				margin: 0 0 1.2em 0;
+				padding-bottom: 0.5em;
+				border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+			}
+
+			.article-body :global(h2) {
+				font-size: 1.8em;
+				font-weight: 600;
+				color: rgba(255, 255, 255, 0.9);
+				margin: 2.5em 0 1em 0;
+				padding-left: 0.5em;
+				border-left: 4px solid rgba(99, 102, 241, 0.5);
+			}
+
+			.article-body :global(h3) {
+				font-size: 1.4em;
+				font-weight: 500;
+				color: rgba(255, 255, 255, 0.85);
+				margin: 2em 0 0.8em 0;
+			}
+
+			.article-body :global(h4) {
+				font-size: 1.2em;
+				font-weight: 500;
+				color: rgba(255, 255, 255, 0.8);
+				margin: 1.5em 0 0.5em 0;
+			}
+
+			.article-body :global(p) {
+				font-size: 1.05em;
+				line-height: 1.9;
+				color: rgba(255, 255, 255, 0.8);
+				margin-bottom: 1.5em;
+			}
+
+			.article-body :global(ul),
+			.article-body :global(ol) {
+				margin: 1.5em 0;
+				padding-left: 2em;
+			}
+
+			.article-body :global(li) {
+				margin-bottom: 0.6em;
+				color: rgba(255, 255, 255, 0.8);
+				line-height: 1.7;
+			}
+
+			/* Table Styles */
+			.article-body :global(table) {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 2em 0;
+				font-size: 0.95em;
+				background: rgba(255, 255, 255, 0.02);
+				border-radius: 8px;
+				overflow: hidden;
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+			}
+
+			.article-body :global(table th),
+			.article-body :global(table td) {
+				padding: 1.2em;
+				text-align: left;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+				min-width: 150px;
+				white-space: nowrap;
+			}
+
+			.article-body :global(table th) {
+				font-weight: 700;
+				color: rgba(199, 198, 255, 0.95);
+				background: rgba(99, 102, 241, 0.2);
+				text-transform: uppercase;
+				font-size: 0.85em;
+				letter-spacing: 0.05em;
+				border-bottom: 2px solid rgba(99, 102, 241, 0.4);
+			}
+
+			.article-body :global(table tr:nth-child(even)) {
+				background: rgba(255, 255, 255, 0.03);
+			}
+
+			.article-body :global(table tr:hover) {
+				background: rgba(99, 102, 241, 0.12);
+				transform: scale(1.01);
+				transition: all 0.2s ease;
+			}
+
+			.article-body :global(table tr:last-child td) {
+				border-bottom: none;
+			}
+
+			/* Code Styles */
+			.article-body :global(code) {
+				background: rgba(99, 102, 241, 0.2);
+				color: #e0e7ff;
+				padding: 0.25em 0.6em;
+				border-radius: 4px;
+				font-size: 0.9em;
+				font-family: 'Space Mono', 'Fira Code', 'Consolas', monospace;
+				border: 1px solid rgba(99, 102, 241, 0.3);
+			}
+
+			.article-body :global(pre) {
+				background: rgba(10, 10, 20, 0.8);
+				border: 1px solid rgba(99, 102, 241, 0.3);
+				border-radius: 12px;
+				padding: 1.8em;
+				overflow-x: auto;
+				margin: 2.5em 0;
+				font-size: 0.9em;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+			}
+
+			.article-body :global(pre code) {
+				background: transparent;
+				padding: 0;
+				border: none;
+				font-family: 'Space Mono', 'Fira Code', 'Consolas', monospace;
+				line-height: 1.7;
+				white-space: pre;
+				overflow-x: auto;
+				font-size: 0.95em;
+			}
+
+			/* ASCII Art Styles */
+			.article-body :global(pre.ascii-art) {
+				background: linear-gradient(135deg, rgba(10, 10, 20, 0.98) 0%, rgba(20, 20, 40, 0.98) 100%);
+				border: 2px solid rgba(99, 102, 241, 0.5);
+				font-family: 'Space Mono', 'Fira Code', 'Courier New', monospace;
+				font-size: 0.85em;
+				line-height: 1.2;
+				white-space: pre;
+				overflow-x: auto;
+				min-width: fit-content;
+				padding: 2.5em 3em;
+				margin: 2.5em 0;
+				box-shadow: 
+					0 6px 30px rgba(99, 102, 241, 0.2),
+					0 0 0 1px rgba(99, 102, 241, 0.1) inset;
+				border-radius: 16px;
+				position: relative;
+			}
+
+			.article-body :global(pre.ascii-art::before) {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 4px;
+				background: linear-gradient(90deg, 
+					rgba(99, 102, 241, 0.8) 0%, 
+					rgba(168, 85, 247, 0.8) 50%, 
+					rgba(255, 79, 0, 0.8) 100%);
+				border-radius: 16px 16px 0 0;
+			}
+
+			.article-body :global(pre.ascii-art code) {
+				white-space: pre;
+				tab-size: 2;
+				color: rgba(199, 198, 255, 0.95);
+				text-shadow: 0 0 10px rgba(199, 198, 255, 0.3);
+			}
+
+			/* ASCII Art - Architecture Diagrams */
+			.article-body :global(pre.architecture-diagram) {
+				background: linear-gradient(135deg, rgba(15, 15, 35, 0.99) 0%, rgba(25, 25, 50, 0.99) 100%);
+				border: 3px solid rgba(168, 85, 247, 0.8);
+				font-family: 'Space Mono', 'Fira Code', 'Courier New', monospace;
+				font-size: 0.9em;
+				line-height: 1.25;
+				white-space: pre;
+				overflow-x: auto;
+				min-width: fit-content;
+				padding: 2.5em 3em;
+				margin: 3em 0;
+				box-shadow: 
+					0 10px 50px rgba(168, 85, 247, 0.4),
+					0 0 0 2px rgba(168, 85, 247, 0.2) inset,
+					0 0 30px rgba(168, 85, 247, 0.2);
+				border-radius: 20px;
+				position: relative;
+			}
+
+			.article-body :global(pre.architecture-diagram::before) {
+				content: '🏗️ 架构图';
+				position: absolute;
+				top: -16px;
+				left: 20px;
+				background: linear-gradient(135deg, rgba(168, 85, 247, 1) 0%, rgba(99, 102, 241, 1) 100%);
+				color: #ffffff;
+				padding: 0.4em 1.2em;
+				font-size: 0.75em;
+				font-weight: 700;
+				border-radius: 10px;
+				letter-spacing: 0.1em;
+				box-shadow: 0 4px 12px rgba(168, 85, 247, 0.5);
+				border: 2px solid rgba(255, 255, 255, 0.2);
+			}
+
+			.article-body :global(pre.architecture-diagram code) {
+				white-space: pre;
+				tab-size: 2;
+				color: rgba(255, 255, 255, 0.95);
+				text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+				font-weight: 500;
+			}
+
+			/* ASCII Art - Flow Diagrams */
+			.article-body :global(pre.flow-diagram) {
+				background: linear-gradient(135deg, rgba(5, 25, 45, 0.99) 0%, rgba(15, 35, 60, 0.99) 100%);
+				border: 3px solid rgba(34, 211, 238, 0.8);
+				font-family: 'Space Mono', 'Fira Code', 'Courier New', monospace;
+				font-size: 0.88em;
+				line-height: 1.3;
+				white-space: pre;
+				overflow-x: auto;
+				min-width: fit-content;
+				padding: 2em 2.5em;
+				margin: 2.5em 0;
+				box-shadow: 
+					0 10px 50px rgba(34, 211, 238, 0.4),
+					0 0 0 2px rgba(34, 211, 238, 0.2) inset,
+					0 0 30px rgba(34, 211, 238, 0.2);
+				border-radius: 20px;
+				position: relative;
+			}
+
+			.article-body :global(pre.flow-diagram::before) {
+				content: '📊 流程图';
+				position: absolute;
+				top: -16px;
+				left: 20px;
+				background: linear-gradient(135deg, rgba(34, 211, 238, 1) 0%, rgba(6, 182, 212, 1) 100%);
+				color: #ffffff;
+				padding: 0.4em 1.2em;
+				font-size: 0.75em;
+				font-weight: 700;
+				border-radius: 10px;
+				letter-spacing: 0.1em;
+				box-shadow: 0 4px 12px rgba(34, 211, 238, 0.5);
+				border: 2px solid rgba(255, 255, 255, 0.2);
+			}
+
+			.article-body :global(pre.flow-diagram code) {
+				white-space: pre;
+				tab-size: 2;
+				color: rgba(255, 255, 255, 0.95);
+				text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+				font-weight: 500;
+			}
+
+			/* ASCII Art - Tree Structure */
+			.article-body :global(pre.tree-diagram) {
+				background: linear-gradient(135deg, rgba(45, 55, 72, 0.99) 0%, rgba(65, 75, 95, 0.99) 100%);
+				border: 3px solid rgba(251, 146, 60, 0.8);
+				font-family: 'Space Mono', 'Fira Code', 'Courier New', monospace;
+				font-size: 0.86em;
+				line-height: 1.25;
+				white-space: pre;
+				overflow-x: auto;
+				min-width: fit-content;
+				padding: 2em 2.5em;
+				margin: 2.5em 0;
+				box-shadow: 
+					0 10px 50px rgba(251, 146, 60, 0.4),
+					0 0 0 2px rgba(251, 146, 60, 0.2) inset,
+					0 0 30px rgba(251, 146, 60, 0.2);
+				border-radius: 20px;
+				position: relative;
+			}
+
+			.article-body :global(pre.tree-diagram::before) {
+				content: '🌲 目录结构';
+				position: absolute;
+				top: -16px;
+				left: 20px;
+				background: linear-gradient(135deg, rgba(251, 146, 60, 1) 0%, rgba(234, 88, 12, 1) 100%);
+				color: #ffffff;
+				padding: 0.4em 1.2em;
+				font-size: 0.75em;
+				font-weight: 700;
+				border-radius: 10px;
+				letter-spacing: 0.1em;
+				box-shadow: 0 4px 12px rgba(251, 146, 60, 0.5);
+				border: 2px solid rgba(255, 255, 255, 0.2);
+			}
+
+			.article-body :global(pre.tree-diagram code) {
+				white-space: pre;
+				tab-size: 2;
+				color: rgba(255, 255, 255, 0.95);
+				text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+				font-weight: 500;
+			}
+
+			/* Blockquote Styles */
+			.article-body :global(blockquote) {
+				border-left: 4px solid rgba(99, 102, 241, 0.5);
+				padding: 1.2em 0 1.2em 2em;
+				margin: 2em 0;
+				color: rgba(255, 255, 255, 0.75);
+				font-style: italic;
+				background: rgba(99, 102, 241, 0.05);
+				border-radius: 0 8px 8px 0;
+			}
+
+			.article-body :global(img) {
+				max-width: 100%;
+				height: auto;
+				border-radius: 8px;
+				margin: 2em 0;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+			}
+
+			.article-body :global(a) {
+				color: #a78bfa;
+				text-decoration: none;
+				border-bottom: 1px solid transparent;
+				transition: all 0.3s ease;
+			}
+
+			.article-body :global(a:hover) {
+				color: #c4b5fd;
+				border-bottom-color: #c4b5fd;
+			}
+
+			/* Horizontal Rule */
+			.article-body :global(hr) {
+				border: none;
+				height: 1px;
+				background: linear-gradient(to right, transparent, rgba(99, 102, 241, 0.3), transparent);
+				margin: 3em 0;
+			}
+
+			/* Updated Info */
+			.updated-info {
+				text-align: center;
+				padding: 2em 0;
+				margin-top: 4em;
+				border-top: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			.updated-info p {
+				font-size: 0.9em;
+				color: rgba(255, 255, 255, 0.5);
+				font-style: italic;
+			}
+
+			/* Footer */
+			.article-footer {
+				padding: 3em 4em;
+				background: #030303;
+				border-top: 1px solid rgba(255, 255, 255, 0.05);
+			}
+
+			.footer-content {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				max-width: 1600px;
+				margin: 0 auto;
+			}
+
+			.footer-left {
+				display: flex;
+				align-items: center;
+				gap: 1em;
+			}
+
+			.footer-text {
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.4);
+			}
+
+			.footer-divider {
+				color: rgba(255, 255, 255, 0.2);
+			}
+
+			.footer-right {
+				display: flex;
+				gap: 2em;
+			}
+
+			.footer-link {
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.5);
+				transition: color 0.3s ease;
+			}
+
+			.footer-link:hover {
+				color: rgba(255, 255, 255, 0.8);
+			}
+
+			/* Responsive */
+			@media (max-width: 1600px) {
+				.content-wrapper {
+					grid-template-columns: 220px 1fr;
+					gap: 2.5em;
+				}
+			}
+
+			@media (max-width: 1280px) {
+				.content-wrapper {
+					grid-template-columns: 200px 1fr;
+					gap: 2em;
+					padding: 0 1.5em 6em;
+				}
+
+				.toc-sidebar {
+					top: 80px;
+					max-height: calc(100vh - 120px);
+				}
+			}
+
+			@media (max-width: 1024px) {
+				.hero-section {
+					padding: 100px 2em 3em;
+				}
+
+				.content-wrapper {
+					grid-template-columns: 1fr;
+					gap: 2em;
+					padding: 0 2em 4em;
+				}
+
+				.toc-sidebar {
+					position: relative;
+					top: 0;
+					max-height: none;
+					order: -1;
+					margin-bottom: 2em;
+				}
+
+				.article-body :global(table th),
+				.article-body :global(table td) {
+					padding: 0.75em 0.5em;
+					min-width: 100px;
+					font-size: 0.85em;
+				}
+
+				.article-body :global(pre) {
+					font-size: 0.85em;
+					padding: 1em;
+				}
+			}
+
+			@media (max-width: 768px) {
+				.hero-section {
+					padding: 80px 1.5em 2em;
+				}
+
+				.content-wrapper {
+					padding: 0 1.5em 3em;
+				}
+
+				.hero-title {
+					font-size: 1.8em;
+				}
+
+				.hero-description {
+					font-size: 1em;
+				}
+
+				.article-body :global(h1) {
+					font-size: 2em;
+				}
+
+				.article-body :global(h2) {
+					font-size: 1.5em;
+				}
+
+				.article-body :global(h3) {
+					font-size: 1.25em;
+				}
+
+				.article-body :global(h4) {
+					font-size: 1.1em;
+				}
+
+				.article-body :global(p) {
+					font-size: 1em;
+				}
+
+				.article-body :global(table) {
+					font-size: 0.8em;
+				}
+
+				.article-body :global(table th),
+				.article-body :global(table td) {
+					padding: 0.6em 0.4em;
+					min-width: 80px;
+				}
+
+				.footer-content {
+					flex-direction: column;
+					gap: 1.5em;
+					text-align: center;
+				}
+
+				.hero-meta {
+					flex-direction: column;
+					align-items: flex-start;
+					gap: 0.75em;
+				}
+			}
+		</style>
+
+		<script define:vars={{ title }}>
+			document.addEventListener('DOMContentLoaded', () => {
+				const articleContent = document.getElementById('article-content');
+				const tocNav = document.getElementById('toc');
+
+				console.log('TOC Script Running:', { articleContent, tocNav });
+
+				if (articleContent && tocNav) {
+					const headings = articleContent.querySelectorAll('h2, h3');
+					console.log('Found headings:', headings.length);
+
+					if (headings.length === 0) {
+						tocNav.innerHTML = '<p style="color: rgba(255,255,255,0.5); font-size: 0.8em;">未找到目录</p>';
+						return;
+					}
+
+					headings.forEach((heading, index) => {
+						const link = document.createElement('a');
+						const headingId = heading.id || `heading-${index}`;
+						
+						if (!heading.id) {
+							heading.id = headingId;
+						}
+
+						link.href = `#${headingId}`;
+						link.textContent = heading.textContent;
+						link.className = `toc-${heading.tagName.toLowerCase()}`;
+
+						tocNav.appendChild(link);
+
+						link.addEventListener('click', (e) => {
+							e.preventDefault();
+							heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+						});
+					});
+
+					const observerOptions = {
+						root: null,
+						rootMargin: '-20% 0px -60% 0px',
+						threshold: 0
+					};
+
+					const observer = new IntersectionObserver((entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting) {
+								const activeLink = tocNav.querySelector(`[href="#${entry.target.id}"]`);
+								if (activeLink) {
+									tocNav.querySelectorAll('a').forEach((a) => a.classList.remove('active'));
+									activeLink.classList.add('active');
+								}
+							}
+						});
+					}, observerOptions);
+
+					headings.forEach((heading) => {
+						if (heading.id) {
+							observer.observe(heading);
+						}
+					});
+
+					console.log('TOC generated successfully');
+				} else {
+					console.error('TOC elements not found:', { articleContent, tocNav });
+				}
+			});
+		</script>
+	</body>
+</html>

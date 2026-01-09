@@ -1,27 +1,38 @@
 ---
-import HeaderArchitectural from '../components/HeaderArchitectural.astro';
-import GlassCard from '../components/GlassCard.astro';
-import BackToTop from '../components/BackToTop.astro';
-import ScrollProgress from '../components/ScrollProgress.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import HeaderArchitectural from '../../components/HeaderArchitectural.astro';
+import GlassCard from '../../components/GlassCard.astro';
+import BackToTop from '../../components/BackToTop.astro';
+import ScrollProgress from '../../components/ScrollProgress.astro';
 import { getCollection } from 'astro:content';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 
-// 获取所有博客文章
+// 获取所有标签用于生成静态路由
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	const tags = new Set<string>();
+	posts.forEach(post => {
+		(post.data.tags || []).forEach(tag => tags.add(tag));
+	});
+
+	return Array.from(tags).map(tag => ({
+		params: { tag },
+		props: { tag },
+	}));
+}
+
+const { tag } = Astro.props;
 const allPosts = await getCollection('blog');
 
+// 获取包含此标签的所有文章
+const taggedPosts = allPosts.filter(post =>
+	(post.data.tags || []).includes(tag)
+);
+
 // 按日期排序
-const sortedPosts = allPosts.sort((a, b) =>
+const sortedPosts = taggedPosts.sort((a, b) =>
 	Math.floor(new Date(b.data.pubDate).getTime() / 1000) -
 	Math.floor(new Date(a.data.pubDate).getTime() / 1000)
 );
-
-// 提取所有唯一标签
-const allTags = new Set<string>();
-allPosts.forEach(post => {
-	(post.data.tags || []).forEach(tag => allTags.add(tag));
-});
-
-const sortedTags = Array.from(allTags).sort();
 ---
 
 <!doctype html>
@@ -29,8 +40,8 @@ const sortedTags = Array.from(allTags).sort();
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>博客 | {SITE_TITLE}</title>
-		<meta name="description" content={SITE_DESCRIPTION} />
+		<title>{tag} | {SITE_TITLE}</title>
+		<meta name="description" content={`${tag} 标签下的所有文章`} />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -68,104 +79,67 @@ const sortedTags = Array.from(allTags).sort();
 						<a href="/">首页</a>
 					</span>
 					<span class="breadcrumb-separator">/</span>
-					<span class="breadcrumb-item current">博客</span>
+					<span class="breadcrumb-item">
+						<a href="/tags">标签</a>
+					</span>
+					<span class="breadcrumb-separator">/</span>
+					<span class="breadcrumb-item current">{tag}</span>
 				</div>
-				<h1 class="page-title">技术文章</h1>
-				<p class="page-subtitle">Technical Articles</p>
+				<h1 class="page-title">{tag}</h1>
+				<p class="page-subtitle">{sortedPosts.length} 篇文章</p>
 			</div>
 			<div class="header-decoration">
-				<span class="deco-number">03</span>
+				<span class="deco-number">05</span>
 			</div>
 		</section>
 
-		<!-- Blog Grid -->
-		<section class="blog-section">
-			<div class="blog-container">
-				<!-- 标签过滤器 -->
-				{sortedTags.length > 0 && (
-					<aside class="tags-sidebar">
-						<GlassCard class="tags-filter-card">
-							<div class="filter-header">
-								<h3>标签过滤</h3>
-								<a href="/tags" class="view-all-tags">查看全部 →</a>
-							</div>
-							<div class="tags-filter">
-								<button
-									class="filter-all active"
-									data-filter="all"
-									onclick="handleFilterClick(event, 'all')"
-								>
-									全部文章
-								</button>
-								{sortedTags.map(tag => (
-									<button
-										class={`filter-tag ${tag === 'all' ? 'active' : ''}`}
-										data-filter={tag}
-										onclick={`handleFilterClick(event, '${tag}')`}
-									>
-										{tag}
-									</button>
-								))}
-							</div>
-						</GlassCard>
-					</aside>
+		<!-- Posts List -->
+		<section class="posts-section">
+			<div class="posts-container">
+				{sortedPosts.length > 0 ? (
+					<div class="posts-list">
+						{sortedPosts.map((post, index) => (
+							<article class="post-item" style={`--delay: ${index * 100}ms`}>
+								<a href={post.url} class="post-link">
+									<GlassCard class="post-card">
+										<div class="post-meta">
+											<time class="post-date">
+												{new Date(post.data.pubDate).toLocaleDateString('zh-CN', {
+													year: 'numeric',
+													month: '2-digit',
+													day: '2-digit'
+												})}
+											</time>
+											{post.data.category && (
+												<span class="post-category">{post.data.category}</span>
+											)}
+										</div>
+										<h2 class="post-title">{post.data.title}</h2>
+										{post.data.description && (
+											<p class="post-description">{post.data.description}</p>
+										)}
+										{post.data.tags && post.data.tags.length > 1 && (
+											<div class="post-tags">
+												{post.data.tags
+													.filter(t => t !== tag)
+													.map((t: string) => (
+														<span class="tag">{t}</span>
+													))}
+											</div>
+										)}
+									</GlassCard>
+								</a>
+							</article>
+						))}
+					</div>
+				) : (
+					<div class="empty-state">
+						<div class="empty-message">
+							<h3>暂无文章</h3>
+							<p>该标签下还没有文章</p>
+						</div>
+					</div>
 				)}
-
-				<!-- 文章列表 -->
-				<div class="posts-wrapper">
-					{sortedPosts.length > 0 ? (
-						<div class="posts-grid">
-							{sortedPosts.map((post, index) => {
-								const postTags = post.data.tags || [];
-								// 获取文章 URL - post.id 包含文件名，需要去掉扩展名
-								const slug = post.id.replace(/\.(md|mdx)$/, '');
-								const postUrl = `/blog/${slug}`;
-								return (
-									<article
-										class="post-item"
-										style={`--delay: ${index * 100}ms`}
-										data-tags={postTags.join(',')}
-									>
-										<a href={postUrl} class="post-link">
-											<GlassCard class="post-card">
-												<div class="post-meta">
-													<time class="post-date">
-														{new Date(post.data.pubDate).toLocaleDateString('zh-CN', {
-															year: 'numeric',
-															month: '2-digit',
-															day: '2-digit'
-														})}
-													</time>
-													{post.data.category && (
-														<span class="post-category">{post.data.category}</span>
-													)}
-												</div>
-												<h2 class="post-title">{post.data.title}</h2>
-												{post.data.description && (
-													<p class="post-description">{post.data.description}</p>
-												)}
-												{postTags.length > 0 && (
-													<div class="post-tags">
-														{postTags.map((tag: string) => (
-															<span class="tag">{tag}</span>
-														))}
-													</div>
-												)}
-											</GlassCard>
-										</a>
-									</article>
-								);
-							})}
-						</div>
-					) : (
-						<div class="empty-state">
-							<div class="empty-message">
-								<h3>暂无文章</h3>
-								<p>敬请期待更多技术分享</p>
-							</div>
-						</div>
-					)}
-				</div>
 			</div>
 		</section>
 
@@ -186,29 +160,6 @@ const sortedTags = Array.from(allTags).sort();
 		</footer>
 
 		<BackToTop />
-
-		<script define:vars={{ sortedTags }}>
-			function handleFilterClick(event: Event, filter: string) {
-				event.preventDefault();
-
-				// 更新按钮状态
-				document.querySelectorAll('.filter-all, .filter-tag').forEach(btn => {
-					btn.classList.remove('active');
-				});
-				(event.currentTarget as HTMLElement).classList.add('active');
-
-				// 过滤文章
-				const posts = document.querySelectorAll('.post-item');
-				posts.forEach(post => {
-					const tags = (post as HTMLElement).dataset.tags || '';
-					if (filter === 'all' || tags.includes(filter)) {
-						(post as HTMLElement).style.display = '';
-					} else {
-						(post as HTMLElement).style.display = 'none';
-					}
-				});
-			}
-		</script>
 
 		<style>
 			.page-header {
@@ -281,102 +232,21 @@ const sortedTags = Array.from(allTags).sort();
 				line-height: 1;
 			}
 
-			/* Blog Section */
-			.blog-section {
+			/* Posts Section */
+			.posts-section {
 				padding: 6em 4em;
 				background: #050505;
 			}
 
-			.blog-container {
-				max-width: 1400px;
+			.posts-container {
+				max-width: 900px;
 				margin: 0 auto;
-				display: grid;
-				grid-template-columns: 280px 1fr;
-				gap: 3em;
-				align-items: start;
 			}
 
-			/* Tags Sidebar */
-			.tags-sidebar {
-				position: sticky;
-				top: 2em;
-			}
-
-			.tags-filter-card {
-				padding: 1.5em;
-			}
-
-			.filter-header {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				margin-bottom: 1.5em;
-				padding-bottom: 1em;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-			}
-
-			.filter-header h3 {
-				font-size: 1em;
-				font-weight: 400;
-				color: rgba(255, 255, 255, 0.95);
-				margin: 0;
-			}
-
-			.view-all-tags {
-				font-size: 0.75em;
-				color: rgba(255, 255, 255, 0.5);
-				transition: color 0.3s ease;
-			}
-
-			.view-all-tags:hover {
-				color: rgba(255, 255, 255, 0.8);
-			}
-
-			.tags-filter {
+			.posts-list {
 				display: flex;
 				flex-direction: column;
-				gap: 0.5em;
-			}
-
-			.filter-all,
-			.filter-tag {
-				text-align: left;
-				padding: 0.6em 1em;
-				background: transparent;
-				border: 1px solid rgba(255, 255, 255, 0.08);
-				color: rgba(255, 255, 255, 0.6);
-				font-size: 0.85em;
-				font-family: 'Inter', sans-serif;
-				cursor: pointer;
-				transition: all 0.3s ease;
-				border-radius: 4px;
-			}
-
-			.filter-all:hover,
-			.filter-tag:hover {
-				background: rgba(255, 255, 255, 0.05);
-				border-color: rgba(255, 255, 255, 0.12);
-				color: rgba(255, 255, 255, 0.8);
-			}
-
-			.filter-all.active,
-			.filter-tag.active {
-				background: rgba(255, 255, 255, 0.1);
-				border-color: rgba(255, 255, 255, 0.2);
-				color: rgba(255, 255, 255, 0.95);
-			}
-
-			/* Posts Wrapper */
-			.posts-wrapper {
-				min-width: 0;
-			}
-
-			.posts-grid {
-				display: grid;
-				grid-template-columns: 1fr;
 				gap: 1.5em;
-				max-width: 800px;
-				margin: 0 auto;
 			}
 
 			.post-item {
@@ -397,21 +267,12 @@ const sortedTags = Array.from(allTags).sort();
 
 			.post-link {
 				display: block;
-				cursor: pointer;
-			}
-
-			.post-link:hover {
-				cursor: pointer;
-			}
-
-			/* 确保内容在顶层 */
-			.post-card :global(.card-content) {
-				z-index: 10;
 			}
 
 			.post-card {
-				height: 100%;
+				padding: 2em;
 				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+				position: relative;
 			}
 
 			.post-card::after {
@@ -429,8 +290,6 @@ const sortedTags = Array.from(allTags).sort();
 				);
 				transform: scaleX(0);
 				transition: transform 0.4s ease;
-				z-index: 5;
-				pointer-events: none;
 			}
 
 			.post-card:hover::after {
@@ -438,16 +297,15 @@ const sortedTags = Array.from(allTags).sort();
 			}
 
 			.post-card:hover {
-				transform: translateY(-12px);
+				transform: translateX(8px);
+				background: rgba(255, 255, 255, 0.05);
 			}
 
 			.post-meta {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				margin-bottom: 2em;
-				padding-bottom: 1.5em;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+				margin-bottom: 1em;
 			}
 
 			.post-date {
@@ -472,7 +330,7 @@ const sortedTags = Array.from(allTags).sort();
 				font-weight: 300;
 				letter-spacing: -0.02em;
 				color: rgba(255, 255, 255, 0.95);
-				margin: 0 0 1em 0;
+				margin: 0 0 0.75em 0;
 				line-height: 1.4;
 			}
 
@@ -480,7 +338,7 @@ const sortedTags = Array.from(allTags).sort();
 				font-size: 0.95em;
 				line-height: 1.7;
 				color: rgba(255, 255, 255, 0.6);
-				margin: 0 0 1.5em 0;
+				margin: 0 0 1em 0;
 			}
 
 			.post-tags {
@@ -562,7 +420,7 @@ const sortedTags = Array.from(allTags).sort();
 			/* Responsive */
 			@media (max-width: 1024px) {
 				.page-header,
-				.blog-section {
+				.posts-section {
 					padding-left: 2em;
 					padding-right: 2em;
 				}
@@ -578,28 +436,6 @@ const sortedTags = Array.from(allTags).sort();
 
 				.deco-number {
 					font-size: 4em;
-				}
-
-				.blog-container {
-					grid-template-columns: 1fr;
-				}
-
-				.tags-sidebar {
-					position: static;
-				}
-
-				.tags-filter {
-					flex-direction: row;
-					flex-wrap: wrap;
-				}
-
-				.filter-all,
-				.filter-tag {
-					flex: 0 0 auto;
-				}
-
-				.posts-grid {
-					grid-template-columns: 1fr;
 				}
 			}
 
@@ -617,6 +453,10 @@ const sortedTags = Array.from(allTags).sort();
 
 				.footer-right {
 					gap: 1.5em;
+				}
+
+				.post-card {
+					padding: 1.5em;
 				}
 			}
 		</style>
