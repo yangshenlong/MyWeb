@@ -78,12 +78,28 @@ const sortedTags = Array.from(allTags).sort();
 			</div>
 		</section>
 
-		<!-- Blog Grid -->
+			<!-- Blog Grid -->
 		<section class="blog-section">
 			<div class="blog-container">
-				<!-- 标签过滤器 -->
-				{sortedTags.length > 0 && (
-					<aside class="tags-sidebar">
+				<!-- 搜索和过滤 -->
+				<aside class="sidebar">
+					<GlassCard class="search-card">
+						<div class="search-header">
+							<h3>搜索文章</h3>
+						</div>
+						<div class="search-box">
+							<input
+								type="text"
+								id="postSearch"
+								class="search-input"
+								placeholder="搜索标题或内容..."
+							/>
+							<span class="search-icon">🔍</span>
+						</div>
+					</GlassCard>
+
+					<!-- 标签过滤器 -->
+					{sortedTags.length > 0 && (
 						<GlassCard class="tags-filter-card">
 							<div class="filter-header">
 								<h3>标签过滤</h3>
@@ -93,7 +109,6 @@ const sortedTags = Array.from(allTags).sort();
 								<button
 									class="filter-all active"
 									data-filter="all"
-									onclick="handleFilterClick(event, 'all')"
 								>
 									全部文章
 								</button>
@@ -101,23 +116,24 @@ const sortedTags = Array.from(allTags).sort();
 									<button
 										class={`filter-tag ${tag === 'all' ? 'active' : ''}`}
 										data-filter={tag}
-										onclick={`handleFilterClick(event, '${tag}')`}
 									>
 										{tag}
 									</button>
 								))}
 							</div>
 						</GlassCard>
-					</aside>
-				)}
+					)}
+				</aside>
 
 				<!-- 文章列表 -->
 				<div class="posts-wrapper">
+					<div class="posts-count">
+						<span id="postsCount">{sortedPosts.length}</span> 篇文章
+					</div>
 					{sortedPosts.length > 0 ? (
 						<div class="posts-grid">
 							{sortedPosts.map((post, index) => {
 								const postTags = post.data.tags || [];
-								// 获取文章 URL - post.id 包含文件名，需要去掉扩展名
 								const slug = post.id.replace(/\.(md|mdx)$/, '');
 								const postUrl = `/blog/${slug}`;
 								return (
@@ -125,6 +141,8 @@ const sortedTags = Array.from(allTags).sort();
 										class="post-item"
 										style={`--delay: ${index * 100}ms`}
 										data-tags={postTags.join(',')}
+										data-title={post.data.title.toLowerCase()}
+										data-description={(post.data.description || '').toLowerCase()}
 									>
 										<a href={postUrl} class="post-link">
 											<GlassCard class="post-card">
@@ -178,35 +196,75 @@ const sortedTags = Array.from(allTags).sort();
 					<span class="footer-text">Technical Artist</span>
 				</div>
 				<div class="footer-right">
-					<a href="https://github.com/username" target="_blank" class="footer-link">GitHub</a>
-					<a href="https://www.bilibili.com" target="_blank" class="footer-link">Bilibili</a>
-					<a href="https://www.zhihu.com" target="_blank" class="footer-link">知乎</a>
+					<a href="https://github.com/yangshenlong" target="_blank" class="footer-link">GitHub</a>
+					<a href="#" target="_blank" class="footer-link">Bilibili</a>
+					<a href="#" target="_blank" class="footer-link">知乎</a>
 				</div>
 			</div>
 		</footer>
 
 		<BackToTop />
 
-		<script define:vars={{ sortedTags }}>
-			function handleFilterClick(event: Event, filter: string) {
-				event.preventDefault();
+		<script>
+			// 搜索功能
+			const searchInput = document.getElementById('postSearch') as HTMLInputElement;
+			const filterButtons = document.querySelectorAll('.filter-all, .filter-tag');
+			const postItems = document.querySelectorAll('.post-item');
+			const postsCount = document.getElementById('postsCount') as HTMLElement;
+			let currentFilter = 'all';
 
-				// 更新按钮状态
-				document.querySelectorAll('.filter-all, .filter-tag').forEach(btn => {
-					btn.classList.remove('active');
+			// 过滤按钮点击事件
+			filterButtons.forEach(btn => {
+				btn.addEventListener('click', () => {
+					// 更新按钮状态
+					filterButtons.forEach(b => b.classList.remove('active'));
+					btn.classList.add('active');
+
+					// 获取过滤标签
+					currentFilter = (btn as HTMLElement).dataset.filter || 'all';
+
+					// 过滤文章
+					filterPosts();
 				});
-				(event.currentTarget as HTMLElement).classList.add('active');
+			});
 
-				// 过滤文章
-				const posts = document.querySelectorAll('.post-item');
-				posts.forEach(post => {
-					const tags = (post as HTMLElement).dataset.tags || '';
-					if (filter === 'all' || tags.includes(filter)) {
-						(post as HTMLElement).style.display = '';
+			// 搜索输入事件
+			searchInput?.addEventListener('input', () => {
+				filterPosts();
+			});
+
+			// 过滤文章函数
+			function filterPosts() {
+				const searchTerm = (searchInput?.value || '').toLowerCase().trim();
+				let visibleCount = 0;
+
+				postItems.forEach(post => {
+					const postEl = post as HTMLElement;
+					const tags = postEl.dataset.tags || '';
+					const title = postEl.dataset.title || '';
+					const description = postEl.dataset.description || '';
+
+					// 检查搜索词
+					const matchesSearch = searchTerm === '' ||
+						title.includes(searchTerm) ||
+						description.includes(searchTerm);
+
+					// 检查标签过滤
+					const matchesFilter = currentFilter === 'all' || tags.includes(currentFilter);
+
+					// 显示或隐藏
+					if (matchesSearch && matchesFilter) {
+						postEl.style.display = '';
+						visibleCount++;
 					} else {
-						(post as HTMLElement).style.display = 'none';
+						postEl.style.display = 'none';
 					}
 				});
+
+				// 更新文章数量
+				if (postsCount) {
+					postsCount.textContent = visibleCount.toString();
+				}
 			}
 		</script>
 
@@ -294,6 +352,75 @@ const sortedTags = Array.from(allTags).sort();
 				grid-template-columns: 280px 1fr;
 				gap: 3em;
 				align-items: start;
+			}
+
+			/* Sidebar */
+			.sidebar {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5em;
+				position: sticky;
+				top: 2em;
+			}
+
+			/* Search Card */
+			.search-card {
+				padding: 1.5em;
+			}
+
+			.search-header h3 {
+				font-size: 1em;
+				font-weight: 400;
+				color: rgba(255, 255, 255, 0.95);
+				margin: 0 0 1em 0;
+			}
+
+			.search-box {
+				position: relative;
+			}
+
+			.search-input {
+				width: 100%;
+				padding: 0.75em 1em 0.75em 2.5em;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 4px;
+				color: rgba(255, 255, 255, 0.9);
+				font-size: 0.9em;
+				font-family: 'Inter', sans-serif;
+				transition: all 0.3s ease;
+			}
+
+			.search-input::placeholder {
+				color: rgba(255, 255, 255, 0.4);
+			}
+
+			.search-input:focus {
+				outline: none;
+				border-color: rgba(255, 255, 255, 0.2);
+				background: rgba(255, 255, 255, 0.08);
+			}
+
+			.search-icon {
+				position: absolute;
+				left: 0.75em;
+				top: 50%;
+				transform: translateY(-50%);
+				font-size: 0.9em;
+				opacity: 0.5;
+			}
+
+			/* Posts Count */
+			.posts-count {
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.5);
+				margin-bottom: 1.5em;
+			}
+
+			.posts-count span {
+				font-family: 'Space Mono', monospace;
+				font-size: 1.2em;
+				color: rgba(255, 255, 255, 0.8);
 			}
 
 			/* Tags Sidebar */
@@ -584,8 +711,16 @@ const sortedTags = Array.from(allTags).sort();
 					grid-template-columns: 1fr;
 				}
 
-				.tags-sidebar {
+				.sidebar {
 					position: static;
+					flex-direction: row;
+					flex-wrap: wrap;
+				}
+
+				.search-card,
+				.tags-filter-card {
+					flex: 1;
+					min-width: 250px;
 				}
 
 				.tags-filter {
@@ -617,6 +752,15 @@ const sortedTags = Array.from(allTags).sort();
 
 				.footer-right {
 					gap: 1.5em;
+				}
+
+				.sidebar {
+					flex-direction: column;
+				}
+
+				.search-card,
+				.tags-filter-card {
+					min-width: 100%;
 				}
 			}
 		</style>

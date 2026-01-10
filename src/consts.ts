@@ -15,17 +15,17 @@ export const AUTHOR = {
 export const SOCIAL_LINKS = [
 	{
 		name: 'GitHub',
-		url: 'https://github.com/username',
+		url: 'https://github.com/yangshenlong',
 		icon: 'github'
 	},
 	{
 		name: 'Bilibili',
-		url: 'https://www.bilibili.com',
+		url: '#',
 		icon: 'bilibili'
 	},
 	{
 		name: '知乎',
-		url: 'https://www.zhihu.com',
+		url: '#',
 		icon: 'zhihu'
 	}
 ];
