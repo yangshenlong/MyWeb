@@ -4,6 +4,7 @@
 */
 
 :root {
+	/* 新野兽派变量 - 高对比度配色 */
 	--accent: #000000;
 	--accent-dark: #000000;
 	--black: 0, 0, 0;
@@ -17,9 +18,35 @@
 	--brutal-shadow-hover: 6px 6px 0px 0px rgba(0, 0, 0, 1);
 	--brutal-shadow-active: 2px 2px 0px 0px rgba(0, 0, 0, 1);
 
+	/* 可访问性：提高对比度以满足 WCAG AA (4.5:1) */
+	--text-primary: 240, 240, 240;
+	--text-secondary: 170, 170, 170;
+	--text-tertiary: 140, 140, 140;
+	--accent-high-contrast: 100, 100, 255;
+
 	/* 粗边框 */
 	--brutal-border: 3px solid #000000;
 	--brutal-border-thick: 4px solid #000000;
+}
+
+/* 性能优化：减少动画对用户的影响 */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* 性能优化：启用硬件加速 */
+@media (not (prefers-reduced-motion: reduce)) {
+	* {
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+	}
 }
 
 @font-face {
@@ -54,8 +81,6 @@ body {
 	font-size: 20px;
 	line-height: 1.6;
 	min-height: 100vh;
-	/* 全局缩放到75% */
-	zoom: 0.75;
 }
 
 main {
@@ -271,7 +296,8 @@ hr {
 }
 
 /* 列表样式 */
-ul, ol {
+ul,
+ol {
 	margin: 1.5em 0;
 	padding-left: 2em;
 }
@@ -302,6 +328,15 @@ button,
 	box-shadow: var(--brutal-shadow);
 	display: inline-block;
 	text-decoration: none;
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+	position: relative;
+}
+
+button:active,
+.button:active {
+	box-shadow: var(--brutal-shadow-active);
+	transform: translate(0px, 0px);
 }
 
 button:hover,
@@ -310,12 +345,6 @@ button:hover,
 	color: #ffffff;
 	box-shadow: var(--brutal-shadow-hover);
 	transform: translate(-2px, -2px);
-}
-
-button:active,
-.button:active {
-	box-shadow: var(--brutal-shadow-active);
-	transform: translate(0px, 0px);
 }
 
 /* 选择文字样式 */
@@ -376,7 +405,6 @@ button:active,
 	width: 1px;
 	overflow: hidden;
 	clip: rect(1px 1px 1px 1px);
-	clip: rect(1px, 1px, 1px, 1px);
 	clip-path: inset(50%);
 	white-space: nowrap;
 }

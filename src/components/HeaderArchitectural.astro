@@ -9,16 +9,16 @@ const navItems = [
 ];
 ---
 
-<header class="arch-header" id="archHeader">
+<header class="arch-header" id="archHeader" role="banner">
 	<div class="header-background">
-		<div class="grid-overlay"></div>
-		<div class="glass-effect"></div>
+		<div class="grid-overlay" aria-hidden="true"></div>
+		<div class="glass-effect" aria-hidden="true"></div>
 	</div>
 
-	<nav class="arch-nav">
+	<nav class="arch-nav" role="navigation" aria-label="Main navigation">
 		<!-- Logo -->
-		<a href="/" class="logo">
-			<div class="logo-icon">
+		<a href="/" class="logo" aria-label={`${SITE_TITLE} home page`}>
+			<div class="logo-icon" aria-hidden="true">
 				<span class="line line-1"></span>
 				<span class="line line-2"></span>
 				<span class="line line-3"></span>
@@ -27,29 +27,32 @@ const navItems = [
 		</a>
 
 		<!-- Navigation -->
-		<div class="nav-items" id="navItems">
+		<ul class="nav-items" id="navItems" role="menubar">
 			{navItems.map((item, index) => (
-				<a
-					href={item.href}
-					class="nav-item"
-					style={`--delay: ${index * 100}ms`}
-				>
-					<span class="nav-number">0{index + 1}</span>
-					<span class="nav-text">{item.title}</span>
-					<span class="nav-line"></span>
-				</a>
+				<li role="none">
+					<a
+						href={item.href}
+						class="nav-item"
+						style={`--delay: ${index * 100}ms`}
+						role="menuitem"
+					>
+						<span class="nav-number" aria-hidden="true">0{index + 1}</span>
+						<span class="nav-text">{item.title}</span>
+						<span class="nav-line" aria-hidden="true"></span>
+					</a>
+				</li>
 			))}
-		</div>
+		</ul>
 
 		<!-- Menu Toggle -->
-		<button class="menu-toggle" id="menuToggle" aria-label="Menu">
+		<button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navItems">
 			<span class="toggle-line"></span>
 			<span class="toggle-line"></span>
 		</button>
 	</nav>
 
 	<!-- Bottom Border -->
-	<div class="header-border"></div>
+	<div class="header-border" aria-hidden="true"></div>
 </header>
 
 <style>
@@ -367,8 +370,10 @@ const navItems = [
 
 	if (menuToggle && navItems) {
 		menuToggle.addEventListener('click', () => {
-			menuToggle.classList.toggle('active');
+			const isActive = menuToggle.classList.toggle('active');
 			navItems.classList.toggle('active');
+			menuToggle.setAttribute('aria-expanded', String(isActive));
+			document.body.style.overflow = isActive ? 'hidden' : '';
 		});
 
 		// Close menu on link click
@@ -376,7 +381,19 @@ const navItems = [
 			link.addEventListener('click', () => {
 				menuToggle.classList.remove('active');
 				navItems.classList.remove('active');
+				menuToggle.setAttribute('aria-expanded', 'false');
+				document.body.style.overflow = '';
 			});
+		});
+
+		// Close menu on escape key
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && menuToggle.classList.contains('active')) {
+				menuToggle.classList.remove('active');
+				navItems.classList.remove('active');
+				menuToggle.setAttribute('aria-expanded', 'false');
+				document.body.style.overflow = '';
+			}
 		});
 	}
 </script>

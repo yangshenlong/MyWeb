@@ -1,0 +1,137 @@
+---
+interface Props {
+	headings: { text: string; level: number; id: string }[];
+}
+
+const { headings = [] } = Astro.props;
+
+if (headings.length === 0) {
+	// 如果没有标题，不渲染目录
+	return null;
+}
+
+// 提取主要标题（h2 和 h3）
+const mainHeadings = headings.filter((h) => h.level >= 2 && h.level <= 3);
+---
+
+<nav class="table-of-contents" aria-label="文章目录">
+	<div class="toc-header">
+		<h3>目录</h3>
+		<span class="toc-count">{mainHeadings.length} 节</span>
+	</div>
+	<ul class="toc-list">
+		{mainHeadings.map((heading) => (
+			<li class={`toc-item toc-level-${heading.level}`}>
+				<a href={`#${heading.id}`} class="toc-link">
+					<span class="toc-text">{heading.text}</span>
+				</a>
+			</li>
+		))}
+	</ul>
+</nav>
+
+<style>
+	.table-of-contents {
+		position: sticky;
+		top: 8em;
+		align-self: flex-start;
+		max-width: 300px;
+		min-width: 200px;
+	}
+
+	.toc-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 1.5em;
+		padding-bottom: 1em;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.toc-header h3 {
+		font-size: 0.9em;
+		font-weight: 600;
+		color: rgba(255, 255, 255, 0.95);
+		margin: 0;
+		letter-spacing: 0.05em;
+	}
+
+	.toc-count {
+		font-size: 0.75em;
+		color: rgba(255, 255, 255, 0.4);
+		font-family: 'Space Mono', monospace;
+	}
+
+	.toc-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.toc-item {
+		margin-bottom: 0.75em;
+	}
+
+	.toc-link {
+		display: block;
+		color: rgba(255, 255, 255, 0.6);
+		text-decoration: none;
+		transition: all 0.3s ease;
+		position: relative;
+	}
+
+	.toc-link:hover {
+		color: rgba(255, 255, 255, 0.95);
+		transform: translateX(4px);
+	}
+
+	.toc-link::before {
+		content: '';
+		position: absolute;
+		left: -12px;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 6px;
+		height: 2px;
+		background: rgba(255, 255, 255, 0.2);
+		transition: all 0.3s ease;
+	}
+
+	.toc-link:hover::before {
+		background: rgba(255, 255, 255, 0.6);
+		width: 12px;
+	}
+
+	.toc-text {
+		display: block;
+		font-size: 0.85em;
+		line-height: 1.5;
+	}
+
+	.toc-level-2 {
+		font-weight: 500;
+	}
+
+	.toc-level-3 {
+		padding-left: 1.5em;
+		font-weight: 400;
+	}
+
+	.toc-level-3 .toc-text {
+		font-size: 0.8em;
+		color: rgba(255, 255, 255, 0.5);
+	}
+
+	@media (max-width: 1400px) {
+		.table-of-contents {
+			max-width: 250px;
+			min-width: 180px;
+		}
+	}
+
+	@media (max-width: 1024px) {
+		.table-of-contents {
+			display: none;
+		}
+	}
+</style>

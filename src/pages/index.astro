@@ -5,6 +5,7 @@ import ProjectGridArchitectural from '../components/ProjectGridArchitectural.ast
 import GlassCard from '../components/GlassCard.astro';
 import BackToTop from '../components/BackToTop.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
+import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 // Featured projects
@@ -230,20 +231,7 @@ const services = [
 		</section>
 
 		<!-- Footer -->
-		<footer class="arch-footer">
-			<div class="footer-content">
-				<div class="footer-left">
-					<span class="footer-text">© 2024 杨慎龙</span>
-					<span class="footer-divider">·</span>
-					<span class="footer-text">Technical Artist</span>
-				</div>
-				<div class="footer-right">
-					<a href="https://github.com/yangshenlong" target="_blank" class="footer-link">GitHub</a>
-					<a href="#" target="_blank" class="footer-link">Bilibili</a>
-					<a href="#" target="_blank" class="footer-link">知乎</a>
-				</div>
-			</div>
-		</footer>
+		<Footer />
 
 		<BackToTop />
 
@@ -565,10 +553,6 @@ const services = [
 				font-size: 0.85em;
 				color: rgba(255, 255, 255, 0.5);
 				transition: color 0.3s ease;
-			}
-
-			.footer-link:hover {
-				color: rgba(255, 255, 255, 0.8);
 			}
 
 			/* Responsive */

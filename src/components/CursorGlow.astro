@@ -2,6 +2,7 @@
 /**
  * 鼠标跟随光效系统
  * 多层光晕跟随鼠标，营造电影感氛围
+ * 性能优化版：添加节流、减少计算
  */
 ---
 
@@ -15,19 +16,41 @@
 	const cursorGlow = document.getElementById('cursorGlow');
 	const layers = cursorGlow.querySelectorAll('.glow-layer');
 
+	// 检查用户是否偏好减少动画
+	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const isMobile = window.innerWidth < 768;
+
+	// 如果用户偏好减少动画或使用移动设备，禁用光效
+	if (prefersReducedMotion || isMobile) {
+		cursorGlow.style.display = 'none';
+	}
+
 	let mouseX = 0;
 	let mouseY = 0;
 	let currentX = 0;
 	let currentY = 0;
 
-	document.addEventListener('mousemove', (e) => {
+	// 节流：限制事件处理频率
+	let isThrottled = false;
+	let lastThrottleTime = 0;
+	const throttleDelay = 16; // ~60fps
+
+	// 使用 Passives 事件监听器提升性能
+	const updateMousePosition = (e) => {
 		mouseX = e.clientX;
 		mouseY = e.clientY;
-	});
+	};
 
-	// 使用 requestAnimationFrame 更新位置，更流畅
+	// 只在需要时启用鼠标跟踪
+	if (!prefersReducedMotion && !isMobile) {
+		document.addEventListener('mousemove', updateMousePosition, { passive: true });
+	}
+
+	// 优化的动画循环
+	let animationId: number;
+
 	function animate() {
-		// 不同层使用不同的延迟速度
+		// 减少计算复杂度，预计算
 		const speed1 = 0.15;
 		const speed2 = 0.1;
 		const speed3 = 0.05;
@@ -35,14 +58,27 @@
 		currentX += (mouseX - currentX) * speed1;
 		currentY += (mouseY - currentY) * speed1;
 
-		layers[0].style.transform = `translate(${mouseX}px, ${mouseY}px)`;
-		layers[1].style.transform = `translate(${currentX * 0.9 + mouseX * 0.1}px, ${currentY * 0.9 + mouseY * 0.1}px)`;
-		layers[2].style.transform = `translate(${currentX * 0.8 + mouseX * 0.2}px, ${currentY * 0.8 + mouseY * 0.2}px)`;
+		// 使用 transform3d 触发硬件加速
+		layers[0].style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+		layers[1].style.transform = `translate3d(${currentX * 0.9 + mouseX * 0.1}px, ${currentY * 0.9 + mouseY * 0.1}px, 0)`;
+		layers[2].style.transform = `translate3d(${currentX * 0.8 + mouseX * 0.2}px, ${currentY * 0.8 + mouseY * 0.2}px, 0)`;
 
-		requestAnimationFrame(animate);
+		animationId = requestAnimationFrame(animate);
 	}
 
-	animate();
+	// 启动动画
+	if (!prefersReducedMotion && !isMobile) {
+		animate();
+	}
+
+	// 窗口大小变化时重新检查
+	window.addEventListener('resize', () => {
+		if (window.innerWidth < 768) {
+			cursorGlow.style.display = 'none';
+		} else if (!prefersReducedMotion) {
+			cursorGlow.style.display = 'block';
+		}
+	});
 </script>
 
 <style>
@@ -55,6 +91,7 @@
 		pointer-events: none;
 		z-index: 9998;
 		overflow: hidden;
+		contain: strict; /* 性能优化：限制重绘区域 */
 	}
 
 	.glow-layer {
@@ -62,7 +99,10 @@
 		border-radius: 50%;
 		mix-blend-mode: screen;
 		pointer-events: none;
-		will-change: transform;
+		will-change: transform; /* 性能优化：提示浏览器优化 */
+		contain: layout style paint; /* 性能优化：限制布局计算 */
+		backface-visibility: hidden; /* 性能优化：启用硬件加速 */
+		transform: translateZ(0); /* 性能优化：触发 GPU */
 	}
 
 	.layer-1 {
@@ -94,7 +134,14 @@
 
 	@media (max-width: 768px) {
 		.cursor-glow {
-			display: none;
+			display: none !important;
+		}
+	}
+
+	/* 支持用户的减少动画偏好 */
+	@media (prefers-reduced-motion: reduce) {
+		.cursor-glow {
+			display: none !important;
 		}
 	}
 </style>

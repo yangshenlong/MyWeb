@@ -1,0 +1,32 @@
+---
+---
+
+<!-- Skip to main content link for accessibility -->
+<a
+	href="#main-content"
+	class="skip-link"
+	id="skip-link"
+	tabindex="0"
+	aria-label="Skip to main content">
+	跳转到主要内容
+</a>
+
+<style>
+	.skip-link {
+		position: absolute;
+		top: -100%;
+		left: 50%;
+		transform: translateX(-50%);
+		background: #000000;
+		color: #ffffff;
+		padding: 1em 2em;
+		z-index: 10000;
+		transition: top 0.3s ease;
+		text-decoration: none;
+		font-weight: 600;
+	}
+
+	.skip-link:focus {
+		top: 0;
+	}
+</style>

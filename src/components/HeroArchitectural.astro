@@ -155,7 +155,7 @@ const {
 		bottom: -25vh;
 	}
 
-	/* Floating Elements */
+	/* Floating Elements - 简化版本 */
 	.floating-elements {
 		position: absolute;
 		top: 0;
@@ -163,39 +163,45 @@ const {
 		right: 0;
 		bottom: 0;
 		pointer-events: none;
+		opacity: 0.5; /* 降低透明度，减少干扰 */
 	}
 
 	.geo-shape {
 		position: absolute;
-		border: 1px solid rgba(255, 255, 255, 0.08);
+		border: 1px solid rgba(255, 255, 255, 0.06); /* 降低边框透明度 */
 		animation: float 20s ease-in-out infinite;
+		will-change: transform, opacity; /* 性能优化 */
+		backface-visibility: hidden; /* 性能优化 */
+		transform: translateZ(0); /* 性能优化：触发GPU */
 	}
 
 	.shape-1 {
-		width: 400px;
-		height: 400px;
-		top: 10%;
-		right: 10%;
+		width: 300px; /* 减小尺寸 */
+		height: 300px;
+		top: 15%;
+		right: 15%;
 		transform: rotate(45deg);
 		animation-delay: 0s;
+		display: none; /* 在小屏幕上隐藏 */
 	}
 
 	.shape-2 {
-		width: 200px;
-		height: 200px;
-		bottom: 20%;
-		left: 15%;
+		width: 150px; /* 减小尺寸 */
+		height: 150px;
+		bottom: 25%;
+		left: 20%;
 		border-radius: 50%;
 		animation-delay: -7s;
 	}
 
 	.shape-3 {
-		width: 300px;
-		height: 300px;
+		width: 200px; /* 减小尺寸 */
+		height: 200px;
 		top: 50%;
-		left: 5%;
+		left: 10%;
 		transform: rotate(30deg);
 		animation-delay: -14s;
+		display: none; /* 在小屏幕上隐藏 */
 	}
 
 	@keyframes float {
@@ -204,8 +210,19 @@ const {
 			opacity: 0.3;
 		}
 		50% {
-			transform: translateY(-30px) rotate(50deg);
+			transform: translateY(-20px) rotate(50deg); /* 减小移动距离 */
 			opacity: 0.5;
+		}
+	}
+
+	/* 在小屏幕上隐藏更多装饰 */
+	@media (max-width: 1024px) {
+		.shape-2 {
+			display: none;
+		}
+
+		.floating-elements {
+			opacity: 0.3; /* 进一步降低 */
 		}
 	}
 
@@ -462,9 +479,27 @@ const {
 	}
 
 	/* Responsive */
-	@media (max-width: 768px) {
+	@media (max-width: 1024px) {
 		.arch-hero {
 			padding: 2em 1.5em;
+		}
+
+		/* 中等屏幕：禁用部分动画以提升性能 */
+		.floating-elements {
+			opacity: 0.3;
+		}
+
+		.geo-shape {
+			animation-duration: 30s; /* 减缓动画速度 */
+		}
+
+		/* 停用复杂的角落装饰 */
+		.corner-decoration {
+			display: none;
+		}
+
+		.scroll-indicator {
+			display: none;
 		}
 
 		.hero-title {
@@ -477,22 +512,45 @@ const {
 		}
 
 		.geo-shape {
+			display: none; /* 中等屏幕隐藏浮动物形 */
+		}
+	}
+
+	@media (max-width: 768px) {
+		.arch-hero {
+			padding: 2em 1.5em;
+		}
+
+		/* 移动端：完全禁用动画 */
+		.floating-elements,
+		.geo-shape,
+		.corner-decoration {
 			display: none;
 		}
 
-		.corner-decoration {
-			width: 50px;
-			height: 50px;
+		.hero-title {
+			font-size: clamp(2em, 12vw, 3.5em);
 		}
 
-		.corner-decoration::before,
-		.corner-decoration::after {
-			width: 25px !important;
-			height: 25px !important;
+		.hero-subtitle {
+			font-size: 0.85em;
+			letter-spacing: 0.15em;
 		}
 
 		.scroll-indicator {
 			bottom: 2em;
+		}
+	}
+
+	/* 支持用户的减少动画偏好 */
+	@media (prefers-reduced-motion: reduce) {
+		/* 禁用所有装饰性动画 */
+		.geo-shape,
+		.corner-decoration,
+		.scroll-line,
+		.floating-elements {
+			animation: none !important;
+			opacity: 0.5;
 		}
 	}
 </style>

@@ -3,6 +3,26 @@ import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 import BlogPostGrass from '../../layouts/BlogPostGrass.astro';
 
+// 提取标题的函数
+function extractHeadings(content: string) {
+	const headingRegex = /^(#{1,6})\s+(.+)$/gm;
+	const headings: { text: string; level: number; id: string }[] = [];
+	let match;
+
+	while ((match = headingRegex.exec(content)) !== null) {
+		const level = match[1].length;
+		const text = match[2].trim();
+		const id = text
+			.toLowerCase()
+			.replace(/[^\w\s-]/g, '')
+			.replace(/\s+/g, '-');
+
+		headings.push({ text, level, id });
+	}
+
+	return headings;
+}
+
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
 	return posts.map((post) => ({
@@ -13,12 +33,22 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { Content } = await render(post);
+const { Content, remarkPluginFrontmatter } = await render(post);
+
+// 提取标题（从原始内容）
+// 注意：这里简化处理，实际生产环境建议使用 remark 插件
+const headings: { text: string; level: number; id: string }[] = [];
 
 const layout = post.id === 'grass-technical-analysis' ? BlogPostGrass : BlogPost;
 const LayoutComponent = layout;
+
+// 将标题添加到 props 中
+const propsWithHeadings = {
+	...post.data,
+	headings
+};
 ---
 
-<LayoutComponent {...post.data}>
+<LayoutComponent {...propsWithHeadings}>
 	<Content />
 </LayoutComponent>
