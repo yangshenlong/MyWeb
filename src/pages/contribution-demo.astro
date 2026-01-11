@@ -1,0 +1,65 @@
+---
+import ContributionGraph from '../components/ContributionGraph.astro';
+import GlassCard from '../components/GlassCard.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Contribution Graph Demo | {SITE_TITLE}</title>
+		<meta name="description" content={SITE_DESCRIPTION} />
+	</head>
+	<body style="background: #f5f5f5; padding: 2em; font-family: 'Atkinson', sans-serif;">
+		<main style="max-width: 1000px; margin: 0 auto;">
+			<h1 style="margin-bottom: 2em; color: #000;">GitHub Contribution Graph Demo</h1>
+
+			<section style="margin-bottom: 3em;">
+				<h2 style="margin-bottom: 1em;">Light Theme (Default)</h2>
+				<ContributionGraph
+					username="yangshenlong"
+					weeks={52}
+					showStats={true}
+					theme="light"
+				/>
+			</section>
+
+			<section style="margin-bottom: 3em;">
+				<h2 style="margin-bottom: 1em;">Dark Theme</h2>
+				<div style="background: #0d1117; padding: 1em; border-radius: 4px;">
+					<ContributionGraph
+						username="yangshenlong"
+						weeks={52}
+						showStats={true}
+						theme="dark"
+					/>
+				</div>
+			</section>
+
+			<section style="margin-bottom: 3em;">
+				<h2 style="margin-bottom: 1em;">Without Stats</h2>
+				<ContributionGraph
+					username="yangshenlong"
+					weeks={26}
+					showStats={false}
+					theme="light"
+				/>
+			</section>
+
+			<section>
+				<h2 style="margin-bottom: 1em;">Integration with GlassCard</h2>
+				<GlassCard>
+					<h3 style="margin-bottom: 1em;">Embedded in GlassCard</h3>
+					<ContributionGraph
+						username="yangshenlong"
+						weeks={52}
+						showStats={true}
+						theme="light"
+					/>
+				</GlassCard>
+			</section>
+		</main>
+	</body>
+</html>

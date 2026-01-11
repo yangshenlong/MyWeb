@@ -304,11 +304,13 @@ function formatDisplayDate(dateStr: string): string {
   }
 
   .heatmap-wrapper {
-    min-width: max-content;
+    overflow-x: auto;
+    max-width: 100%;
   }
-
+  
   .heatmap-container {
-    display: inline-grid;
+    min-width: max-content;
+    display: grid;
     grid-template-areas:
       "month-spacer months"
       "days squares";
@@ -479,6 +481,11 @@ function formatDisplayDate(dateStr: string): string {
     .blog-activity-heatmap {
       --square-size: 10px;
     }
+    
+    .heatmap-wrapper {
+      -webkit-overflow-scrolling: touch;
+      overflow-x: auto;
+    }
   }
 
   @media (max-width: 480px) {
@@ -493,6 +500,15 @@ function formatDisplayDate(dateStr: string): string {
     
     .stat-value {
       font-size: 1.5em;
+    }
+    
+    .heatmap-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .squares-container {
+      min-width: 280px;
     }
   }
 </style>
