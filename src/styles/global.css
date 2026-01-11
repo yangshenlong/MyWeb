@@ -1,34 +1,58 @@
 /*
-  黑白新野兽派风格 - 现代酷炫
-  Neobrutalism: 粗边框 + 硬阴影 + 高对比度
+  Premium Dark Mode Design System
+  Architectural Glassmorphism Style
+  Background: #050505
+  Accents: Indigo (#6366f1), Purple (#a855f7), Orange (#FF4F00)
 */
 
 :root {
-	/* 新野兽派变量 - 高对比度配色 */
-	--accent: #000000;
-	--accent-dark: #000000;
-	--black: 0, 0, 0;
-	--white: 255, 255, 255;
-	--gray: 100, 100, 100;
-	--gray-light: 245, 245, 245;
-	--gray-dark: 30, 30, 30;
+	/* === Design Tokens === */
 
-	/* 新野兽派阴影 - 硬阴影，有偏移 */
-	--brutal-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
-	--brutal-shadow-hover: 6px 6px 0px 0px rgba(0, 0, 0, 1);
-	--brutal-shadow-active: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+	/* Color System - Premium Dark Palette */
+	--color-bg-primary: #050505;
+	--color-bg-secondary: #0a0a0a;
+	--color-bg-tertiary: #0f0f0f;
 
-	/* 可访问性：提高对比度以满足 WCAG AA (4.5:1) */
-	--text-primary: 240, 240, 240;
-	--text-secondary: 170, 170, 170;
-	--text-tertiary: 140, 140, 140;
-	--accent-high-contrast: 100, 100, 255;
+	--color-text-primary: rgba(255, 255, 255, 0.95);
+	--color-text-secondary: rgba(255, 255, 255, 0.7);
+	--color-text-tertiary: rgba(255, 255, 255, 0.5);
+	--color-text-muted: rgba(255, 255, 255, 0.3);
 
-	/* 粗边框 */
-	--brutal-border: 3px solid #000000;
-	--brutal-border-thick: 4px solid #000000;
+	/* Accent Colors - Vibrant Gradients */
+	--color-accent-primary: 99, 102, 241;   /* Indigo */
+	--color-accent-secondary: 168, 85, 247; /* Purple */
+	--color-accent-tertiary: 255, 79, 0;    /* Orange */
 
-	/* UI 布局系统 - 设计令牌 */
+	--color-accent-rgb: 99, 102, 241;
+	--color-glow-indigo: rgba(99, 102, 241, 0.4);
+	--color-glow-purple: rgba(168, 85, 247, 0.3);
+	--color-glow-orange: rgba(255, 79, 0, 0.2);
+
+	/* Glassmorphism Variables */
+	--glass-blur: 30px;
+	--glass-opacity-bg: 0.02;
+	--glass-opacity-bg-hover: 0.05;
+	--glass-opacity-border: 0.06;
+	--glass-opacity-border-hover: 0.12;
+
+	/* Border Colors */
+	--border-subtle: rgba(255, 255, 255, 0.06);
+	--border-standard: rgba(255, 255, 255, 0.08);
+	--border-hover: rgba(255, 255, 255, 0.15);
+	--border-strong: rgba(255, 255, 255, 0.25);
+
+	/* Typography */
+	--font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	--font-mono: 'Space Mono', 'Courier New', monospace;
+
+	/* Font Weights */
+	--font-weight-light: 200;
+	--font-weight-normal: 300;
+	--font-weight-medium: 400;
+	--font-weight-semibold: 500;
+	--font-weight-bold: 600;
+
+	/* Spacing System */
 	--space-xs: 0.25em;
 	--space-sm: 0.5em;
 	--space-md: 1em;
@@ -38,17 +62,71 @@
 	--space-3xl: 4em;
 	--space-4xl: 6em;
 	--space-5xl: 8em;
-	--space-6xl: 10em;
 
+	/* Layout */
 	--section-padding-y: 8em;
 	--section-padding-x: 4em;
+	--container-max-width: 1600px;
+	--content-max-width: 800px;
+
+	/* Grid */
 	--grid-gap: 2em;
-	--glass-blur: 30px;
-	--glass-opacity-bg: 0.02;
-	--glass-opacity-border: 0.06;
+
+	/* Shadows */
+	--shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.3);
+	--shadow-md: 0 10px 40px rgba(0, 0, 0, 0.4);
+	--shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+	--shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+
+	/* Transitions */
+	--transition-fast: 0.2s ease;
+	--transition-normal: 0.3s ease;
+	--transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+	/* Border Radius */
+	--radius-sm: 4px;
+	--radius-md: 8px;
+	--radius-lg: 12px;
+	--radius-xl: 16px;
+	--radius-full: 9999px;
+
+	/* Z-index Layers */
+	--z-dropdown: 100;
+	--z-sticky: 200;
+	--z-fixed: 300;
+	--z-modal-backdrop: 400;
+	--z-modal: 500;
+	--z-popover: 600;
+	--z-tooltip: 700;
 }
 
-/* 性能优化：减少动画对用户的影响 */
+/* === Neobrutalism Variables (Legacy Support) === */
+/* Kept for backward compatibility, but premium dark mode is preferred */
+:root {
+	--accent: #000000;
+	--accent-dark: #000000;
+	--black: 0, 0, 0;
+	--white: 255, 255, 255;
+	--gray: 100, 100, 100;
+	--gray-light: 245, 245, 245;
+	--gray-dark: 30, 30, 30;
+
+	--brutal-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+	--brutal-shadow-hover: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+	--brutal-shadow-active: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+
+	--brutal-border: 3px solid #000000;
+	--brutal-border-thick: 4px solid #000000;
+
+	--text-primary: 240, 240, 240;
+	--text-secondary: 170, 170, 170;
+	--text-tertiary: 140, 140, 140;
+	--accent-high-contrast: 100, 100, 255;
+}
+
+/* === Performance Optimizations === */
+
+/* Support for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
 	*,
 	*::before,
@@ -60,7 +138,7 @@
 	}
 }
 
-/* 性能优化：启用硬件加速 */
+/* Hardware acceleration for animations */
 @media (not (prefers-reduced-motion: reduce)) {
 	* {
 		backface-visibility: hidden;
@@ -68,353 +146,133 @@
 	}
 }
 
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-regular.woff") format("woff");
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-bold.woff") format("woff");
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
+/* === Base Styles === */
 
 * {
 	box-sizing: border-box;
 }
 
+html {
+	scroll-behavior: smooth;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
 body {
-	font-family: "Atkinson", sans-serif;
+	font-family: var(--font-primary);
+	background: var(--color-bg-primary);
+	color: var(--color-text-primary);
+	line-height: 1.6;
 	margin: 0;
 	padding: 0;
-	text-align: left;
-	background: #ffffff;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
-	font-size: 20px;
-	line-height: 1.6;
 	min-height: 100vh;
+	overflow-x: hidden;
 }
 
 main {
-	width: 800px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
-}
-
-/* 标题样式 */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.75rem 0;
-	color: rgb(var(--black));
-	line-height: 1.2;
-	font-weight: 700;
-	letter-spacing: -0.02em;
-	text-transform: uppercase;
-}
-
-h1 {
-	font-size: 3.5em;
-	text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-	font-size: 2.5em;
-}
-
-h3 {
-	font-size: 2em;
-}
-
-h4 {
-	font-size: 1.5em;
-}
-
-h5 {
-	font-size: 1.25em;
-}
-
-strong,
-b {
-	font-weight: 700;
-	background: #000000;
-	color: #ffffff;
-	padding: 0.1em 0.3em;
-}
-
-/* 链接样式 - 新野兽派风格 */
-a {
-	color: var(--accent);
-	text-decoration: none;
-	border-bottom: 3px solid #000000;
-	transition: all 0.15s ease;
-	display: inline-block;
-}
-
-a:hover {
-	background: #000000;
-	color: #ffffff;
-	transform: translate(-2px, -2px);
-	box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
-}
-
-p {
-	margin-bottom: 1.25em;
-}
-
-.prose p {
-	margin-bottom: 2em;
-}
-
-/* 表单元素 */
-textarea,
-input {
-	width: 100%;
-	font-size: 16px;
-	padding: 0.75em;
-	border: var(--brutal-border);
-	background: #ffffff;
-	box-shadow: var(--brutal-shadow);
-	transition: all 0.15s ease;
-	font-family: inherit;
-}
-
-textarea:focus,
-input:focus {
-	outline: none;
-	box-shadow: var(--brutal-shadow-hover);
-	transform: translate(-2px, -2px);
-}
-
-/* 表格样式 */
-table {
-	width: 100%;
-	border-collapse: separate;
-	border-spacing: 0;
-	margin: 2em 0;
-	border: var(--brutal-border-thick);
-	box-shadow: var(--brutal-shadow);
-}
-
-table th,
-table td {
-	padding: 0.75em 1em;
-	border: 1px solid #000000;
-	text-align: left;
-}
-
-table th {
-	background: #000000;
-	color: #ffffff;
-	font-weight: 700;
-	text-transform: uppercase;
-}
-
-table tr:hover {
-	background: var(--gray-light);
-}
-
-/* 图片样式 */
-img {
-	max-width: 100%;
-	height: auto;
-	border: var(--brutal-border);
-	box-shadow: var(--brutal-shadow);
-	transition: all 0.15s ease;
 	display: block;
 }
 
-img:hover {
-	box-shadow: var(--brutal-shadow-hover);
-	transform: translate(-2px, -2px);
+/* === Typography === */
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	font-weight: var(--font-weight-normal);
+	line-height: 1.2;
+	letter-spacing: -0.02em;
 }
 
-/* 代码样式 */
-code {
-	padding: 0.2em 0.5em;
-	background: #000000;
-	color: #ffffff;
-	border: var(--brutal-border);
-	font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-	font-size: 0.9em;
-	box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+h1 {
+	font-size: clamp(2em, 5vw, 4em);
+	font-weight: var(--font-weight-light);
 }
 
-pre {
-	padding: 1.5em;
-	background: #ffffff;
-	border: var(--brutal-border-thick);
-	box-shadow: var(--brutal-shadow);
-	overflow-x: auto;
-	position: relative;
+h2 {
+	font-size: clamp(1.5em, 3vw, 2.5em);
 }
 
-pre::before {
-	content: 'CODE';
-	position: absolute;
-	top: -12px;
-	left: 12px;
-	background: #000000;
-	color: #ffffff;
-	padding: 0.1em 0.5em;
-	font-size: 0.75em;
-	font-weight: 700;
-	letter-spacing: 0.1em;
+h3 {
+	font-size: clamp(1.25em, 2.5vw, 2em);
 }
 
-pre > code {
-	all: unset;
-	font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-	background: transparent;
-	border: none;
-	box-shadow: none;
+p {
+	margin: 0 0 1em 0;
 }
 
-/* 引用样式 - 新野兽派 */
-blockquote {
-	border: var(--brutal-border-thick);
-	padding: 1.5em 2em;
-	margin: 2em 0;
-	background: #ffffff;
-	box-shadow: var(--brutal-shadow);
-	font-size: 1.2em;
-	color: rgb(var(--gray-dark));
-	font-style: italic;
-	position: relative;
-}
-
-blockquote::before {
-	content: '"';
-	position: absolute;
-	top: -20px;
-	left: 20px;
-	font-size: 4em;
-	line-height: 1;
-	background: #ffffff;
-	padding: 0 10px;
-	color: #000000;
-	font-weight: 700;
-}
-
-hr {
-	border: none;
-	border-top: var(--brutal-border-thick);
-	margin: 3em 0;
-	box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.5);
-}
-
-/* 列表样式 */
-ul,
-ol {
-	margin: 1.5em 0;
-	padding-left: 2em;
-}
-
-li {
-	margin: 0.5em 0;
-	padding-left: 0.5em;
-}
-
-ul li::marker {
-	color: #000000;
-	font-size: 1.2em;
-}
-
-/* 按钮样式 */
-button,
-.button {
-	background: #ffffff;
-	color: #000000;
-	border: var(--brutal-border);
-	padding: 0.75em 1.5em;
-	font-size: 1em;
-	font-weight: 700;
-	cursor: pointer;
-	transition: all 0.15s ease;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
-	box-shadow: var(--brutal-shadow);
-	display: inline-block;
+a {
+	color: inherit;
 	text-decoration: none;
-	user-select: none;
-	-webkit-tap-highlight-color: transparent;
-	position: relative;
 }
 
-button:active,
-.button:active {
-	box-shadow: var(--brutal-shadow-active);
-	transform: translate(0px, 0px);
-}
+/* === Selection === */
 
-button:hover,
-.button:hover {
-	background: #000000;
-	color: #ffffff;
-	box-shadow: var(--brutal-shadow-hover);
-	transform: translate(-2px, -2px);
-}
-
-/* 选择文字样式 */
 ::selection {
-	background-color: #000000;
-	color: #ffffff;
+	background: rgba(var(--color-accent-rgb), 0.3);
+	color: rgba(255, 255, 255, 1);
 }
 
-/* 滚动条样式 */
+/* === Scrollbar === */
+
 ::-webkit-scrollbar {
-	width: 12px;
-	height: 12px;
+	width: 8px;
+	height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-	background: #ffffff;
-	border-left: 2px solid #000000;
+	background: rgba(255, 255, 255, 0.02);
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #000000;
-	border: 2px solid #000000;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #333333;
+	background: rgba(255, 255, 255, 0.2);
 }
 
-@media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
+/* === Utility Classes === */
 
-	main {
-		padding: 2em 1em;
-	}
-
-	h1 {
-		font-size: 2.5em;
-	}
-
-	h2 {
-		font-size: 2em;
-	}
-
-	blockquote::before {
-		font-size: 3em;
-		top: -15px;
-	}
+/* Glass Effect */
+.glass {
+	background: rgba(255, 255, 255, var(--glass-opacity-bg));
+	backdrop-filter: blur(var(--glass-blur));
+	-webkit-backdrop-filter: blur(var(--glass-blur));
+	border: 1px solid var(--border-subtle);
 }
 
+/* Text Gradient */
+.text-gradient {
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.7) 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+/* Accent Gradient Text */
+.text-gradient-accent {
+	background: linear-gradient(135deg,
+		rgba(var(--color-accent-primary), 1) 0%,
+		rgba(var(--color-accent-secondary), 1) 100%
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+/* Glow Effect */
+.glow {
+	box-shadow: var(--shadow-glow);
+}
+
+/* Container */
+.container {
+	max-width: var(--container-max-width);
+	margin: 0 auto;
+	padding: 0 var(--section-padding-x);
+}
+
+/* Visually Hidden (for accessibility) */
 .sr-only {
 	border: 0;
 	padding: 0;
@@ -426,4 +284,57 @@ button:hover,
 	clip: rect(1px 1px 1px 1px);
 	clip-path: inset(50%);
 	white-space: nowrap;
+}
+
+/* === Animation Keyframes === */
+
+/* Fade In */
+@keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+/* Fade In Up */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Fade In Down */
+@keyframes fadeInDown {
+	from {
+		opacity: 0;
+		transform: translateY(-30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Scale In */
+@keyframes scaleIn {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+/* === Responsive Typography === */
+
+@media (max-width: 768px) {
+	:root {
+		--section-padding-x: 1.5em;
+		--section-padding-y: 6em;
+	}
 }
