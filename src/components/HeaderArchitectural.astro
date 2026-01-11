@@ -74,9 +74,9 @@ const navItems = [
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background: rgba(5, 5, 5, 0.85);
-		backdrop-filter: blur(20px);
-		-webkit-backdrop-filter: blur(20px);
+		background: rgba(5, 5, 5, 0.8);
+		backdrop-filter: blur(25px);
+		-webkit-backdrop-filter: blur(25px);
 	}
 
 	.grid-overlay {
@@ -86,8 +86,8 @@ const navItems = [
 		right: 0;
 		bottom: 0;
 		background-image:
-			linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+			linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 		background-size: 50px 50px;
 		pointer-events: none;
 	}
@@ -100,10 +100,10 @@ const navItems = [
 		bottom: 0;
 		background: linear-gradient(
 			180deg,
-			rgba(20, 20, 20, 0.95) 0%,
-			rgba(10, 10, 10, 0.9) 100%
+			rgba(15, 15, 15, 0.95) 0%,
+			rgba(8, 8, 8, 0.9) 100%
 		);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 	}
 
 	/* Navigation */
@@ -216,7 +216,7 @@ const navItems = [
 		font-size: 0.7em;
 		font-weight: 400;
 		letter-spacing: 0.1em;
-		color: rgba(255, 255, 255, 0.35);
+		color: rgba(255, 255, 255, 0.3);
 		font-family: 'Courier New', monospace;
 		transition: all 0.3s ease;
 	}
@@ -225,7 +225,7 @@ const navItems = [
 		font-size: 0.85em;
 		font-weight: 400;
 		letter-spacing: 0.1em;
-		color: rgba(255, 255, 255, 0.8);
+		color: rgba(255, 255, 255, 0.7);
 		text-transform: uppercase;
 		position: relative;
 		transition: all 0.3s ease;
@@ -237,17 +237,19 @@ const navItems = [
 		left: 0;
 		width: 0;
 		height: 1px;
-		background: rgba(255, 255, 255, 0.9);
+		background: rgba(255, 255, 255, 0.8);
 		transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.nav-item:hover .nav-number {
 		color: rgba(255, 255, 255, 0.6);
+		text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 	}
 
 	.nav-item:hover .nav-text {
 		color: rgba(255, 255, 255, 1);
 		letter-spacing: 0.15em;
+		text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
 	}
 
 	.nav-item:hover .nav-line {

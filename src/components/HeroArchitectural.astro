@@ -24,6 +24,9 @@ const {
 		<div class="grid-lines horizontal"></div>
 	</div>
 
+	<!-- Ambient Glow -->
+	<div class="ambient-glow"></div>
+
 	<!-- Floating Elements -->
 	<div class="floating-elements">
 		<div class="geo-shape shape-1"></div>
@@ -88,7 +91,7 @@ const {
 		padding-top: 73px;
 	}
 
-	/* Grid Background */
+	/* Grid Background with subtle glow */
 	.hero-grid {
 		position: absolute;
 		top: 0;
@@ -118,7 +121,7 @@ const {
 		top: 0;
 		bottom: 0;
 		width: 1px;
-		background: rgba(255, 255, 255, 0.02);
+		background: rgba(255, 255, 255, 0.015);
 	}
 
 	.grid-lines.vertical::before {
@@ -144,7 +147,7 @@ const {
 		left: 0;
 		right: 0;
 		height: 1px;
-		background: rgba(255, 255, 255, 0.02);
+		background: rgba(255, 255, 255, 0.015);
 	}
 
 	.grid-lines.horizontal::before {
@@ -155,7 +158,7 @@ const {
 		bottom: -25vh;
 	}
 
-	/* Floating Elements - 简化版本 */
+	/* Enhanced Floating Elements */
 	.floating-elements {
 		position: absolute;
 		top: 0;
@@ -163,55 +166,102 @@ const {
 		right: 0;
 		bottom: 0;
 		pointer-events: none;
-		opacity: 0.5; /* 降低透明度，减少干扰 */
+		opacity: 0.6;
 	}
 
 	.geo-shape {
 		position: absolute;
-		border: 1px solid rgba(255, 255, 255, 0.06); /* 降低边框透明度 */
+		border: 1px solid rgba(255, 255, 255, 0.08);
 		animation: float 20s ease-in-out infinite;
-		will-change: transform, opacity; /* 性能优化 */
-		backface-visibility: hidden; /* 性能优化 */
-		transform: translateZ(0); /* 性能优化：触发GPU */
+		will-change: transform, opacity;
+		backface-visibility: hidden;
+		transform: translateZ(0);
 	}
 
 	.shape-1 {
-		width: 300px; /* 减小尺寸 */
-		height: 300px;
-		top: 15%;
-		right: 15%;
+		width: 400px;
+		height: 400px;
+		top: 12%;
+		right: 12%;
 		transform: rotate(45deg);
 		animation-delay: 0s;
-		display: none; /* 在小屏幕上隐藏 */
+		border-color: rgba(99, 102, 241, 0.15);
+		box-shadow:
+			0 0 60px rgba(99, 102, 241, 0.08),
+			inset 0 0 60px rgba(99, 102, 241, 0.05);
 	}
 
 	.shape-2 {
-		width: 150px; /* 减小尺寸 */
-		height: 150px;
-		bottom: 25%;
-		left: 20%;
+		width: 180px;
+		height: 180px;
+		bottom: 30%;
+		left: 15%;
 		border-radius: 50%;
 		animation-delay: -7s;
+		border-color: rgba(168, 85, 247, 0.12);
+		box-shadow:
+			0 0 50px rgba(168, 85, 247, 0.08),
+			inset 0 0 40px rgba(168, 85, 247, 0.05);
 	}
 
 	.shape-3 {
-		width: 200px; /* 减小尺寸 */
-		height: 200px;
-		top: 50%;
-		left: 10%;
+		width: 250px;
+		height: 250px;
+		top: 45%;
+		left: 8%;
 		transform: rotate(30deg);
 		animation-delay: -14s;
-		display: none; /* 在小屏幕上隐藏 */
+		border-color: rgba(255, 79, 0, 0.1);
+		box-shadow:
+			0 0 50px rgba(255, 79, 0, 0.06),
+			inset 0 0 40px rgba(255, 79, 0, 0.04);
 	}
 
 	@keyframes float {
 		0%, 100% {
 			transform: translateY(0) rotate(45deg);
-			opacity: 0.3;
+			opacity: 0.4;
+		}
+		25% {
+			transform: translateY(-15px) rotate(48deg);
+			opacity: 0.6;
 		}
 		50% {
-			transform: translateY(-20px) rotate(50deg); /* 减小移动距离 */
+			transform: translateY(-25px) rotate(42deg);
 			opacity: 0.5;
+		}
+		75% {
+			transform: translateY(-10px) rotate(47deg);
+			opacity: 0.55;
+		}
+	}
+
+	/* Ambient Glow Background */
+	.ambient-glow {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 800px;
+		height: 800px;
+		background: radial-gradient(
+			circle,
+			rgba(99, 102, 241, 0.08) 0%,
+			rgba(168, 85, 247, 0.05) 30%,
+			transparent 70%
+		);
+		pointer-events: none;
+		animation: ambientPulse 8s ease-in-out infinite;
+	}
+
+	@keyframes ambientPulse {
+		0%, 100% {
+			opacity: 0.6;
+			transform: translate(-50%, -50%) scale(1);
+		}
+		50% {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1.1);
 		}
 	}
 
@@ -294,7 +344,7 @@ const {
 		animation: fadeInUp 0.8s ease-out 0.4s forwards;
 	}
 
-	/* CTA Button */
+	/* CTA Button - Enhanced */
 	.hero-cta {
 		opacity: 0;
 		animation: fadeInUp 0.8s ease-out 0.6s forwards;
@@ -305,21 +355,46 @@ const {
 		align-items: center;
 		gap: 1em;
 		padding: 1em 2.5em;
-		background: rgba(255, 255, 255, 0.05);
-		border: 1px solid rgba(255, 255, 255, 0.15);
-		color: rgba(255, 255, 255, 0.9);
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		color: rgba(255, 255, 255, 0.95);
 		text-decoration: none;
 		font-size: 0.85em;
 		letter-spacing: 0.2em;
 		text-transform: uppercase;
 		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 		backdrop-filter: blur(10px);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.cta-button::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(
+			90deg,
+			transparent 0%,
+			rgba(255, 255, 255, 0.1) 50%,
+			transparent 100%
+		);
+		transition: left 0.6s ease;
+	}
+
+	.cta-button:hover::before {
+		left: 100%;
 	}
 
 	.cta-button:hover {
-		background: rgba(255, 255, 255, 0.1);
-		border-color: rgba(255, 255, 255, 0.3);
-		transform: translateY(-2px);
+		background: rgba(255, 255, 255, 0.08);
+		border-color: rgba(255, 255, 255, 0.25);
+		transform: translateY(-3px);
+		box-shadow:
+			0 15px 30px rgba(0, 0, 0, 0.3),
+			0 0 40px rgba(255, 255, 255, 0.05);
 	}
 
 	.cta-icon {
@@ -327,10 +402,10 @@ const {
 	}
 
 	.cta-button:hover .cta-icon {
-		transform: translateX(5px);
+		transform: translateX(8px);
 	}
 
-	/* Scroll Indicator */
+	/* Scroll Indicator - Enhanced */
 	.scroll-indicator {
 		position: absolute;
 		bottom: 3em;
@@ -346,23 +421,39 @@ const {
 
 	.scroll-line {
 		width: 1px;
-		height: 60px;
+		height: 80px;
 		background: linear-gradient(
 			180deg,
-			rgba(255, 255, 255, 0.5) 0%,
-			rgba(255, 255, 255, 0.1) 100%
+			rgba(255, 255, 255, 0.6) 0%,
+			rgba(255, 255, 255, 0.15) 50%,
+			rgba(255, 255, 255, 0.05) 100%
+		);
+		position: relative;
+	}
+
+	.scroll-line::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 30%;
+		background: linear-gradient(
+			180deg,
+			rgba(255, 255, 255, 0.9) 0%,
+			transparent 100%
 		);
 		animation: scrollPulse 2s ease-in-out infinite;
 	}
 
 	@keyframes scrollPulse {
 		0%, 100% {
-			transform: scaleY(1);
-			opacity: 0.5;
+			transform: translateY(0);
+			opacity: 1;
 		}
 		50% {
-			transform: scaleY(0.7);
-			opacity: 0.3;
+			transform: translateY(50%);
+			opacity: 0.4;
 		}
 	}
 
@@ -484,18 +575,38 @@ const {
 			padding: 2em 1.5em;
 		}
 
-		/* 中等屏幕：禁用部分动画以提升性能 */
+		/* Medium screens: subtle animations */
 		.floating-elements {
-			opacity: 0.3;
+			opacity: 0.4;
 		}
 
 		.geo-shape {
-			animation-duration: 30s; /* 减缓动画速度 */
+			animation-duration: 25s;
 		}
 
-		/* 停用复杂的角落装饰 */
+		.shape-1 {
+			width: 280px;
+			height: 280px;
+		}
+
+		.shape-2 {
+			width: 120px;
+			height: 120px;
+		}
+
+		.shape-3 {
+			width: 180px;
+			height: 180px;
+		}
+
+		.ambient-glow {
+			width: 500px;
+			height: 500px;
+		}
+
+		/* Simplified corner decorations */
 		.corner-decoration {
-			display: none;
+			opacity: 0.2;
 		}
 
 		.scroll-indicator {
@@ -510,10 +621,6 @@ const {
 			font-size: 0.9em;
 			letter-spacing: 0.2em;
 		}
-
-		.geo-shape {
-			display: none; /* 中等屏幕隐藏浮动物形 */
-		}
 	}
 
 	@media (max-width: 768px) {
@@ -521,11 +628,28 @@ const {
 			padding: 2em 1.5em;
 		}
 
-		/* 移动端：完全禁用动画 */
-		.floating-elements,
-		.geo-shape,
-		.corner-decoration {
+		/* Mobile: keep subtle floating elements */
+		.floating-elements {
+			opacity: 0.25;
+		}
+
+		.geo-shape {
+			animation-duration: 30s;
+		}
+
+		.shape-2 {
+			width: 100px;
+			height: 100px;
+		}
+
+		.shape-1,
+		.shape-3 {
 			display: none;
+		}
+
+		.ambient-glow {
+			width: 300px;
+			height: 300px;
 		}
 
 		.hero-title {

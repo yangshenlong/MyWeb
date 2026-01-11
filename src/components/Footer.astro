@@ -28,8 +28,26 @@ import { AUTHOR, SOCIAL_LINKS } from '../consts';
 <style>
 	.footer {
 		padding: 3em 4em;
-		background: #030303;
-		border-top: 1px solid rgba(255, 255, 255, 0.05);
+		background: #020202;
+		border-top: 1px solid rgba(255, 255, 255, 0.04);
+		position: relative;
+	}
+
+	.footer::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: linear-gradient(
+			90deg,
+			transparent 0%,
+			rgba(255, 255, 255, 0.08) 20%,
+			rgba(255, 255, 255, 0.04) 50%,
+			rgba(255, 255, 255, 0.08) 80%,
+			transparent 100%
+		);
 	}
 
 	.footer-content {
@@ -48,11 +66,12 @@ import { AUTHOR, SOCIAL_LINKS } from '../consts';
 
 	.footer-text {
 		font-size: 0.85em;
-		color: rgba(255, 255, 255, 0.4);
+		color: rgba(255, 255, 255, 0.35);
+		transition: color 0.3s ease;
 	}
 
 	.footer-divider {
-		color: rgba(255, 255, 255, 0.2);
+		color: rgba(255, 255, 255, 0.15);
 	}
 
 	.footer-right {
@@ -62,13 +81,30 @@ import { AUTHOR, SOCIAL_LINKS } from '../consts';
 
 	.footer-link {
 		font-size: 0.85em;
-		color: rgba(255, 255, 255, 0.5);
-		transition: color 0.3s ease;
+		color: rgba(255, 255, 255, 0.45);
+		transition: all 0.3s ease;
 		text-decoration: none;
+		position: relative;
+		padding: 0.25em 0;
+	}
+
+	.footer-link::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 0;
+		height: 1px;
+		background: rgba(255, 255, 255, 0.4);
+		transition: width 0.3s ease;
 	}
 
 	.footer-link:hover {
-		color: rgba(255, 255, 255, 0.8);
+		color: rgba(255, 255, 255, 0.85);
+	}
+
+	.footer-link:hover::after {
+		width: 100%;
 	}
 
 	@media (max-width: 768px) {
