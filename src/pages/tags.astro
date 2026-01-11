@@ -359,48 +359,7 @@ const maxCount = Math.max(...Array.from(tagCounts.values()));
 				transform: translateX(4px);
 			}
 
-			/* Footer */
-			.arch-footer {
-				padding: 3em 4em;
-				background: #030303;
-				border-top: 1px solid rgba(255, 255, 255, 0.05);
-			}
-
-			.footer-content {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-			}
-
-			.footer-left {
-				display: flex;
-				align-items: center;
-				gap: 1em;
-			}
-
-			.footer-text {
-				font-size: 0.85em;
-				color: rgba(255, 255, 255, 0.4);
-			}
-
-			.footer-divider {
-				color: rgba(255, 255, 255, 0.2);
-			}
-
-			.footer-right {
-				display: flex;
-				gap: 2em;
-			}
-
-			.footer-link {
-				font-size: 0.85em;
-				color: rgba(255, 255, 255, 0.5);
-				transition: color 0.3s ease;
-			}
-
-			.footer-link:hover {
-				color: rgba(255, 255, 255, 0.8);
-			}
+			/* Footer styles moved to Footer.astro component */
 
 			/* Responsive */
 			@media (max-width: 1024px) {

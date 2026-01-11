@@ -131,7 +131,7 @@ const { projects } = Astro.props;
 	.projects-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		gap: 2.5em;
+		gap: var(--grid-gap, 2em);
 	}
 
 	.project-item {

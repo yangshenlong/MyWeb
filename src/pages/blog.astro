@@ -1,6 +1,7 @@
 ---
 import HeaderArchitectural from '../components/HeaderArchitectural.astro';
 import GlassCard from '../components/GlassCard.astro';
+import BlogActivityHeatmap from '../components/BlogActivityHeatmap.astro';
 import BackToTop from '../components/BackToTop.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
 import Footer from '../components/Footer.astro';
@@ -84,6 +85,20 @@ const sortedTags = Array.from(allTags).sort();
 			<div class="blog-container">
 				<!-- 搜索和过滤 -->
 				<aside class="sidebar">
+					{/* 贡献热力图 */}
+					<GlassCard class="activity-card">
+						<div class="card-header">
+							<h3>Activity</h3>
+						</div>
+						<BlogActivityHeatmap
+							collection="blog"
+							weeks={52}
+							showStats={true}
+							includeUpdates={true}
+							theme="dark"
+						/>
+					</GlassCard>
+
 					<GlassCard class="search-card">
 						<div class="search-header">
 							<h3>搜索文章</h3>
@@ -258,7 +273,7 @@ const sortedTags = Array.from(allTags).sort();
 
 		<style>
 			.page-header {
-				padding: 180px 4em 6em;
+				padding: calc(60px + var(--section-padding-y, 8em)) 4em 6em;
 				background: #050505;
 				position: relative;
 				display: flex;
@@ -346,9 +361,21 @@ const sortedTags = Array.from(allTags).sort();
 			.sidebar {
 				display: flex;
 				flex-direction: column;
-				gap: 1.5em;
+				gap: var(--grid-gap, 2em);
 				position: sticky;
 				top: 2em;
+			}
+
+			/* Activity Card */
+			.activity-card {
+				padding: 1.5em;
+			}
+
+			.activity-card .card-header h3 {
+				font-size: 1em;
+				font-weight: 400;
+				color: rgba(255, 255, 255, 0.95);
+				margin: 0 0 1em 0;
 			}
 
 			/* Search Card */
@@ -631,12 +658,8 @@ const sortedTags = Array.from(allTags).sort();
 				color: rgba(255, 255, 255, 0.5);
 			}
 
-			/* Footer */
-			.arch-footer {
-				padding: 3em 4em;
-				background: #030303;
-				border-top: 1px solid rgba(255, 255, 255, 0.05);
-			}
+			/* Footer styles moved to Footer.astro component */
+
 
 			.footer-content {
 				display: flex;

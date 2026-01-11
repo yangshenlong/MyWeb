@@ -127,4 +127,66 @@ import { AUTHOR, SOCIAL_LINKS } from '../consts';
 			gap: 1.5em;
 		}
 	}
+
+	/* 统一页脚样式 - 供所有页面使用 */
+	.arch-footer {
+		padding: 3em var(--section-padding-x, 4em);
+		background: #030303;
+		border-top: 1px solid rgba(255, 255, 255, 0.05);
+	}
+
+	.arch-footer .footer-content {
+		max-width: 1400px;
+		margin: 0 auto;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.arch-footer .footer-left {
+		display: flex;
+		align-items: center;
+		gap: 1em;
+	}
+
+	.arch-footer .footer-text {
+		font-size: 0.85em;
+		color: rgba(255, 255, 255, 0.4);
+	}
+
+	.arch-footer .footer-divider {
+		color: rgba(255, 255, 255, 0.2);
+	}
+
+	.arch-footer .footer-right {
+		display: flex;
+		gap: 2em;
+	}
+
+	.arch-footer .footer-link {
+		font-size: 0.85em;
+		color: rgba(255, 255, 255, 0.5);
+		transition: color 0.3s ease;
+	}
+
+	.arch-footer .footer-link:hover {
+		color: rgba(255, 255, 255, 0.8);
+	}
+
+	@media (max-width: 768px) {
+		.arch-footer .footer-content {
+			flex-direction: column;
+			gap: 1.5em;
+			text-align: center;
+		}
+
+		.arch-footer .footer-left {
+			flex-direction: column;
+			gap: 0.5em;
+		}
+
+		.arch-footer .footer-right {
+			gap: 1.5em;
+		}
+	}
 </style>

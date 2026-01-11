@@ -1,0 +1,498 @@
+---
+import { aggregateBlogActivity } from '../utils/activity-aggregator';
+import { calculateBlogStats } from '../utils/stats-calculator';
+
+interface Props {
+  collection?: string;
+  weeks?: number;
+  showStats?: boolean;
+  includeUpdates?: boolean;
+  theme?: 'light' | 'dark';
+  class?: string;
+}
+
+const {
+  collection = 'blog',
+  weeks = 52,
+  showStats = true,
+  includeUpdates = true,
+  theme = 'dark',
+  class: className = ''
+} = Astro.props;
+
+const activityMap = await aggregateBlogActivity({ weeks, includeUpdates });
+const stats = calculateBlogStats(activityMap);
+
+const activityData = Array.from(activityMap.entries())
+  .filter(([_, data]) => data.count > 0)
+  .map(([date, data]) => ({
+    date,
+    count: data.count,
+    publications: data.publications,
+    updates: data.updates,
+    posts: data.posts
+  }));
+
+const maxCount = Math.max(...activityData.map(d => d.count), 1);
+
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+
+function getWeekMonths(weeksCount: number): (number | null)[] {
+  const result: (number | null)[] = [];
+  const today = new Date();
+  const startDate = new Date(today);
+  startDate.setDate(today.getDate() - weeksCount * 7);
+
+  for (let i = 0; i < weeksCount; i++) {
+    const weekStart = new Date(startDate);
+    weekStart.setDate(startDate.getDate() + i * 7);
+    if (weekStart.getDate() <= 7) {
+      result.push(weekStart.getMonth());
+    } else {
+      result.push(null);
+    }
+  }
+  return result;
+}
+
+const weekMonths = getWeekMonths(weeks);
+
+function formatDisplayDate(dateStr: string): string {
+  const date = new Date(dateStr + 'T12:00:00');
+  return date.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long'
+  });
+}
+---
+
+<div class={`blog-activity-heatmap ${theme} ${className}`}>
+  {showStats && (
+    <div class="stats-container">
+      <div class="stat-item priority">
+        <span class="stat-value" data-value={stats.totalPosts}>{stats.totalPosts}</span>
+        <span class="stat-label">Posts</span>
+      </div>
+      <div class="stat-item priority">
+        <span class="stat-value" data-value={stats.activeDays}>{stats.activeDays}</span>
+        <span class="stat-label">Active Days</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" data-value={stats.currentStreak}>{stats.currentStreak}</span>
+        <span class="stat-label">Current Streak</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" data-value={stats.longestStreak}>{stats.longestStreak}</span>
+        <span class="stat-label">Longest Streak</span>
+      </div>
+    </div>
+  )}
+
+  <div class="heatmap-wrapper">
+    <div class="heatmap-container">
+      <div class="months-row">
+        <div class="month-spacer"></div>
+        {weekMonths.map((month, index) => (
+          <div class={`month-label ${month !== null ? 'visible' : ''}`}>
+            {month !== null ? months[month] : ''}
+          </div>
+        ))}
+      </div>
+
+      <div class="heatmap-main">
+        <div class="days-column">
+          {dayLabels.map((label) => (
+            <div class="day-label">{label}</div>
+          ))}
+        </div>
+
+        <div class="squares-container">
+          {Array.from(activityMap.entries()).map(([date, data]) => {
+            const level = data.count > 0 ? Math.ceil(data.count / maxCount * 4) : 0;
+            return (
+              <div
+                class={`square level-${level} ${data.count > 0 ? 'active' : ''}`}
+                data-date={date}
+                data-count={data.count}
+                data-publications={data.publications}
+                data-updates={data.updates}
+              >
+                {data.count > 0 && (
+                  <div class="day-popup">
+                    <div class="popup-date">{formatDisplayDate(date)}</div>
+                    <div class="popup-count">
+                      {data.count} {data.count === 1 ? 'post' : 'posts'}
+                    </div>
+                    {data.posts.slice(0, 3).map((post) => (
+                      <div class="popup-post">
+                        <span class="post-icon">{post.type === 'publication' ? '📝' : '🔄'}</span>
+                        <span class="post-title">{post.postTitle}</span>
+                      </div>
+                    ))}
+                    {data.posts.length > 3 && (
+                      <div class="popup-more">+{data.posts.length - 3} more</div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span>Less</span>
+      <div class="legend-squares">
+        <div class="square level-0"></div>
+        <div class="square level-1"></div>
+        <div class="square level-2"></div>
+        <div class="square level-3"></div>
+        <div class="square level-4"></div>
+      </div>
+      <span>More</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const squares = document.querySelectorAll('.square.active');
+    
+    squares.forEach(square => {
+      const popup = square.querySelector('.day-popup') as HTMLElement;
+      
+      square.addEventListener('mouseenter', () => {
+        if (popup) popup.style.opacity = '1';
+        if (popup) popup.style.visibility = 'visible';
+        square.classList.add('show-popup');
+      });
+      
+      square.addEventListener('mouseleave', () => {
+        if (popup) popup.style.opacity = '0';
+        if (popup) popup.style.visibility = 'hidden';
+        square.classList.remove('show-popup');
+      });
+    });
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(el => {
+              const targetValue = parseInt(el.dataset.value || '0');
+              if (targetValue > 0) {
+                animateNumber(el as HTMLElement, 0, targetValue, 1000);
+              }
+            });
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.5 });
+
+      const statsContainer = document.querySelector('.stats-container');
+      if (statsContainer) {
+        observer.observe(statsContainer);
+      }
+    }
+
+    function animateNumber(element: HTMLElement, start: number, end: number, duration: number) {
+      const startTime = performance.now();
+      
+      function update(currentTime: number) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const currentValue = Math.round(start + (end - start) * easeOut);
+        
+        element.textContent = currentValue.toString();
+        
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+      
+      requestAnimationFrame(update);
+    }
+  });
+</script>
+
+<style>
+  .blog-activity-heatmap {
+    --square-size: 13px;
+    --square-gap: 4px;
+    --heatmap-bg: rgba(255, 255, 255, 0.02);
+    --heatmap-text: rgba(255, 255, 255, 0.95);
+    --heatmap-border: rgba(255, 255, 255, 0.06);
+    --h-level-0: #161b22;
+    --h-level-1: #0e4429;
+    --h-level-2: #006d32;
+    --h-level-3: #26a641;
+    --h-level-4: #39d353;
+  }
+
+  .blog-activity-heatmap.dark {
+    --heatmap-bg: rgba(13, 17, 23, 0.6);
+  }
+
+  .blog-activity-heatmap {
+    position: relative;
+    background: var(--heatmap-bg);
+    backdrop-filter: blur(30px);
+    border: 1px solid var(--heatmap-border);
+    border-radius: 8px;
+    padding: 1.5em;
+    font-family: 'Atkinson', sans-serif;
+  }
+
+  .stats-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1em;
+    margin-bottom: 1.5em;
+    padding-bottom: 1.5em;
+    border-bottom: 1px solid var(--heatmap-border);
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 1em;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+
+  .stat-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+  }
+
+  .stat-item.priority {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.2);
+  }
+
+  .stat-item.priority:hover {
+    background: rgba(16, 185, 129, 0.15);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+  }
+
+  .stat-value {
+    display: block;
+    font-size: 2em;
+    font-weight: 200;
+    color: var(--heatmap-text);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .stat-item.priority .stat-value {
+    color: #39d353;
+  }
+
+  .stat-label {
+    display: block;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 0.5em;
+  }
+
+  .heatmap-wrapper {
+    min-width: max-content;
+  }
+
+  .heatmap-container {
+    display: inline-grid;
+    grid-template-areas:
+      "month-spacer months"
+      "days squares";
+    grid-template-columns: auto 1fr;
+    grid-gap: var(--square-gap);
+  }
+
+  .months-row {
+    grid-area: months;
+    display: grid;
+    grid-template-columns: repeat(52, var(--square-size));
+    gap: var(--square-gap);
+    padding-left: var(--square-gap);
+  }
+
+  .month-spacer { grid-area: month-spacer; }
+
+  .month-label {
+    font-size: 0.7em;
+    font-weight: 500;
+    color: var(--heatmap-text);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .month-label.visible { opacity: 0.6; }
+
+  .heatmap-main {
+    grid-area: squares;
+    display: grid;
+    grid-template-areas: "days-column squares";
+    grid-template-columns: auto 1fr;
+    grid-gap: var(--square-gap);
+  }
+
+  .days-column {
+    grid-area: days-column;
+    display: grid;
+    grid-template-rows: repeat(7, var(--square-size));
+    gap: var(--square-gap);
+  }
+
+  .day-label {
+    font-size: 0.65em;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.1em;
+  }
+
+  .squares-container {
+    display: grid;
+    grid-template-rows: repeat(7, var(--square-size));
+    grid-auto-flow: column;
+    gap: var(--square-gap);
+  }
+
+  .square {
+    width: var(--square-size);
+    height: var(--square-size);
+    background: var(--h-level-0);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .square:hover {
+    transform: scale(1.2);
+    z-index: 10;
+  }
+
+  .square.level-1 { background: var(--h-level-1); }
+  .square.level-2 { background: var(--h-level-2); }
+  .square.level-3 { background: var(--h-level-3); }
+  .square.level-4 { background: var(--h-level-4); }
+
+  .day-popup {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(13, 17, 23, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 0.75em;
+    min-width: 180px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .square.show-popup .day-popup {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .popup-date {
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.5em;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .popup-count {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #39d353;
+    margin-bottom: 0.5em;
+  }
+
+  .popup-post {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 0.8em;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.25em 0;
+  }
+
+  .popup-more {
+    font-size: 0.75em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 0.25em;
+  }
+
+  .legend {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    margin-top: 1em;
+    justify-content: flex-end;
+  }
+
+  .legend span {
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .legend-squares {
+    display: flex;
+    gap: var(--square-gap);
+  }
+
+  .legend-squares .square {
+    cursor: default;
+  }
+
+  .legend-squares .square:hover {
+    transform: none;
+  }
+
+  @media (max-width: 768px) {
+    .stats-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .blog-activity-heatmap {
+      --square-size: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-container {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5em;
+    }
+    
+    .stat-item {
+      padding: 0.75em 0.5em;
+    }
+    
+    .stat-value {
+      font-size: 1.5em;
+    }
+  }
+</style>

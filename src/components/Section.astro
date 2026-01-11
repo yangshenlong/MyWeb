@@ -1,0 +1,33 @@
+---
+interface Props {
+  variant?: 'default' | 'hero' | 'compact';
+  class?: string;
+  id?: string;
+}
+
+const { variant = 'default', class: className = '', id = '' } = Astro.props;
+---
+
+<section id={id} class:list={['section', `section-${variant}`, className]}>
+  <div class="section-container">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section { width: 100%; }
+  
+  .section-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--section-padding-x, 4em);
+  }
+  
+  .section-default { padding: var(--section-padding-y) 0; }
+  .section-hero { padding: calc(var(--section-padding-y) + 2em) 0; }
+  .section-compact { padding: calc(var(--section-padding-y) / 2) 0; }
+
+  @media (max-width: 1024px) {
+    .section-container { padding: 0 2em; }
+  }
+</style>
