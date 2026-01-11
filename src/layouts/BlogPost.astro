@@ -31,10 +31,17 @@ const formatDate = (date: Date) => {
 const formattedDate = formatDate(pubDate);
 const updatedText = updatedDate ? formatDate(updatedDate) : '';
 
-// Reading time estimation
-const content = await Astro.slots.render();
-const wordCount = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().split(' ').length;
-const readingTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute
+// Reading time estimation - using a simple fixed value as fallback
+let readingTime = 5; // Default 5 minutes
+try {
+	const contentResult = await Astro.slots.render();
+	const content = String(contentResult || '');
+	const wordCount = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().split(' ').length;
+	readingTime = Math.ceil(wordCount / 200) || 5; // Assuming 200 words per minute
+} catch (e) {
+	// Fallback to default reading time if calculation fails
+	readingTime = 5;
+}
 ---
 
 <!doctype html>

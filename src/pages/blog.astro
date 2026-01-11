@@ -1,3 +1,31 @@
+---
+import HeaderArchitectural from '../components/HeaderArchitectural.astro';
+import GlassCard from '../components/GlassCard.astro';
+import BlogActivityHeatmap from '../components/BlogActivityHeatmap.astro';
+import BackToTop from '../components/BackToTop.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+
+// 获取所有博客文章
+const allPosts = await getCollection('blog');
+
+// 按日期排序
+const sortedPosts = allPosts.sort((a, b) =>
+	Math.floor(new Date(b.data.pubDate).getTime() / 1000) -
+	Math.floor(new Date(a.data.pubDate).getTime() / 1000)
+);
+
+// 提取所有唯一标签
+const allTags = new Set<string>();
+allPosts.forEach(post => {
+	(post.data.tags || []).forEach(tag => allTags.add(tag));
+});
+
+const sortedTags = Array.from(allTags).sort();
+---
+
 <!doctype html>
 <html lang="zh-CN">
 	<head>
