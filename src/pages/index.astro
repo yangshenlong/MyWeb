@@ -5,6 +5,8 @@ import ProjectGridArchitectural from '../components/ProjectGridArchitectural.ast
 import GlassCard from '../components/GlassCard.astro';
 import BackToTop from '../components/BackToTop.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
+import PageLoader from '../components/PageLoader.astro';
+import PageTransition from '../components/PageTransition.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
@@ -157,13 +159,16 @@ const services = [
 	</head>
 
 	<body>
+		<PageLoader />
+		<PageTransition />
 		<ScrollProgress />
 		<HeaderArchitectural />
 
-		<HeroArchitectural />
+		<main>
+			<HeroArchitectural />
 
-		<!-- Services Section -->
-		<section class="services-section">
+			<!-- Services Section -->
+			<section class="services-section">
 			<div class="services-grid">
 				{services.map((service, index) => (
 					<GlassCard
@@ -214,21 +219,22 @@ const services = [
 			</div>
 		</section>
 
-		<!-- Contact CTA -->
-		<section class="contact-cta">
-			<div class="cta-content">
-				<h2 class="cta-title">让我们合作</h2>
-				<p class="cta-description">
-					有项目想法或想要合作？欢迎随时联系我。
-				</p>
-				<a href="/contact" class="cta-button">
-					<span>联系我</span>
-				</a>
-			</div>
-			<div class="cta-decoration">
-				<div class="deco-line"></div>
-			</div>
-		</section>
+			<!-- Contact CTA -->
+			<section class="contact-cta">
+				<div class="cta-content">
+					<h2 class="cta-title">让我们合作</h2>
+					<p class="cta-description">
+						有项目想法或想要合作？欢迎随时联系我。
+					</p>
+					<a href="/contact" class="cta-button">
+						<span>联系我</span>
+					</a>
+				</div>
+				<div class="cta-decoration">
+					<div class="deco-line"></div>
+				</div>
+			</section>
+		</main>
 
 		<!-- Footer -->
 		<Footer />

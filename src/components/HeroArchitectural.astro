@@ -65,8 +65,8 @@ const {
 
 	<!-- Scroll Indicator -->
 	{showScroll && (
-		<div class="scroll-indicator">
-			<div class="scroll-line"></div>
+		<div class="scroll-indicator" aria-label="Scroll down">
+			<div class="scroll-line" aria-hidden="true"></div>
 			<span class="scroll-text">滚动</span>
 		</div>
 	)}
@@ -558,16 +558,7 @@ const {
 	}
 
 	/* Animations */
-	@keyframes fadeInUp {
-		from {
-			opacity: 0;
-			transform: translateY(30px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+	/* fadeInUp defined in global.css */
 
 	/* Responsive */
 	@media (max-width: 1024px) {
@@ -666,6 +657,12 @@ const {
 		}
 	}
 
+	/* 性能优化：不在视口时暂停动画 */
+	.arch-hero:not(.in-view) .geo-shape,
+	.arch-hero:not(.in-view) .ambient-glow {
+		animation-play-state: paused;
+	}
+
 	/* 支持用户的减少动画偏好 */
 	@media (prefers-reduced-motion: reduce) {
 		/* 禁用所有装饰性动画 */
@@ -678,3 +675,24 @@ const {
 		}
 	}
 </style>
+
+<script>
+	// 性能优化：使用 IntersectionObserver 在元素离开视口时暂停动画
+	document.addEventListener('DOMContentLoaded', () => {
+		const heroSection = document.querySelector('.arch-hero');
+		
+		if (heroSection) {
+			const observer = new IntersectionObserver((entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						heroSection.classList.add('in-view');
+					} else {
+						heroSection.classList.remove('in-view');
+					}
+				});
+			}, { threshold: 0.1 }); // 只要有 10% 可见就开始动画
+			
+			observer.observe(heroSection);
+		}
+	});
+</script>
