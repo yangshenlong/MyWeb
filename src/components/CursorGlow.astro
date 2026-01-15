@@ -7,157 +7,145 @@
 ---
 
 <div class="cursor-glow" id="cursorGlow">
-	<div class="glow-layer layer-1"></div>
-	<div class="glow-layer layer-2"></div>
-	<div class="glow-layer layer-3"></div>
+  <div class="glow-layer layer-1"></div>
+  <div class="glow-layer layer-2"></div>
+  <div class="glow-layer layer-3"></div>
 </div>
 
 <script>
-	const cursorGlow = document.getElementById('cursorGlow');
-	const layers = cursorGlow.querySelectorAll('.glow-layer');
+  const cursorGlow = document.getElementById("cursorGlow") as HTMLElement;
+  const layers = Array.from(cursorGlow.querySelectorAll(".glow-layer")) as HTMLElement[];
 
-	// 检查用户是否偏好减少动画
-	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	const isMobile = window.innerWidth < 768;
+  // 检查用户是否偏好减少动画
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isMobile = window.innerWidth < 768;
 
-	// 如果用户偏好减少动画或使用移动设备，禁用光效
-	if (prefersReducedMotion || isMobile) {
-		cursorGlow.style.display = 'none';
-	}
+  // 如果用户偏好减少动画或使用移动设备，禁用光效
+  if (prefersReducedMotion || isMobile) {
+    cursorGlow.style.display = "none";
+  }
 
-	let mouseX = 0;
-	let mouseY = 0;
-	let currentX = 0;
-	let currentY = 0;
+  let mouseX = 0;
+  let mouseY = 0;
+  let currentX = 0;
+  let currentY = 0;
 
-	// 节流：限制事件处理频率
-	let isThrottled = false;
-	let lastThrottleTime = 0;
-	const throttleDelay = 16; // ~60fps
+  // 使用 Passives 事件监听器提升性能
+  const updateMousePosition = (e: MouseEvent) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  };
 
-	// 使用 Passives 事件监听器提升性能
-	const updateMousePosition = (e) => {
-		mouseX = e.clientX;
-		mouseY = e.clientY;
-	};
+  // 只在需要时启用鼠标跟踪
+  if (!prefersReducedMotion && !isMobile) {
+    document.addEventListener("mousemove", updateMousePosition, { passive: true });
+  }
 
-	// 只在需要时启用鼠标跟踪
-	if (!prefersReducedMotion && !isMobile) {
-		document.addEventListener('mousemove', updateMousePosition, { passive: true });
-	}
+  // 优化的动画循环
+  function animate() {
+    currentX += (mouseX - currentX) * 0.15;
+    currentY += (mouseY - currentY) * 0.15;
 
-	// 优化的动画循环
-	let animationId: number;
+    // 使用 transform3d 触发硬件加速
+    layers[0].style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+    layers[1].style.transform = `translate3d(${currentX * 0.9 + mouseX * 0.1}px, ${currentY * 0.9 + mouseY * 0.1}px, 0)`;
+    layers[2].style.transform = `translate3d(${currentX * 0.8 + mouseX * 0.2}px, ${currentY * 0.8 + mouseY * 0.2}px, 0)`;
 
-	function animate() {
-		// 减少计算复杂度，预计算
-		const speed1 = 0.15;
-		const speed2 = 0.1;
-		const speed3 = 0.05;
+    requestAnimationFrame(animate);
+  }
 
-		currentX += (mouseX - currentX) * speed1;
-		currentY += (mouseY - currentY) * speed1;
+  // 启动动画
+  if (!prefersReducedMotion && !isMobile) {
+    animate();
+  }
 
-		// 使用 transform3d 触发硬件加速
-		layers[0].style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-		layers[1].style.transform = `translate3d(${currentX * 0.9 + mouseX * 0.1}px, ${currentY * 0.9 + mouseY * 0.1}px, 0)`;
-		layers[2].style.transform = `translate3d(${currentX * 0.8 + mouseX * 0.2}px, ${currentY * 0.8 + mouseY * 0.2}px, 0)`;
-
-		animationId = requestAnimationFrame(animate);
-	}
-
-	// 启动动画
-	if (!prefersReducedMotion && !isMobile) {
-		animate();
-	}
-
-	// 窗口大小变化时重新检查
-	window.addEventListener('resize', () => {
-		if (window.innerWidth < 768) {
-			cursorGlow.style.display = 'none';
-		} else if (!prefersReducedMotion) {
-			cursorGlow.style.display = 'block';
-		}
-	});
+  // 窗口大小变化时重新检查
+  window.addEventListener("resize", () => {
+    if (window.innerWidth < 768) {
+      cursorGlow.style.display = "none";
+    } else if (!prefersReducedMotion) {
+      cursorGlow.style.display = "block";
+    }
+  });
 </script>
 
 <style>
-	.cursor-glow {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		pointer-events: none;
-		z-index: 9998;
-		overflow: hidden;
-		contain: strict; /* 性能优化：限制重绘区域 */
-	}
+  .cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    overflow: hidden;
+    contain: strict; /* 性能优化：限制重绘区域 */
+  }
 
-	.glow-layer {
-		position: absolute;
-		border-radius: 50%;
-		mix-blend-mode: screen;
-		pointer-events: none;
-		will-change: transform;
-		contain: layout style paint;
-		backface-visibility: hidden;
-		transform: translateZ(0);
-		filter: blur(1px);
-	}
+  .glow-layer {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    will-change: transform;
+    contain: layout style paint;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    filter: blur(1px);
+  }
 
-	.layer-1 {
-		width: 500px;
-		height: 500px;
-		background: radial-gradient(
-			circle,
-			rgba(99, 102, 241, 0.12) 0%,
-			rgba(99, 102, 241, 0.08) 20%,
-			transparent 60%
-		);
-		margin-left: -250px;
-		margin-top: -250px;
-		opacity: 0.7;
-	}
+  .layer-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(
+      circle,
+      rgba(99, 102, 241, 0.12) 0%,
+      rgba(99, 102, 241, 0.08) 20%,
+      transparent 60%
+    );
+    margin-left: -250px;
+    margin-top: -250px;
+    opacity: 0.7;
+  }
 
-	.layer-2 {
-		width: 350px;
-		height: 350px;
-		background: radial-gradient(
-			circle,
-			rgba(168, 85, 247, 0.1) 0%,
-			rgba(168, 85, 247, 0.06) 20%,
-			transparent 60%
-		);
-		margin-left: -175px;
-		margin-top: -175px;
-		opacity: 0.6;
-	}
+  .layer-2 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(
+      circle,
+      rgba(168, 85, 247, 0.1) 0%,
+      rgba(168, 85, 247, 0.06) 20%,
+      transparent 60%
+    );
+    margin-left: -175px;
+    margin-top: -175px;
+    opacity: 0.6;
+  }
 
-	.layer-3 {
-		width: 200px;
-		height: 200px;
-		background: radial-gradient(
-			circle,
-			rgba(255, 79, 0, 0.08) 0%,
-			rgba(255, 79, 0, 0.04) 20%,
-			transparent 60%
-		);
-		margin-left: -100px;
-		margin-top: -100px;
-		opacity: 0.5;
-	}
+  .layer-3 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(
+      circle,
+      rgba(255, 79, 0, 0.08) 0%,
+      rgba(255, 79, 0, 0.04) 20%,
+      transparent 60%
+    );
+    margin-left: -100px;
+    margin-top: -100px;
+    opacity: 0.5;
+  }
 
-	@media (max-width: 768px) {
-		.cursor-glow {
-			display: none !important;
-		}
-	}
+  @media (max-width: 768px) {
+    .cursor-glow {
+      display: none !important;
+    }
+  }
 
-	/* 支持用户的减少动画偏好 */
-	@media (prefers-reduced-motion: reduce) {
-		.cursor-glow {
-			display: none !important;
-		}
-	}
+  /* 支持用户的减少动画偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .cursor-glow {
+      display: none !important;
+    }
+  }
 </style>

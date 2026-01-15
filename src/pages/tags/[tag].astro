@@ -1,398 +1,402 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import HeaderArchitectural from '../../components/HeaderArchitectural.astro';
-import GlassCard from '../../components/GlassCard.astro';
-import BackToTop from '../../components/BackToTop.astro';
-import ScrollProgress from '../../components/ScrollProgress.astro';
-import { getCollection } from 'astro:content';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import BaseHead from "../../components/BaseHead.astro";
+import HeaderArchitectural from "../../components/HeaderArchitectural.astro";
+import GlassCard from "../../components/GlassCard.astro";
+import BackToTop from "../../components/BackToTop.astro";
+import ScrollProgress from "../../components/ScrollProgress.astro";
+import { getCollection } from "astro:content";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
 
 // 获取所有标签用于生成静态路由
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	const tags = new Set<string>();
-	posts.forEach(post => {
-		(post.data.tags || []).forEach(tag => tags.add(tag));
-	});
+  const posts = await getCollection("blog");
+  const tags = new Set<string>();
+  posts.forEach((post) => {
+    (post.data.tags || []).forEach((tag) => tags.add(tag));
+  });
 
-	return Array.from(tags).map(tag => ({
-		params: { tag },
-		props: { tag },
-	}));
+  return Array.from(tags).map((tag) => ({
+    params: { tag },
+    props: { tag },
+  }));
 }
 
 const { tag } = Astro.props;
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection("blog");
 
 // 获取包含此标签的所有文章
-const taggedPosts = allPosts.filter(post =>
-	(post.data.tags || []).includes(tag)
-);
+const taggedPosts = allPosts.filter((post) => (post.data.tags || []).includes(tag));
 
 // 按日期排序
-const sortedPosts = taggedPosts.sort((a, b) =>
-	Math.floor(new Date(b.data.pubDate).getTime() / 1000) -
-	Math.floor(new Date(a.data.pubDate).getTime() / 1000)
+const sortedPosts = taggedPosts.sort(
+  (a, b) =>
+    Math.floor(new Date(b.data.pubDate).getTime() / 1000) -
+    Math.floor(new Date(a.data.pubDate).getTime() / 1000)
 );
 ---
 
 <!doctype html>
 <html lang="zh-CN">
-	<head>
-		<BaseHead title={`${tag} | ${SITE_TITLE}`} description={`${tag} 标签下的所有文章`} />
-	</head>
+  <head>
+    <BaseHead title={`${tag} | ${SITE_TITLE}`} description={`${tag} 标签下的所有文章`} />
+  </head>
 
-	<body>
-		<ScrollProgress />
-		<HeaderArchitectural />
+  <body>
+    <ScrollProgress />
+    <HeaderArchitectural />
 
-		<!-- Page Header -->
-		<section class="page-header">
-			<div class="header-content">
-				<div class="breadcrumb">
-					<span class="breadcrumb-item">
-						<a href="/">首页</a>
-					</span>
-					<span class="breadcrumb-separator">/</span>
-					<span class="breadcrumb-item">
-						<a href="/tags">标签</a>
-					</span>
-					<span class="breadcrumb-separator">/</span>
-					<span class="breadcrumb-item current">{tag}</span>
-				</div>
-				<h1 class="page-title">{tag}</h1>
-				<p class="page-subtitle">{sortedPosts.length} 篇文章</p>
-			</div>
-			<div class="header-decoration">
-				<span class="deco-number">05</span>
-			</div>
-		</section>
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="header-content">
+        <div class="breadcrumb">
+          <span class="breadcrumb-item">
+            <a href="/">首页</a>
+          </span>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-item">
+            <a href="/tags">标签</a>
+          </span>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-item current">{tag}</span>
+        </div>
+        <h1 class="page-title">{tag}</h1>
+        <p class="page-subtitle">{sortedPosts.length} 篇文章</p>
+      </div>
+      <div class="header-decoration">
+        <span class="deco-number">05</span>
+      </div>
+    </section>
 
-		<!-- Posts List -->
-		<section class="posts-section">
-			<div class="posts-container">
-				{sortedPosts.length > 0 ? (
-					<div class="posts-list">
-						{sortedPosts.map((post, index) => (
-							<article class="post-item" style={`--delay: ${index * 100}ms`}>
-								<a href={post.url} class="post-link">
-									<GlassCard class="post-card">
-										<div class="post-meta">
-											<time class="post-date">
-												{new Date(post.data.pubDate).toLocaleDateString('zh-CN', {
-													year: 'numeric',
-													month: '2-digit',
-													day: '2-digit'
-												})}
-											</time>
-											{post.data.category && (
-												<span class="post-category">{post.data.category}</span>
-											)}
-										</div>
-										<h2 class="post-title">{post.data.title}</h2>
-										{post.data.description && (
-											<p class="post-description">{post.data.description}</p>
-										)}
-										{post.data.tags && post.data.tags.length > 1 && (
-											<div class="post-tags">
-												{post.data.tags
-													.filter(t => t !== tag)
-													.map((t: string) => (
-														<span class="tag">{t}</span>
-													))}
-											</div>
-										)}
-									</GlassCard>
-								</a>
-							</article>
-						))}
-					</div>
-				) : (
-					<div class="empty-state">
-						<div class="empty-message">
-							<h3>暂无文章</h3>
-							<p>该标签下还没有文章</p>
-						</div>
-					</div>
-				)}
-			</div>
-		</section>
+    <!-- Posts List -->
+    <section class="posts-section">
+      <div class="posts-container">
+        {
+          sortedPosts.length > 0 ? (
+            <div class="posts-list">
+              {sortedPosts.map((post, index) => {
+                const slug = post.id.replace(/\.(md|mdx)$/, "");
+                return (
+                  <article class="post-item" style={`--delay: ${index * 100}ms`}>
+                    <a href={`/blog/${slug}`} class="post-link">
+                      <GlassCard class="post-card">
+                        <div class="post-meta">
+                          <time class="post-date">
+                            {new Date(post.data.pubDate).toLocaleDateString("zh-CN", {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                            })}
+                          </time>
+                          {post.data.category && (
+                            <span class="post-category">{post.data.category}</span>
+                          )}
+                        </div>
+                        <h2 class="post-title">{post.data.title}</h2>
+                        {post.data.description && (
+                          <p class="post-description">{post.data.description}</p>
+                        )}
+                        {post.data.tags && post.data.tags.length > 1 && (
+                          <div class="post-tags">
+                            {post.data.tags
+                              .filter((t) => t !== tag)
+                              .map((t: string) => (
+                                <span class="tag">{t}</span>
+                              ))}
+                          </div>
+                        )}
+                      </GlassCard>
+                    </a>
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <div class="empty-state">
+              <div class="empty-message">
+                <h3>暂无文章</h3>
+                <p>该标签下还没有文章</p>
+              </div>
+            </div>
+          )
+        }
+      </div>
+    </section>
 
-		<!-- Footer -->
-		<footer class="arch-footer">
-			<div class="footer-content">
-				<div class="footer-left">
-					<span class="footer-text">© 2024 杨慎龙</span>
-					<span class="footer-divider">·</span>
-					<span class="footer-text">Technical Artist</span>
-				</div>
-				<div class="footer-right">
-					<a href="https://github.com/yangshenlong" target="_blank" class="footer-link">GitHub</a>
-					<a href="#" target="_blank" class="footer-link">Bilibili</a>
-					<a href="#" target="_blank" class="footer-link">知乎</a>
-				</div>
-			</div>
-		</footer>
+    <!-- Footer -->
+    <footer class="arch-footer">
+      <div class="footer-content">
+        <div class="footer-left">
+          <span class="footer-text">© 2024 杨慎龙</span>
+          <span class="footer-divider">·</span>
+          <span class="footer-text">Technical Artist</span>
+        </div>
+        <div class="footer-right">
+          <a href="https://github.com/yangshenlong" target="_blank" class="footer-link">GitHub</a>
+          <a href="#" target="_blank" class="footer-link">Bilibili</a>
+          <a href="#" target="_blank" class="footer-link">知乎</a>
+        </div>
+      </div>
+    </footer>
 
-		<BackToTop />
+    <BackToTop />
 
-		<style>
-			.page-header {
-				padding: 180px 4em 6em;
-				background: var(--color-bg-primary);
-				position: relative;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				max-width: 1600px;
-				margin: 0 auto;
-			}
+    <style>
+      .page-header {
+        padding: 180px 4em 6em;
+        background: var(--color-bg-primary);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1600px;
+        margin: 0 auto;
+      }
 
-			.header-content {
-				flex: 1;
-			}
+      .header-content {
+        flex: 1;
+      }
 
-			.breadcrumb {
-				display: flex;
-				align-items: center;
-				gap: 0.75em;
-				margin-bottom: 1.5em;
-			}
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.75em;
+        margin-bottom: 1.5em;
+      }
 
-			.breadcrumb-item {
-				font-size: 0.75em;
-				letter-spacing: 0.2em;
-				text-transform: uppercase;
-				color: rgba(255, 255, 255, 0.4);
-				transition: color 0.3s ease;
-			}
+      .breadcrumb-item {
+        font-size: 0.75em;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+        transition: color 0.3s ease;
+      }
 
-			.breadcrumb-item:hover {
-				color: rgba(255, 255, 255, 0.7);
-			}
+      .breadcrumb-item:hover {
+        color: rgba(255, 255, 255, 0.7);
+      }
 
-			.breadcrumb-item.current {
-				color: rgba(255, 255, 255, 0.7);
-			}
+      .breadcrumb-item.current {
+        color: rgba(255, 255, 255, 0.7);
+      }
 
-			.breadcrumb-separator {
-				color: rgba(255, 255, 255, 0.2);
-			}
+      .breadcrumb-separator {
+        color: rgba(255, 255, 255, 0.2);
+      }
 
-			.page-title {
-				font-size: clamp(3em, 8vw, 6em);
-				font-weight: 200;
-				letter-spacing: -0.03em;
-				line-height: 1;
-				margin: 0 0 0.5em 0;
-			}
+      .page-title {
+        font-size: clamp(3em, 8vw, 6em);
+        font-weight: 200;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin: 0 0 0.5em 0;
+      }
 
-			.page-subtitle {
-				font-size: 1em;
-				letter-spacing: 0.2em;
-				text-transform: uppercase;
-				color: rgba(255, 255, 255, 0.4);
-				margin: 0;
-			}
+      .page-subtitle {
+        font-size: 1em;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+        margin: 0;
+      }
 
-			.header-decoration {
-				position: relative;
-			}
+      .header-decoration {
+        position: relative;
+      }
 
-			.deco-number {
-				font-size: 8em;
-				font-weight: 100;
-				color: rgba(255, 255, 255, 0.03);
-				font-family: 'Space Mono', monospace;
-				line-height: 1;
-			}
+      .deco-number {
+        font-size: 8em;
+        font-weight: 100;
+        color: rgba(255, 255, 255, 0.03);
+        font-family: "Space Mono", monospace;
+        line-height: 1;
+      }
 
-			/* Posts Section */
-			.posts-section {
-				padding: 6em 4em;
-				background: var(--color-bg-primary);
-			}
+      /* Posts Section */
+      .posts-section {
+        padding: 6em 4em;
+        background: var(--color-bg-primary);
+      }
 
-			.posts-container {
-				max-width: 900px;
-				margin: 0 auto;
-			}
+      .posts-container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
 
-			.posts-list {
-				display: flex;
-				flex-direction: column;
-				gap: 1.5em;
-			}
+      .posts-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5em;
+      }
 
-			.post-item {
-				animation: fadeInUp 0.6s ease-out backwards;
-				animation-delay: var(--delay);
-			}
+      .post-item {
+        animation: fadeInUp 0.6s ease-out backwards;
+        animation-delay: var(--delay);
+      }
 
-			@keyframes fadeInUp {
-				from {
-					opacity: 0;
-					transform: translateY(30px);
-				}
-				to {
-					opacity: 1;
-					transform: translateY(0);
-				}
-			}
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-			.post-link {
-				display: block;
-			}
+      .post-link {
+        display: block;
+      }
 
-			.post-card {
-				padding: 2em;
-				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-				position: relative;
-			}
+      .post-card {
+        padding: 2em;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+      }
 
-			.post-card::after {
-				content: '';
-				position: absolute;
-				bottom: 0;
-				left: 2em;
-				right: 2em;
-				height: 1px;
-				background: linear-gradient(
-					90deg,
-					transparent 0%,
-					var(--border-hover) 50%,
-					transparent 100%
-				);
-				transform: scaleX(0);
-				transition: transform 0.4s ease;
-			}
+      .post-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 2em;
+        right: 2em;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          var(--border-hover) 50%,
+          transparent 100%
+        );
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+      }
 
-			.post-card:hover::after {
-				transform: scaleX(1);
-			}
+      .post-card:hover::after {
+        transform: scaleX(1);
+      }
 
-			.post-card:hover {
-				transform: translateX(8px);
-				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-			}
+      .post-card:hover {
+        transform: translateX(8px);
+        background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+      }
 
-			.post-meta {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				margin-bottom: 1em;
-			}
+      .post-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1em;
+      }
 
-			.post-date {
-				font-size: 0.75em;
-				color: var(--color-text-tertiary);
-				font-family: 'Space Mono', monospace;
-				letter-spacing: 0.1em;
-			}
+      .post-date {
+        font-size: 0.75em;
+        color: var(--color-text-tertiary);
+        font-family: "Space Mono", monospace;
+        letter-spacing: 0.1em;
+      }
 
-			.post-category {
-				font-size: 0.7em;
-				letter-spacing: 0.15em;
-				text-transform: uppercase;
-				color: rgba(255, 255, 255, 0.4);
-				padding: 0.3em 0.8em;
-				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-				border: 1px solid var(--border-standard);
-			}
+      .post-category {
+        font-size: 0.7em;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+        padding: 0.3em 0.8em;
+        background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+        border: 1px solid var(--border-standard);
+      }
 
-			.post-title {
-				font-size: 1.5em;
-				font-weight: 300;
-				letter-spacing: -0.02em;
-				color: var(--color-text-primary);
-				margin: 0 0 0.75em 0;
-				line-height: 1.4;
-			}
+      .post-title {
+        font-size: 1.5em;
+        font-weight: 300;
+        letter-spacing: -0.02em;
+        color: var(--color-text-primary);
+        margin: 0 0 0.75em 0;
+        line-height: 1.4;
+      }
 
-			.post-description {
-				font-size: 0.95em;
-				line-height: 1.7;
-				color: rgba(255, 255, 255, 0.6);
-				margin: 0 0 1em 0;
-			}
+      .post-description {
+        font-size: 0.95em;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.6);
+        margin: 0 0 1em 0;
+      }
 
-			.post-tags {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.5em;
-			}
+      .post-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+      }
 
-			.tag {
-				font-size: 0.7em;
-				letter-spacing: 0.1em;
-				padding: 0.3em 0.8em;
-				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-				border: 1px solid var(--border-standard);
-				color: var(--color-text-tertiary);
-			}
+      .tag {
+        font-size: 0.7em;
+        letter-spacing: 0.1em;
+        padding: 0.3em 0.8em;
+        background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+        border: 1px solid var(--border-standard);
+        color: var(--color-text-tertiary);
+      }
 
-			/* Empty State */
-			.empty-state {
-				text-align: center;
-				padding: 8em 0;
-			}
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 8em 0;
+      }
 
-			.empty-message h3 {
-				font-size: 2em;
-				font-weight: 300;
-				color: rgba(255, 255, 255, 0.7);
-				margin-bottom: 1em;
-			}
+      .empty-message h3 {
+        font-size: 2em;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 1em;
+      }
 
-			.empty-message p {
-				font-size: 1em;
-				color: var(--color-text-tertiary);
-			}
+      .empty-message p {
+        font-size: 1em;
+        color: var(--color-text-tertiary);
+      }
 
-			/* Footer styles moved to Footer.astro component */
+      /* Footer styles moved to Footer.astro component */
 
-			/* Responsive */
-			@media (max-width: 1024px) {
-				.page-header,
-				.posts-section {
-					padding-left: 2em;
-					padding-right: 2em;
-				}
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .page-header,
+        .posts-section {
+          padding-left: 2em;
+          padding-right: 2em;
+        }
 
-				.page-header {
-					flex-direction: column;
-					gap: 2em;
-				}
+        .page-header {
+          flex-direction: column;
+          gap: 2em;
+        }
 
-				.header-decoration {
-					align-self: flex-end;
-				}
+        .header-decoration {
+          align-self: flex-end;
+        }
 
-				.deco-number {
-					font-size: 4em;
-				}
-			}
+        .deco-number {
+          font-size: 4em;
+        }
+      }
 
-			@media (max-width: 768px) {
-				.footer-content {
-					flex-direction: column;
-					gap: 1.5em;
-					text-align: center;
-				}
+      @media (max-width: 768px) {
+        .footer-content {
+          flex-direction: column;
+          gap: 1.5em;
+          text-align: center;
+        }
 
-				.footer-left {
-					flex-direction: column;
-					gap: 0.5em;
-				}
+        .footer-left {
+          flex-direction: column;
+          gap: 0.5em;
+        }
 
-				.footer-right {
-					gap: 1.5em;
-				}
+        .footer-right {
+          gap: 1.5em;
+        }
 
-				.post-card {
-					padding: 1.5em;
-				}
-			}
-		</style>
-	</body>
+        .post-card {
+          padding: 1.5em;
+        }
+      }
+    </style>
+  </body>
 </html>

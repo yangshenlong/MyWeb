@@ -1,0 +1,42 @@
+
+> receptive-accretion@0.0.1 build
+> astro build
+
+[2m23:00:10[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m23:00:11[22m [34m[content][39m Syncing content
+[2m23:00:12[22m [34m[content][39m Synced content
+[2m23:00:12[22m [34m[types][39m Generated [2m1.33s[22m
+[2m23:00:12[22m [34m[build][39m output: [34m"static"[39m
+[2m23:00:12[22m [34m[build][39m mode: [34m"static"[39m
+[2m23:00:12[22m [34m[build][39m directory: [34mC:\Users\24279\Desktop\myBlog\MyWeb\dist\[39m
+[2m23:00:12[22m [34m[build][39m Collecting build info...
+[2m23:00:12[22m [34m[build][39m [32m✓ Completed in 1.40s.[39m
+[2m23:00:12[22m [34m[build][39m Building static entrypoints...
+[2m23:00:14[22m [34m[vite][39m [32m✓ built in 2.59s[39m
+[2m23:00:14[22m [34m[build][39m [32m✓ Completed in 2.66s.[39m
+
+[42m[30m building client (vite) [39m[49m
+[2m23:00:14[22m [34m[vite][39m transforming...
+[2m23:00:14[22m [34m[vite][39m [32m✓[39m 15 modules transformed.
+[31m[1m23:00:14[22m [ERROR] [vite][39m [31m✗[39m Build failed in 61ms
+src/components/BackToTop.astro?astro&type=script&index=0&lang.ts (26:2): Return statement is not allowed here (Note that you need plugins to import files that are not JavaScript)
+file: C:/Users/24279/Desktop/myBlog/MyWeb/src/components/BackToTop.astro?astro&type=script&index=0&lang.ts:26:2
+
+24:       btn.classList.remove('visible');
+25:     }
+26:   });
+       ^
+27: 
+28:   btn.addEventListener('click', () => {
+
+  [1mLocation:[22m
+    [4mC:/Users/24279/Desktop/myBlog/MyWeb/src/components/BackToTop.astro?astro&type=script&index=0&lang.ts:26:2[24m
+  [1mStack trace:[22m
+[2m    at getRollupError (file:///C:/Users/24279/Desktop/myBlog/MyWeb/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
+    at convertNode (file:///C:/Users/24279/Desktop/myBlog/MyWeb/node_modules/rollup/dist/es/shared/node-entry.js:16418:10)
+    at Module.setSource (file:///C:/Users/24279/Desktop/myBlog/MyWeb/node_modules/rollup/dist/es/shared/node-entry.js:17418:24)[22m
+  [1mCaused by:[22m
+[2m  Return statement is not allowed here
+    at getRollupError (file:///C:/Users/24279/Desktop/myBlog/MyWeb/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
+    at convertNode (file:///C:/Users/24279/Desktop/myBlog/MyWeb/node_modules/rollup/dist/es/shared/node-entry.js:16418:10)
+    at Module.setSource (file:///C:/Users/24279/Desktop/myBlog/MyWeb/node_modules/rollup/dist/es/shared/node-entry.js:17418:24)[22m

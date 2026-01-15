@@ -1,0 +1,354 @@
+---
+interface Props {
+  /** Whether to show legend */
+  showLegend?: boolean;
+}
+
+const { showLegend = true } = Astro.props;
+
+// Skill data with category and domain mapping
+const skillTags = [
+  // Shader category
+  { name: "Shader", category: "Shader", domain: "特效", isReal: false, color: "#6366f1" },
+  { name: "HLSL", category: "Shader", domain: "特效", isReal: false, color: "#6366f1" },
+  { name: "GLSL", category: "Shader", domain: "特效", isReal: false, color: "#6366f1" },
+  { name: "Shader Graph", category: "Shader", domain: "特效", isReal: false, color: "#6366f1" },
+  { name: "Compute Shader", category: "Shader", domain: "特效", isReal: false, color: "#6366f1" },
+  { name: "Noise Functions", category: "Shader", domain: "特效", isReal: false, color: "#6366f1" },
+
+  // Render Pipeline category
+  { name: "Unity", category: "渲染管线", domain: "通用", isReal: false, color: "#22c55e" },
+  { name: "URP", category: "渲染管线", domain: "通用", isReal: false, color: "#22c55e" },
+  { name: "Unreal Engine", category: "渲染管线", domain: "通用", isReal: false, color: "#22c55e" },
+  { name: "PBR", category: "渲染管线", domain: "通用", isReal: false, color: "#22c55e" },
+  {
+    name: "Deferred Rendering",
+    category: "渲染管线",
+    domain: "通用",
+    isReal: false,
+    color: "#22c55e",
+  },
+  { name: "Real-time GI", category: "渲染管线", domain: "通用", isReal: false, color: "#22c55e" },
+  { name: "SRP", category: "渲染管线", domain: "通用", isReal: false, color: "#22c55e" },
+  {
+    name: "Post-processing",
+    category: "渲染管线",
+    domain: "特效",
+    isReal: false,
+    color: "#22c55e",
+  },
+
+  // DCC category
+  { name: "Maya", category: "DCC", domain: "场景", isReal: false, color: "#f97316" },
+  { name: "Maya API", category: "DCC", domain: "工具", isReal: false, color: "#f97316" },
+  { name: "Houdini", category: "DCC", domain: "场景", isReal: false, color: "#f97316" },
+  { name: "Blender", category: "DCC", domain: "场景", isReal: false, color: "#f97316" },
+
+  // Niagara category
+  { name: "Niagara", category: "Niagara", domain: "特效", isReal: false, color: "#a855f7" },
+  { name: "VFX", category: "Niagara", domain: "特效", isReal: false, color: "#a855f7" },
+
+  // PCG category
+  { name: "草地渲染", category: "PCG", domain: "场景", isReal: true, color: "#ef4444" },
+  { name: "GPU Instancing", category: "PCG", domain: "场景", isReal: false, color: "#ef4444" },
+  { name: "Geometry Shader", category: "PCG", domain: "特效", isReal: false, color: "#ef4444" },
+  { name: "Procedural", category: "PCG", domain: "场景", isReal: false, color: "#ef4444" },
+];
+
+// Get unique categories for X-axis
+const categories = ["渲染管线", "Shader", "DCC", "Niagara", "PCG"];
+
+// Get unique domains for Y-axis
+const domains = ["场景", "特效", "角色", "工具", "通用"];
+
+// Category to X position mapping (0-4)
+const categoryPositions: Record<string, number> = {
+  渲染管线: 0,
+  Shader: 1,
+  DCC: 2,
+  Niagara: 3,
+  PCG: 4,
+};
+
+// Domain to Y position mapping (0-4, top to bottom)
+const domainPositions: Record<string, number> = {
+  场景: 0,
+  特效: 1,
+  角色: 2,
+  工具: 3,
+  通用: 4,
+};
+---
+
+<section class="skill-scatter-section">
+  <h2 class="section-title">
+    <span class="title-icon">📊</span>
+    技能分布
+  </h2>
+  <p class="section-description">点击技能标签可查看对应的博客文章</p>
+
+  <div class="scatter-container">
+    <!-- Y-axis labels -->
+    <div class="y-axis">
+      {domains.map((domain) => <div class="y-label">{domain}</div>)}
+    </div>
+
+    <!-- Scatter chart area -->
+    <div class="chart-area">
+      <!-- X-axis labels -->
+      <div class="x-axis">
+        {categories.map((cat) => <div class="x-label">{cat}</div>)}
+      </div>
+
+      <!-- Grid lines -->
+      <div class="grid-lines">
+        {
+          categories.map((_, i) => (
+            <div class="grid-line vertical" style:left={`${(i + 1) * 20}%`} />
+          ))
+        }
+        {domains.map((_, i) => <div class="grid-line horizontal" style:top={`${(i + 1) * 20}%`} />)}
+      </div>
+
+      <!-- Skill points -->
+      <div class="skill-points">
+        {
+          skillTags.map((skill) => {
+            const x = categoryPositions[skill.category] * 20 + 10;
+            const y = domainPositions[skill.domain] * 20 + 10;
+            return (
+              <a
+                href={`/tags/${skill.name}`}
+                class={`skill-point ${skill.isReal ? "real" : "placeholder"}`}
+                style={`left: ${x}%; top: ${y}%; --point-color: ${skill.color}`}
+                title={`${skill.name} (${skill.category} - ${skill.domain})`}
+              >
+                <span class="skill-dot" />
+              </a>
+            );
+          })
+        }
+      </div>
+    </div>
+  </div>
+
+  {
+    showLegend && (
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-dot real" />
+          <span class="legend-text">已发布文章</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot placeholder" />
+          <span class="legend-text">待发布内容</span>
+        </div>
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .skill-scatter-section {
+    margin-bottom: 4em;
+  }
+
+  .section-description {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9em;
+    margin: 0.5em 0 2em 0;
+  }
+
+  .scatter-container {
+    display: flex;
+    background: rgba(255, 255, 255, var(--glass-opacity-bg));
+    border: 1px solid var(--border-standard);
+    border-radius: 16px;
+    padding: 1.5em;
+    gap: 1em;
+  }
+
+  .y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 60px;
+    flex-shrink: 0;
+  }
+
+  .y-label {
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: right;
+    padding-right: 0.5em;
+    white-space: nowrap;
+  }
+
+  .chart-area {
+    flex: 1;
+    position: relative;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .x-axis {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .x-label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    color: rgba(255, 255, 255, 0.6);
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .x-label:first-child {
+    border-left: none;
+  }
+
+  .grid-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 30px;
+  }
+
+  .grid-line {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .grid-line.vertical {
+    top: 0;
+    bottom: 0;
+    width: 1px;
+  }
+
+  .grid-line.horizontal {
+    left: 0;
+    right: 0;
+    height: 1px;
+  }
+
+  .skill-points {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 30px;
+  }
+
+  .skill-point {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    text-decoration: none;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+
+  .skill-point:hover {
+    transform: translate(-50%, -50%) scale(1.5);
+    z-index: 20;
+  }
+
+  .skill-dot {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--point-color);
+  }
+
+  .skill-point.real .skill-dot {
+    box-shadow: 0 0 12px var(--point-color);
+  }
+
+  .skill-point.placeholder {
+    opacity: 0.5;
+  }
+
+  .skill-point.placeholder .skill-dot {
+    opacity: 0.4;
+  }
+
+  .legend {
+    display: flex;
+    gap: 2em;
+    justify-content: center;
+    margin-top: 1.5em;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .legend-dot.real {
+    background: #ef4444;
+    box-shadow: 0 0 8px #ef4444;
+  }
+
+  .legend-dot.placeholder {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .legend-text {
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  @media (max-width: 768px) {
+    .scatter-container {
+      flex-direction: column;
+      padding: 1em;
+    }
+
+    .y-axis {
+      flex-direction: row;
+      width: 100%;
+      height: auto;
+      justify-content: space-between;
+      padding-bottom: 0.5em;
+    }
+
+    .y-label {
+      font-size: 0.7em;
+      padding-right: 0;
+    }
+
+    .chart-area {
+      height: 200px;
+    }
+
+    .x-label {
+      font-size: 0.65em;
+    }
+
+    .skill-point {
+      width: 10px;
+      height: 10px;
+    }
+  }
+</style>

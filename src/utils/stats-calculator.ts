@@ -1,8 +1,17 @@
-import type { BlogStats } from '../types/activity';
+import type { BlogStats } from "../types/activity";
 
-export function calculateBlogStats(
-  activityMap: Map<string, { count: number; publications: number; updates: number; posts: any[] }>
-): BlogStats {
+interface ActivityData {
+  count: number;
+  publications: number;
+  updates: number;
+  posts: Array<{
+    title: string;
+    slug: string;
+    pubDate: Date;
+  }>;
+}
+
+export function calculateBlogStats(activityMap: Map<string, ActivityData>): BlogStats {
   const entries = Array.from(activityMap.entries())
     .filter(([_, data]) => data.count > 0)
     .sort((a, b) => a[0].localeCompare(b[0]));
@@ -12,15 +21,16 @@ export function calculateBlogStats(
 
   const totalUpdates = entries.reduce((sum, [_, data]) => sum + data.updates, 0);
   const daysInRange = activityMap.size;
-  const averagePostsPerWeek = parseFloat(((totalPosts / daysInRange) * 7).toFixed(2));
+  const averagePostsPerWeek =
+    daysInRange > 0 ? parseFloat(((totalPosts / daysInRange) * 7).toFixed(2)) : 0;
 
   const streakResult = calculateStreaks(entries);
-  
+
   const now = new Date();
   const thisYear = now.getFullYear();
-  const postsThisYear = entries.filter(([dateStr]) => 
-    dateStr.startsWith(thisYear.toString())
-  ).reduce((sum, [_, data]) => sum + data.publications, 0);
+  const postsThisYear = entries
+    .filter(([dateStr]) => dateStr.startsWith(thisYear.toString()))
+    .reduce((sum, [_, data]) => sum + data.publications, 0);
 
   return {
     totalPosts,
@@ -29,13 +39,14 @@ export function calculateBlogStats(
     longestStreak: streakResult.longestStreak,
     averagePostsPerWeek,
     totalUpdates,
-    postsThisYear
+    postsThisYear,
   };
 }
 
-function calculateStreaks(
-  entries: [string, any][]
-): { currentStreak: number; longestStreak: number } {
+function calculateStreaks(entries: [string, ActivityData][]): {
+  currentStreak: number;
+  longestStreak: number;
+} {
   if (entries.length === 0) {
     return { currentStreak: 0, longestStreak: 0 };
   }
@@ -50,8 +61,10 @@ function calculateStreaks(
     } else {
       const prevDate = new Date(entries[i - 1][0]);
       const currDate = new Date(entries[i][0]);
-      const diffDays = Math.floor((currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24));
-      
+      const diffDays = Math.floor(
+        (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
+
       if (diffDays === 1) {
         tempStreak++;
       } else {

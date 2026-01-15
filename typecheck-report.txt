@@ -1,0 +1,521 @@
+
+> receptive-accretion@0.0.1 type-check
+> astro check
+
+[2m22:01:00[22m [34m[content][39m Syncing content
+[2m22:01:00[22m [34m[content][39m Synced content
+[2m22:01:00[22m [34m[types][39m Generated [2m746ms[22m
+[2m22:01:00[22m [34m[check][39m Getting diagnostics for Astro files in C:\Users\24279\Desktop\myBlog\MyWeb...
+[96mastro.config.mjs[0m:[93m17[0m:[93m2[0m - [91merror[0m[90m ts(2353): [0mObject literal may only specify known properties, and 'headers' does not exist in type 'AstroUserConfig<never, never>'.
+
+[7m17[0m  headers: {
+[7m  [0m [91m ~~~~~~~[0m
+
+[96msrc/components/BackToTop.astro[0m:[93m46[0m:[93m2[0m - [91merror[0m[90m ts(18047): [0m'backToTop' is possibly 'null'.
+
+[7m46[0m  backToTop.addEventListener('click', () => {
+[7m  [0m [91m ~~~~~~~~~[0m
+[96msrc/components/BackToTop.astro[0m:[93m41[0m:[93m4[0m - [91merror[0m[90m ts(18047): [0m'backToTop' is possibly 'null'.
+
+[7m41[0m    backToTop.classList.remove('visible');
+[7m  [0m [91m   ~~~~~~~~~[0m
+[96msrc/components/BackToTop.astro[0m:[93m39[0m:[93m4[0m - [91merror[0m[90m ts(18047): [0m'backToTop' is possibly 'null'.
+
+[7m39[0m    backToTop.classList.add('visible');
+[7m  [0m [91m   ~~~~~~~~~[0m
+[96msrc/components/BackToTop.astro[0m:[93m35[0m:[93m3[0m - [91merror[0m[90m ts(2322): [0mType 'number' is not assignable to type 'string'.
+
+[7m35[0m   progressBar.style.strokeDashoffset = offset;
+[7m  [0m [91m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/components/BackToTop.astro[0m:[93m35[0m:[93m3[0m - [91merror[0m[90m ts(18047): [0m'progressBar' is possibly 'null'.
+
+[7m35[0m   progressBar.style.strokeDashoffset = offset;
+[7m  [0m [91m  ~~~~~~~~~~~[0m
+[96msrc/components/BackToTop.astro[0m:[93m34[0m:[93m3[0m - [91merror[0m[90m ts(2322): [0mType 'number' is not assignable to type 'string'.
+
+[7m34[0m   progressBar.style.strokeDasharray = circumference;
+[7m  [0m [91m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/components/BackToTop.astro[0m:[93m34[0m:[93m3[0m - [91merror[0m[90m ts(18047): [0m'progressBar' is possibly 'null'.
+
+[7m34[0m   progressBar.style.strokeDasharray = circumference;
+[7m  [0m [91m  ~~~~~~~~~~~[0m
+
+[96msrc/components/BlogActivityHeatmap.astro[0m:[93m24[0m:[93m34[0m - [91merror[0m[90m ts(2345): [0mArgument of type 'Map<string, BlogActivitySummary>' is not assignable to parameter of type 'Map<string, ActivityData>'.
+  Type 'BlogActivitySummary' is not assignable to type 'ActivityData'.
+    Types of property 'posts' are incompatible.
+      Type 'BlogActivity[]' is not assignable to type '{ title: string; slug: string; pubDate: Date; }[]'.
+        Type 'BlogActivity' is missing the following properties from type '{ title: string; slug: string; pubDate: Date; }': title, slug, pubDate
+
+[7m24[0m const stats = calculateBlogStats(activityMap);
+[7m  [0m [91m                                 ~~~~~~~~~~~[0m
+[96msrc/components/BlogActivityHeatmap.astro[0m:[93m23[0m:[93m51[0m - [91merror[0m[90m ts(2353): [0mObject literal may only specify known properties, and 'weeks' does not exist in type 'ActivityAggregatorOptions'.
+
+[7m23[0m const activityMap = await aggregateBlogActivity({ weeks, includeUpdates });
+[7m  [0m [91m                                                  ~~~~~[0m
+[96msrc/components/BlogActivityHeatmap.astro[0m:[93m98[0m:[93m33[0m - [93mwarning[0m[90m ts(6133): [0m'index' is declared but its value is never read.
+
+[7m98[0m         {weekMonths.map((month, index) => (
+[7m  [0m [93m                                ~~~~~[0m
+[96msrc/components/BlogActivityHeatmap.astro[0m:[93m15[0m:[93m3[0m - [93mwarning[0m[90m ts(6133): [0m'collection' is declared but its value is never read.
+
+[7m15[0m   collection = 'blog',
+[7m  [0m [93m  ~~~~~~~~~~[0m
+[96msrc/components/BlogActivityHeatmap.astro[0m:[93m187[0m:[93m47[0m - [91merror[0m[90m ts(2339): [0mProperty 'dataset' does not exist on type 'Element'.
+
+[7m187[0m               const targetValue = parseInt(el.dataset.value || '0');
+[7m   [0m [91m                                              ~~~~~~~[0m
+
+[96msrc/components/CTAButton.astro[0m:[93m14[0m:[93m24[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m14[0m  children: AstroNode | AstroNode[];
+[7m  [0m [91m                       ~~~~~~~~~[0m
+[96msrc/components/CTAButton.astro[0m:[93m14[0m:[93m12[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m14[0m  children: AstroNode | AstroNode[];
+[7m  [0m [91m           ~~~~~~~~~[0m
+[96msrc/components/CTAButton.astro[0m:[93m31[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'element' is declared but its value is never read.
+
+[7m31[0m const element = href ? 'a' : 'button';
+[7m  [0m [93m      ~~~~~~~[0m
+
+[96msrc/components/CinematicHero.astro[0m:[93m91[0m:[93m18[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m91[0m       typingText.style.borderRight = 'none';
+[7m  [0m [91m                 ~~~~~[0m
+
+[96msrc/components/ContributionGraph.astro[0m:[93m91[0m:[93m63[0m - [91merror[0m[90m ts(2322): [0mType '{ children: any[]; class: string; theme: "auto" | "light" | "dark"; }' is not assignable to type 'HTMLAttributes'.
+  Property 'theme' does not exist on type 'HTMLAttributes'.
+
+[7m91[0m <div class={`contribution-graph contribution-graph-${theme}`} theme={theme}>
+[7m  [0m [91m                                                              ~~~~~[0m
+[96msrc/components/ContributionGraph.astro[0m:[93m141[0m:[93m13[0m - [93mwarning[0m[90m ts(6133): [0m'dayOfWeek' is declared but its value is never read.
+
+[7m141[0m       const dayOfWeek = index % 7;
+[7m   [0m [93m            ~~~~~~~~~[0m
+[96msrc/components/ContributionGraph.astro[0m:[93m140[0m:[93m13[0m - [93mwarning[0m[90m ts(6133): [0m'weekIndex' is declared but its value is never read.
+
+[7m140[0m       const weekIndex = Math.floor(index / 7);
+[7m   [0m [93m            ~~~~~~~~~[0m
+[96msrc/components/ContributionGraph.astro[0m:[93m132[0m:[93m29[0m - [93mwarning[0m[90m ts(6133): [0m'index' is declared but its value is never read.
+
+[7m132[0m      {dayLabels.map((label, index) => (
+[7m   [0m [93m                            ~~~~~[0m
+[96msrc/components/ContributionGraph.astro[0m:[93m121[0m:[93m29[0m - [93mwarning[0m[90m ts(6133): [0m'index' is declared but its value is never read.
+
+[7m121[0m     {weekMonths.map((month, index) => (
+[7m   [0m [93m                            ~~~~~[0m
+[96msrc/components/ContributionGraph.astro[0m:[93m51[0m:[93m6[0m - [93mwarning[0m[90m ts(6133): [0m'currentStreak' is declared but its value is never read.
+
+[7m51[0m  let currentStreak = 0;
+[7m  [0m [93m     ~~~~~~~~~~~~~[0m
+[96msrc/components/ContributionGraph.astro[0m:[93m50[0m:[93m53[0m - [93mwarning[0m[90m ts(6133): [0m'd' is declared but its value is never read.
+
+[7m50[0m const longestStreak = contributionData.reduce((max, d, i, arr) => {
+[7m  [0m [93m                                                    ~[0m
+[96msrc/components/ContributionGraph.astro[0m:[93m763[0m:[93m40[0m - [91merror[0m[90m ts(2339): [0mProperty 'dataset' does not exist on type 'Element'.
+
+[7m763[0m        const targetValue = parseInt(el.dataset.value || '0');
+[7m   [0m [91m                                       ~~~~~~~[0m
+[96msrc/components/ContributionGraph.astro[0m:[93m732[0m:[93m17[0m - [91merror[0m[90m ts(2339): [0mProperty 'clientY' does not exist on type 'Event'.
+
+[7m732[0m     const y = e.clientY;
+[7m   [0m [91m                ~~~~~~~[0m
+[96msrc/components/ContributionGraph.astro[0m:[93m731[0m:[93m17[0m - [91merror[0m[90m ts(2339): [0mProperty 'clientX' does not exist on type 'Event'.
+
+[7m731[0m     const x = e.clientX;
+[7m   [0m [91m                ~~~~~~~[0m
+[96msrc/components/ContributionGraph.astro[0m:[93m698[0m:[93m11[0m - [93mwarning[0m[90m ts(6133): [0m'level' is declared but its value is never read.
+
+[7m698[0m     const level = parseInt(target.dataset.level || '0');
+[7m   [0m [93m          ~~~~~[0m
+
+[96msrc/components/CountUpNumber.astro[0m:[93m32[0m:[93m19[0m - [91merror[0m[90m ts(7006): [0mParameter 'currentTime' implicitly has an 'any' type.
+
+[7m32[0m   function update(currentTime) {
+[7m  [0m [91m                  ~~~~~~~~~~~[0m
+[96msrc/components/CountUpNumber.astro[0m:[93m28[0m:[93m21[0m - [91merror[0m[90m ts(2339): [0mProperty 'dataset' does not exist on type 'Element'.
+
+[7m28[0m   const suffix = el.dataset.suffix || '';
+[7m  [0m [91m                    ~~~~~~~[0m
+[96msrc/components/CountUpNumber.astro[0m:[93m27[0m:[93m32[0m - [91merror[0m[90m ts(2339): [0mProperty 'dataset' does not exist on type 'Element'.
+
+[7m27[0m   const duration = parseInt(el.dataset.duration || '2000');
+[7m  [0m [91m                               ~~~~~~~[0m
+[96msrc/components/CountUpNumber.astro[0m:[93m26[0m:[93m32[0m - [91merror[0m[90m ts(2339): [0mProperty 'dataset' does not exist on type 'Element'.
+
+[7m26[0m   const target = parseFloat(el.dataset.target || '0');
+[7m  [0m [91m                               ~~~~~~~[0m
+
+[96msrc/components/CursorGlow.astro[0m:[93m79[0m:[93m4[0m - [91merror[0m[90m ts(18047): [0m'cursorGlow' is possibly 'null'.
+
+[7m79[0m    cursorGlow.style.display = 'block';
+[7m  [0m [91m   ~~~~~~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m77[0m:[93m4[0m - [91merror[0m[90m ts(18047): [0m'cursorGlow' is possibly 'null'.
+
+[7m77[0m    cursorGlow.style.display = 'none';
+[7m  [0m [91m   ~~~~~~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m64[0m:[93m13[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m64[0m   layers[2].style.transform = `translate3d(${currentX * 0.8 + mouseX * 0.2}px, ${currentY * 0.8 + mouseY * 0.2}px, 0)`;
+[7m  [0m [91m            ~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m63[0m:[93m13[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m63[0m   layers[1].style.transform = `translate3d(${currentX * 0.9 + mouseX * 0.1}px, ${currentY * 0.9 + mouseY * 0.1}px, 0)`;
+[7m  [0m [91m            ~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m62[0m:[93m13[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m62[0m   layers[0].style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+[7m  [0m [91m            ~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m39[0m:[93m31[0m - [91merror[0m[90m ts(7006): [0mParameter 'e' implicitly has an 'any' type.
+
+[7m39[0m  const updateMousePosition = (e) => {
+[7m  [0m [91m                              ~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m25[0m:[93m3[0m - [91merror[0m[90m ts(18047): [0m'cursorGlow' is possibly 'null'.
+
+[7m25[0m   cursorGlow.style.display = 'none';
+[7m  [0m [91m  ~~~~~~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m17[0m:[93m17[0m - [91merror[0m[90m ts(18047): [0m'cursorGlow' is possibly 'null'.
+
+[7m17[0m  const layers = cursorGlow.querySelectorAll('.glow-layer');
+[7m  [0m [91m                ~~~~~~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m56[0m:[93m9[0m - [93mwarning[0m[90m ts(6133): [0m'speed3' is declared but its value is never read.
+
+[7m56[0m   const speed3 = 0.05;
+[7m  [0m [93m        ~~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m55[0m:[93m9[0m - [93mwarning[0m[90m ts(6133): [0m'speed2' is declared but its value is never read.
+
+[7m55[0m   const speed2 = 0.1;
+[7m  [0m [93m        ~~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m50[0m:[93m6[0m - [93mwarning[0m[90m ts(6133): [0m'animationId' is declared but its value is never read.
+
+[7m50[0m  let animationId: number;
+[7m  [0m [93m     ~~~~~~~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m36[0m:[93m8[0m - [93mwarning[0m[90m ts(6133): [0m'throttleDelay' is declared but its value is never read.
+
+[7m36[0m  const throttleDelay = 16; // ~60fps
+[7m  [0m [93m       ~~~~~~~~~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m35[0m:[93m6[0m - [93mwarning[0m[90m ts(6133): [0m'lastThrottleTime' is declared but its value is never read.
+
+[7m35[0m  let lastThrottleTime = 0;
+[7m  [0m [93m     ~~~~~~~~~~~~~~~~[0m
+[96msrc/components/CursorGlow.astro[0m:[93m34[0m:[93m6[0m - [93mwarning[0m[90m ts(6133): [0m'isThrottled' is declared but its value is never read.
+
+[7m34[0m  let isThrottled = false;
+[7m  [0m [93m     ~~~~~~~~~~~[0m
+
+[96msrc/components/GlassCard.astro[0m:[93m8[0m:[93m24[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m8[0m  children: AstroNode | AstroNode[];
+[7m [0m [91m                       ~~~~~~~~~[0m
+[96msrc/components/GlassCard.astro[0m:[93m8[0m:[93m12[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m8[0m  children: AstroNode | AstroNode[];
+[7m [0m [91m           ~~~~~~~~~[0m
+[96msrc/components/GlassCard.astro[0m:[93m15[0m:[93m2[0m - [93mwarning[0m[90m ts(6133): [0m'children' is declared but its value is never read.
+
+[7m15[0m  children,
+[7m  [0m [93m ~~~~~~~~[0m
+
+[96msrc/components/Header.astro[0m:[93m58[0m:[93m4[0m - [91merror[0m[90m ts(18047): [0m'navLinks' is possibly 'null'.
+
+[7m58[0m    navLinks.classList.remove('active');
+[7m  [0m [91m   ~~~~~~~~[0m
+[96msrc/components/Header.astro[0m:[93m57[0m:[93m4[0m - [91merror[0m[90m ts(18047): [0m'mobileToggle' is possibly 'null'.
+
+[7m57[0m    mobileToggle.classList.remove('active');
+[7m  [0m [91m   ~~~~~~~~~~~~[0m
+[96msrc/components/Header.astro[0m:[93m55[0m:[93m2[0m - [91merror[0m[90m ts(18047): [0m'navLinks' is possibly 'null'.
+
+[7m55[0m  navLinks.querySelectorAll('a').forEach(link => {
+[7m  [0m [91m ~~~~~~~~[0m
+[96msrc/components/Header.astro[0m:[93m51[0m:[93m3[0m - [91merror[0m[90m ts(18047): [0m'navLinks' is possibly 'null'.
+
+[7m51[0m   navLinks.classList.toggle('active');
+[7m  [0m [91m  ~~~~~~~~[0m
+[96msrc/components/Header.astro[0m:[93m50[0m:[93m3[0m - [91merror[0m[90m ts(18047): [0m'mobileToggle' is possibly 'null'.
+
+[7m50[0m   mobileToggle.classList.toggle('active');
+[7m  [0m [91m  ~~~~~~~~~~~~[0m
+[96msrc/components/Header.astro[0m:[93m49[0m:[93m2[0m - [91merror[0m[90m ts(18047): [0m'mobileToggle' is possibly 'null'.
+
+[7m49[0m  mobileToggle.addEventListener('click', () => {
+[7m  [0m [91m ~~~~~~~~~~~~[0m
+
+[96msrc/components/MagneticButton.astro[0m:[93m9[0m:[93m24[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m9[0m  children: AstroNode | AstroNode[];
+[7m [0m [91m                       ~~~~~~~~~[0m
+[96msrc/components/MagneticButton.astro[0m:[93m9[0m:[93m12[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m9[0m  children: AstroNode | AstroNode[];
+[7m [0m [91m           ~~~~~~~~~[0m
+[96msrc/components/MagneticButton.astro[0m:[93m89[0m:[93m11[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m89[0m    button.style.transform = 'translate(0, 0) scale(1)';
+[7m  [0m [91m          ~~~~~[0m
+[96msrc/components/MagneticButton.astro[0m:[93m85[0m:[93m9[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m85[0m    glow.style.background = `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(255, 255, 255, 0.4) 0%, transparent 70%)`;
+[7m  [0m [91m        ~~~~~[0m
+[96msrc/components/MagneticButton.astro[0m:[93m85[0m:[93m4[0m - [91merror[0m[90m ts(18047): [0m'glow' is possibly 'null'.
+
+[7m85[0m    glow.style.background = `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(255, 255, 255, 0.4) 0%, transparent 70%)`;
+[7m  [0m [91m   ~~~~[0m
+[96msrc/components/MagneticButton.astro[0m:[93m84[0m:[93m22[0m - [91merror[0m[90m ts(2339): [0mProperty 'clientY' does not exist on type 'Event'.
+
+[7m84[0m    const glowY = ((e.clientY - rect.top) / rect.height) * 100;
+[7m  [0m [91m                     ~~~~~~~[0m
+[96msrc/components/MagneticButton.astro[0m:[93m83[0m:[93m22[0m - [91merror[0m[90m ts(2339): [0mProperty 'clientX' does not exist on type 'Event'.
+
+[7m83[0m    const glowX = ((e.clientX - rect.left) / rect.width) * 100;
+[7m  [0m [91m                     ~~~~~~~[0m
+[96msrc/components/MagneticButton.astro[0m:[93m79[0m:[93m11[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m79[0m    button.style.transform = `translate(${x * strength}px, ${y * strength}px) scale(1.05)`;
+[7m  [0m [91m          ~~~~~[0m
+[96msrc/components/MagneticButton.astro[0m:[93m77[0m:[93m16[0m - [91merror[0m[90m ts(2339): [0mProperty 'clientY' does not exist on type 'Event'.
+
+[7m77[0m    const y = e.clientY - rect.top - rect.height / 2;
+[7m  [0m [91m               ~~~~~~~[0m
+[96msrc/components/MagneticButton.astro[0m:[93m76[0m:[93m16[0m - [91merror[0m[90m ts(2339): [0mProperty 'clientX' does not exist on type 'Event'.
+
+[7m76[0m    const x = e.clientX - rect.left - rect.width / 2;
+[7m  [0m [91m               ~~~~~~~[0m
+[96msrc/components/MagneticButton.astro[0m:[93m72[0m:[93m38[0m - [91merror[0m[90m ts(2339): [0mProperty 'dataset' does not exist on type 'Element'.
+
+[7m72[0m   const strength = parseFloat(button.dataset.strength || '0.3');
+[7m  [0m [91m                                     ~~~~~~~[0m
+
+[96msrc/components/PageLoader.astro[0m:[93m26[0m:[93m5[0m - [91merror[0m[90m ts(18047): [0m'loader' is possibly 'null'.
+
+[7m26[0m     loader.style.display = 'none';
+[7m  [0m [91m    ~~~~~~[0m
+[96msrc/components/PageLoader.astro[0m:[93m24[0m:[93m4[0m - [91merror[0m[90m ts(18047): [0m'loader' is possibly 'null'.
+
+[7m24[0m    loader.classList.add('loaded');
+[7m  [0m [91m   ~~~~~~[0m
+
+[96msrc/components/PageTransition.astro[0m:[93m89[0m:[93m9[0m - [93mwarning[0m[90m astro(4000): [0mThis script will be treated as if it has the `is:inline` directive because it contains an attribute. Therefore, features that require processing (e.g. using TypeScript or npm packages in the script) are unavailable.
+
+See docs for more details: https://docs.astro.build/en/guides/client-side-scripts/#script-processing.
+
+Add the `is:inline` directive explicitly to silence this hint.
+
+[7m89[0m <script define:vars={{ delay }}>
+[7m  [0m [93m        ~~~~~~~~~~~[0m
+
+[96msrc/components/ParallaxSection.astro[0m:[93m8[0m:[93m24[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m8[0m  children: AstroNode | AstroNode[];
+[7m [0m [91m                       ~~~~~~~~~[0m
+[96msrc/components/ParallaxSection.astro[0m:[93m8[0m:[93m12[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m8[0m  children: AstroNode | AstroNode[];
+[7m [0m [91m           ~~~~~~~~~[0m
+[96msrc/components/ParallaxSection.astro[0m:[93m49[0m:[93m12[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m49[0m    section.style.transform = `translateY(${offset}px)`;
+[7m  [0m [91m           ~~~~~[0m
+[96msrc/components/ParallaxSection.astro[0m:[93m44[0m:[93m37[0m - [91merror[0m[90m ts(2339): [0mProperty 'dataset' does not exist on type 'Element'.
+
+[7m44[0m    const speed = parseFloat(section.dataset.speed || '0.5');
+[7m  [0m [91m                                    ~~~~~~~[0m
+
+[96msrc/components/ScrollProgress.astro[0m:[93m53[0m:[93m16[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m53[0m    progressBar.style.width = progress + '%';
+[7m  [0m [91m               ~~~~~[0m
+
+[96msrc/components/ScrollReveal.astro[0m:[93m8[0m:[93m24[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m8[0m  children: AstroNode | AstroNode[];
+[7m [0m [91m                       ~~~~~~~~~[0m
+[96msrc/components/ScrollReveal.astro[0m:[93m8[0m:[93m12[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m8[0m  children: AstroNode | AstroNode[];
+[7m [0m [91m           ~~~~~~~~~[0m
+
+[96msrc/components/SkillScatterChart.astro[0m:[93m103[0m:[93m40[0m - [91merror[0m[90m ts(2322): [0mType '{ class: string; "style:top": string; }' is not assignable to type 'HTMLAttributes'.
+  Property 'style:top' does not exist on type 'HTMLAttributes'.
+
+[7m103[0m      <div class="grid-line horizontal" style:top={`${(i + 1) * 20}%`}></div>
+[7m   [0m [91m                                       ~~~~~~~~~[0m
+[96msrc/components/SkillScatterChart.astro[0m:[93m100[0m:[93m38[0m - [91merror[0m[90m ts(2322): [0mType '{ class: string; "style:left": string; }' is not assignable to type 'HTMLAttributes'.
+  Property 'style:left' does not exist on type 'HTMLAttributes'.
+
+[7m100[0m      <div class="grid-line vertical" style:left={`${(i + 1) * 20}%`}></div>
+[7m   [0m [91m                                     ~~~~~~~~~~[0m
+
+[96msrc/components/TechTag.astro[0m:[93m51[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'element' is declared but its value is never read.
+
+[7m51[0m const element = href ? 'a' : 'span';
+[7m  [0m [93m      ~~~~~~~[0m
+[96msrc/components/TechTag.astro[0m:[93m32[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'colorVar' is declared but its value is never read.
+
+[7m32[0m const colorVar = {
+[7m  [0m [93m      ~~~~~~~~[0m
+
+[96msrc/components/TiltCard.astro[0m:[93m8[0m:[93m24[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m8[0m  children: AstroNode | AstroNode[];
+[7m [0m [91m                       ~~~~~~~~~[0m
+[96msrc/components/TiltCard.astro[0m:[93m8[0m:[93m12[0m - [91merror[0m[90m ts(2304): [0mCannot find name 'AstroNode'.
+
+[7m8[0m  children: AstroNode | AstroNode[];
+[7m [0m [91m           ~~~~~~~~~[0m
+[96msrc/components/TiltCard.astro[0m:[93m53[0m:[93m9[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m53[0m    card.style.setProperty('--tilt-y', '0deg');
+[7m  [0m [91m        ~~~~~[0m
+[96msrc/components/TiltCard.astro[0m:[93m52[0m:[93m9[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m52[0m    card.style.setProperty('--tilt-x', '0deg');
+[7m  [0m [91m        ~~~~~[0m
+[96msrc/components/TiltCard.astro[0m:[93m48[0m:[93m9[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m48[0m    card.style.setProperty('--tilt-y', `${tiltY}deg`);
+[7m  [0m [91m        ~~~~~[0m
+[96msrc/components/TiltCard.astro[0m:[93m47[0m:[93m9[0m - [91merror[0m[90m ts(2339): [0mProperty 'style' does not exist on type 'Element'.
+
+[7m47[0m    card.style.setProperty('--tilt-x', `${tiltX}deg`);
+[7m  [0m [91m        ~~~~~[0m
+[96msrc/components/TiltCard.astro[0m:[93m39[0m:[93m16[0m - [91merror[0m[90m ts(2339): [0mProperty 'clientY' does not exist on type 'Event'.
+
+[7m39[0m    const y = e.clientY - rect.top;
+[7m  [0m [91m               ~~~~~~~[0m
+[96msrc/components/TiltCard.astro[0m:[93m38[0m:[93m16[0m - [91merror[0m[90m ts(2339): [0mProperty 'clientX' does not exist on type 'Event'.
+
+[7m38[0m    const x = e.clientX - rect.left;
+[7m  [0m [91m               ~~~~~~~[0m
+[96msrc/components/TiltCard.astro[0m:[93m34[0m:[93m33[0m - [91merror[0m[90m ts(2339): [0mProperty 'dataset' does not exist on type 'Element'.
+
+[7m34[0m   const maxTilt = parseInt(card.dataset.maxTilt || '10');
+[7m  [0m [91m                                ~~~~~~~[0m
+
+[96msrc/layouts/BlogPost.astro[0m:[93m37[0m:[93m42[0m - [91merror[0m[90m ts(2554): [0mExpected 1-2 arguments, but got 0.
+
+[7m37[0m  const contentResult = await Astro.slots.render();
+[7m  [0m [91m                                         ~~~~~~[0m
+[96msrc/layouts/BlogPost.astro[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m ts(2305): [0mModule '"astro:assets"' has no exported member 'ImageMetadata'.
+
+[7m2[0m import { Image, type ImageMetadata } from 'astro:assets';
+[7m [0m [91m                     ~~~~~~~~~~~~~[0m
+[96msrc/layouts/BlogPost.astro[0m:[93m9[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'GradientText' is declared but its value is never read.
+
+[7m9[0m import GradientText from '../components/GradientText.astro';
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/layouts/BlogPost.astro[0m:[93m391[0m:[93m45[0m - [91merror[0m[90m ts(2345): [0mArgument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+[7m391[0m      const target = document.getElementById(targetId);
+[7m   [0m [91m                                            ~~~~~~~~[0m
+
+[96msrc/layouts/BlogPostGrass.astro[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m ts(2305): [0mModule '"astro:assets"' has no exported member 'ImageMetadata'.
+
+[7m2[0m import { Image, type ImageMetadata } from 'astro:assets';
+[7m [0m [91m                     ~~~~~~~~~~~~~[0m
+[96msrc/layouts/BlogPostGrass.astro[0m:[93m10[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'SITE_TITLE' is declared but its value is never read.
+
+[7m10[0m import { SITE_TITLE } from '../consts';
+[7m  [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/layouts/BlogPostGrass.astro[0m:[93m1094[0m:[93m11[0m - [93mwarning[0m[90m astro(4000): [0mThis script will be treated as if it has the `is:inline` directive because it contains an attribute. Therefore, features that require processing (e.g. using TypeScript or npm packages in the script) are unavailable.
+
+See docs for more details: https://docs.astro.build/en/guides/client-side-scripts/#script-processing.
+
+Add the `is:inline` directive explicitly to silence this hint.
+
+[7m1094[0m   <script define:vars={{ title }}>
+[7m    [0m [93m          ~~~~~~~~~~~[0m
+
+[96msrc/pages/about.astro[0m:[93m232[0m:[93m9[0m - [91merror[0m[90m ts(18047): [0m'toast' is possibly 'null'.
+
+[7m232[0m         toast.classList.remove('show');
+[7m   [0m [91m        ~~~~~[0m
+[96msrc/pages/about.astro[0m:[93m230[0m:[93m8[0m - [91merror[0m[90m ts(18047): [0m'toast' is possibly 'null'.
+
+[7m230[0m        toast.classList.add('show');
+[7m   [0m [91m       ~~~~~[0m
+[96msrc/pages/about.astro[0m:[93m221[0m:[93m57[0m - [91merror[0m[90m ts(2339): [0mProperty 'metaKey' does not exist on type 'Event'.
+
+[7m221[0m      } else if (link.tagName === 'A' && (e.ctrlKey || e.metaKey)) {
+[7m   [0m [91m                                                        ~~~~~~~[0m
+[96msrc/pages/about.astro[0m:[93m221[0m:[93m44[0m - [91merror[0m[90m ts(2339): [0mProperty 'ctrlKey' does not exist on type 'Event'.
+
+[7m221[0m      } else if (link.tagName === 'A' && (e.ctrlKey || e.metaKey)) {
+[7m   [0m [91m                                           ~~~~~~~[0m
+[96msrc/pages/about.astro[0m:[93m219[0m:[93m51[0m - [91merror[0m[90m ts(2339): [0mProperty 'metaKey' does not exist on type 'Event'.
+
+[7m219[0m      if (link.tagName === 'A' && !e.ctrlKey && !e.metaKey) {
+[7m   [0m [91m                                                  ~~~~~~~[0m
+[96msrc/pages/about.astro[0m:[93m219[0m:[93m37[0m - [91merror[0m[90m ts(2339): [0mProperty 'ctrlKey' does not exist on type 'Event'.
+
+[7m219[0m      if (link.tagName === 'A' && !e.ctrlKey && !e.metaKey) {
+[7m   [0m [91m                                    ~~~~~~~[0m
+
+[96msrc/pages/contact.astro[0m:[93m6[0m:[93m40[0m - [93mwarning[0m[90m ts(6133): [0m'AUTHOR' is declared but its value is never read.
+
+[7m6[0m import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
+[7m [0m [93m                                       ~~~~~~[0m
+[96msrc/pages/contact.astro[0m:[93m665[0m:[93m11[0m - [91merror[0m[90m ts(2551): [0mProperty 'reset' does not exist on type 'HTMLElement'. Did you mean 'onreset'?
+
+[7m665[0m      form.reset();
+[7m   [0m [91m          ~~~~~[0m
+[96msrc/pages/contact.astro[0m:[93m659[0m:[93m36[0m - [91merror[0m[90m ts(2345): [0mArgument of type 'HTMLElement' is not assignable to parameter of type 'HTMLFormElement'.
+  Type 'HTMLElement' is missing the following properties from type 'HTMLFormElement': acceptCharset, action, autocomplete, elements, and 15 more.
+
+[7m659[0m      const formData = new FormData(form);
+[7m   [0m [91m                                   ~~~~[0m
+[96msrc/pages/contact.astro[0m:[93m660[0m:[93m12[0m - [93mwarning[0m[90m ts(6133): [0m'data' is declared but its value is never read.
+
+[7m660[0m      const data = Object.fromEntries(formData);
+[7m   [0m [93m           ~~~~[0m
+[96msrc/pages/contact.astro[0m:[93m183[0m:[93m9[0m - [91merror[0m[90m ts(18047): [0m'toast' is possibly 'null'.
+
+[7m183[0m         toast.classList.remove('show');
+[7m   [0m [91m        ~~~~~[0m
+[96msrc/pages/contact.astro[0m:[93m181[0m:[93m8[0m - [91merror[0m[90m ts(18047): [0m'toast' is possibly 'null'.
+
+[7m181[0m        toast.classList.add('show');
+[7m   [0m [91m       ~~~~~[0m
+[96msrc/pages/contact.astro[0m:[93m172[0m:[93m57[0m - [91merror[0m[90m ts(2339): [0mProperty 'metaKey' does not exist on type 'Event'.
+
+[7m172[0m      } else if (link.tagName === 'A' && (e.ctrlKey || e.metaKey)) {
+[7m   [0m [91m                                                        ~~~~~~~[0m
+[96msrc/pages/contact.astro[0m:[93m172[0m:[93m44[0m - [91merror[0m[90m ts(2339): [0mProperty 'ctrlKey' does not exist on type 'Event'.
+
+[7m172[0m      } else if (link.tagName === 'A' && (e.ctrlKey || e.metaKey)) {
+[7m   [0m [91m                                           ~~~~~~~[0m
+[96msrc/pages/contact.astro[0m:[93m170[0m:[93m51[0m - [91merror[0m[90m ts(2339): [0mProperty 'metaKey' does not exist on type 'Event'.
+
+[7m170[0m      if (link.tagName === 'A' && !e.ctrlKey && !e.metaKey) {
+[7m   [0m [91m                                                  ~~~~~~~[0m
+[96msrc/pages/contact.astro[0m:[93m170[0m:[93m37[0m - [91merror[0m[90m ts(2339): [0mProperty 'ctrlKey' does not exist on type 'Event'.
+
+[7m170[0m      if (link.tagName === 'A' && !e.ctrlKey && !e.metaKey) {
+[7m   [0m [91m                                    ~~~~~~~[0m
+
+[96msrc/pages/shaders.astro[0m:[93m177[0m:[93m63[0m - [91merror[0m[90m ts(2322): [0mType '{ children: any[]; href: string; target: string; }' is not assignable to type 'IntrinsicAttributes & Props'.
+  Property 'target' does not exist on type 'IntrinsicAttributes & Props'.
+
+[7m177[0m        <MagneticButton href="https://github.com/yangshenlong" target="_blank">
+[7m   [0m [91m                                                              ~~~~~~[0m
+
+[96msrc/pages/blog/[...slug].astro[0m:[93m36[0m:[93m18[0m - [93mwarning[0m[90m ts(6133): [0m'remarkPluginFrontmatter' is declared but its value is never read.
+
+[7m36[0m const { Content, remarkPluginFrontmatter } = await render(post);
+[7m  [0m [93m                 ~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/pages/blog/[...slug].astro[0m:[93m7[0m:[93m10[0m - [93mwarning[0m[90m ts(6133): [0m'extractHeadings' is declared but its value is never read.
+
+[7m7[0m function extractHeadings(content: string) {
+[7m [0m [93m         ~~~~~~~~~~~~~~~[0m
+
+[96msrc/pages/tags/[tag].astro[0m:[93m8[0m:[93m22[0m - [93mwarning[0m[90m ts(6133): [0m'SITE_DESCRIPTION' is declared but its value is never read.
+
+[7m8[0m import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+[7m [0m [93m                     ~~~~~~~~~~~~~~~~[0m
+
+Result (57 files): 
+- 88 errors
+- 0 warnings
+- 28 hints
+

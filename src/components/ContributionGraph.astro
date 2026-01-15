@@ -5,789 +5,809 @@
  */
 
 interface Props {
-	/** GitHub用户名，用于获取贡献数据 */
-	username?: string;
-	/** 显示的周数，默认52周 */
-	weeks?: number;
-	/** 是否显示统计数据 */
-	showStats?: boolean;
-	/** 主题：light/dark/auto */
-	theme?: 'light' | 'dark' | 'auto';
+  /** GitHub用户名，用于获取贡献数据 */
+  username?: string;
+  /** 显示的周数，默认52周 */
+  weeks?: number;
+  /** 是否显示统计数据 */
+  showStats?: boolean;
+  /** 主题：light/dark/auto */
+  theme?: "light" | "dark" | "auto";
 }
 
-const {
-	username = '',
-	weeks = 52,
-	showStats = true,
-	theme = 'light'
-} = Astro.props;
+const { username = "", weeks = 52, showStats = true, theme = "light" } = Astro.props;
 
 // 生成模拟贡献数据（实际使用时可以从GitHub API获取）
 function generateContributionData(weeksCount: number): { date: string; count: number }[] {
-	const data: { date: string; count: number }[] = [];
-	const today = new Date();
-	const startDate = new Date(today);
-	startDate.setDate(today.getDate() - weeksCount * 7);
+  const data: { date: string; count: number }[] = [];
+  const today = new Date();
+  const startDate = new Date(today);
+  startDate.setDate(today.getDate() - weeksCount * 7);
 
-	for (let i = 0; i < weeksCount * 7; i++) {
-		const date = new Date(startDate);
-		date.setDate(startDate.getDate() + i);
-		const count = Math.random() > 0.6 ? Math.floor(Math.random() * 10) : 0;
-		data.push({
-			date: date.toISOString().split('T')[0],
-			count
-		});
-	}
-	return data;
+  for (let i = 0; i < weeksCount * 7; i++) {
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + i);
+    const count = Math.random() > 0.6 ? Math.floor(Math.random() * 10) : 0;
+    data.push({
+      date: date.toISOString().split("T")[0],
+      count,
+    });
+  }
+  return data;
 }
 
 const contributionData = generateContributionData(weeks);
 
 // 计算统计数据
 const totalContributions = contributionData.reduce((sum, d) => sum + d.count, 0);
-const maxDay = Math.max(...contributionData.map(d => d.count));
-const activeDays = contributionData.filter(d => d.count > 0).length;
+const maxDay = Math.max(...contributionData.map((d) => d.count));
+const activeDays = contributionData.filter((d) => d.count > 0).length;
 const longestStreak = contributionData.reduce((max, d, i, arr) => {
-	let currentStreak = 0;
-	let tempStreak = 0;
-	for (let j = 0; j <= i; j++) {
-		if (arr[j].count > 0) {
-			tempStreak++;
-		} else {
-			tempStreak = 0;
-		}
-	}
-	return Math.max(max, tempStreak);
+  let currentStreak = 0;
+  let tempStreak = 0;
+  for (let j = 0; j <= i; j++) {
+    if (arr[j].count > 0) {
+      tempStreak++;
+    } else {
+      tempStreak = 0;
+    }
+  }
+  return Math.max(max, tempStreak);
 }, 0);
 
 // 月份标签
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 // 获取每周的起始月份
 function getWeekMonths(weeksCount: number): (number | null)[] {
-	const result: (number | null)[] = [];
-	const today = new Date();
-	const startDate = new Date(today);
-	startDate.setDate(today.getDate() - weeksCount * 7);
+  const result: (number | null)[] = [];
+  const today = new Date();
+  const startDate = new Date(today);
+  startDate.setDate(today.getDate() - weeksCount * 7);
 
-	for (let i = 0; i < weeksCount; i++) {
-		const weekStart = new Date(startDate);
-		weekStart.setDate(startDate.getDate() + i * 7);
-		if (weekStart.getDate() <= 7) {
-			result.push(weekStart.getMonth());
-		} else {
-			result.push(null);
-		}
-	}
-	return result;
+  for (let i = 0; i < weeksCount; i++) {
+    const weekStart = new Date(startDate);
+    weekStart.setDate(startDate.getDate() + i * 7);
+    if (weekStart.getDate() <= 7) {
+      result.push(weekStart.getMonth());
+    } else {
+      result.push(null);
+    }
+  }
+  return result;
 }
 
 const weekMonths = getWeekMonths(weeks);
 
 // 星期标签
-const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+const dayLabels = ["", "Mon", "", "Wed", "", "Fri", ""];
 ---
 
 <div class={`contribution-graph contribution-graph-${theme}`} theme={theme}>
-	{/* 自定义Tooltip */}
-	<div class="custom-tooltip" id="tooltip"></div>
+  {/* 自定义Tooltip */}
+  <div class="custom-tooltip" id="tooltip"></div>
 
-	{showStats && (
-		<div class="stats-container">
-			<div class="stat-item">
-				<span class="stat-value" data-value={totalContributions}>{totalContributions}</span>
-				<span class="stat-label">Total</span>
-			</div>
-			<div class="stat-item">
-				<span class="stat-value" data-value={maxDay}>{maxDay}</span>
-				<span class="stat-label">Best Day</span>
-			</div>
-			<div class="stat-item">
-				<span class="stat-value" data-value={activeDays}>{activeDays}</span>
-				<span class="stat-label">Active Days</span>
-			</div>
-			<div class="stat-item">
-				<span class="stat-value" data-value={longestStreak}>{longestStreak}</span>
-				<span class="stat-label">Longest Streak</span>
-			</div>
-		</div>
-	)}
+  {
+    showStats && (
+      <div class="stats-container">
+        <div class="stat-item">
+          <span class="stat-value" data-value={totalContributions}>
+            {totalContributions}
+          </span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" data-value={maxDay}>
+            {maxDay}
+          </span>
+          <span class="stat-label">Best Day</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" data-value={activeDays}>
+            {activeDays}
+          </span>
+          <span class="stat-label">Active Days</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" data-value={longestStreak}>
+            {longestStreak}
+          </span>
+          <span class="stat-label">Longest Streak</span>
+        </div>
+      </div>
+    )
+  }
 
-	<div class="graph-wrapper">
-		<div class="graph-container">
-			{/* 月份行 */}
-			<div class="months-row">
-				<div class="month-spacer"></div>
-				{weekMonths.map((month, index) => (
-					<div class={`month-label ${month !== null ? 'visible' : ''}`}>
-						{month !== null ? months[month] : ''}
-					</div>
-				))}
-			</div>
+  <div class="graph-wrapper">
+    <div class="graph-container">
+      {/* 月份行 */}
+      <div class="months-row">
+        <div class="month-spacer"></div>
+        {
+          weekMonths.map((month, index) => (
+            <div class={`month-label ${month !== null ? "visible" : ""}`}>
+              {month !== null ? months[month] : ""}
+            </div>
+          ))
+        }
+      </div>
 
-			{/* 主图表区域 */}
-			<div class="graph-main">
-				{/* 星期标签 */}
-				<div class="days-column">
-					{dayLabels.map((label, index) => (
-						<div class="day-label">{label}</div>
-					))}
-				</div>
+      {/* 主图表区域 */}
+      <div class="graph-main">
+        {/* 星期标签 */}
+        <div class="days-column">
+          {dayLabels.map((label, index) => <div class="day-label">{label}</div>)}
+        </div>
 
-				{/* 热力图网格 */}
-				<div class="squares-container">
-					{contributionData.map((day, index) => {
-						const weekIndex = Math.floor(index / 7);
-						const dayOfWeek = index % 7;
-						const level = day.count > 0 ? Math.ceil(day.count / maxDay * 4) : 0;
-						return (
-							<div
-								class={`square level-${level}`}
-								data-date={day.date}
-								data-count={day.count}
-								data-level={level}
-							></div>
-						);
-					})}
-				</div>
-			</div>
-		</div>
+        {/* 热力图网格 */}
+        <div class="squares-container">
+          {
+            contributionData.map((day, index) => {
+              const weekIndex = Math.floor(index / 7);
+              const dayOfWeek = index % 7;
+              const level = day.count > 0 ? Math.ceil((day.count / maxDay) * 4) : 0;
+              return (
+                <div
+                  class={`square level-${level}`}
+                  data-date={day.date}
+                  data-count={day.count}
+                  data-level={level}
+                />
+              );
+            })
+          }
+        </div>
+      </div>
+    </div>
 
-		{/* 图例 */}
-		<div class="legend">
-			<span class="legend-label">Less</span>
-			<div class="legend-squares">
-				<div class="square level-0" title="0 contributions"></div>
-				<div class="square level-1" title="1-2 contributions"></div>
-				<div class="square level-2" title="3-4 contributions"></div>
-				<div class="square level-3" title="5-6 contributions"></div>
-				<div class="square level-4" title="7+ contributions"></div>
-			</div>
-			<span class="legend-label">More</span>
-		</div>
-	</div>
+    {/* 图例 */}
+    <div class="legend">
+      <span class="legend-label">Less</span>
+      <div class="legend-squares">
+        <div class="square level-0" title="0 contributions"></div>
+        <div class="square level-1" title="1-2 contributions"></div>
+        <div class="square level-2" title="3-4 contributions"></div>
+        <div class="square level-3" title="5-6 contributions"></div>
+        <div class="square level-4" title="7+ contributions"></div>
+      </div>
+      <span class="legend-label">More</span>
+    </div>
+  </div>
 
-	{username && (
-		<div class="github-link">
-			<a href={`https://github.com/${username}`} target="_blank" rel="noopener noreferrer">
-				View on GitHub
-			</a>
-		</div>
-	)}
+  {
+    username && (
+      <div class="github-link">
+        <a href={`https://github.com/${username}`} target="_blank" rel="noopener noreferrer">
+          View on GitHub
+        </a>
+      </div>
+    )
+  }
 </div>
 
 <style>
-	/* ========== 基础变量 - Glassmorphism风格 ========== */
-	:global(.contribution-graph) {
-		--cg-square-size: 13px;
-		--cg-square-gap: 4px;
-		--cg-bg: rgba(255, 255, 255, 0.02);
-		--cg-text: #000000;
-		--cg-border: var(--border-hover);
-		--cg-shadow:
-			0 25px 50px rgba(0, 0, 0, 0.5),
-			0 0 100px rgba(255, 255, 255, 0.03),
-			inset 0 0 30px rgba(255, 255, 255, 0.02);
-		--cg-blur: 30px;
-
-		/* 贡献级别颜色 - 更柔和的绿色渐变 */
-		--cg-level-0: rgba(255, 255, 255, 0.03);
-		--cg-level-1: rgba(75, 192, 192, 0.4);
-		--cg-level-2: rgba(34, 197, 94, 0.6);
-		--cg-level-3: rgba(22, 163, 74, 0.8);
-		--cg-level-4: rgba(21, 128, 61, 1);
-
-		/* Glow效果 */
-		--cg-glow-level-1: 0 0 20px rgba(75, 192, 192, 0.3);
-		--cg-glow-level-2: 0 0 20px rgba(34, 197, 94, 0.4);
-		--cg-glow-level-3: 0 0 20px rgba(22, 163, 74, 0.5);
-		--cg-glow-level-4: 0 0 20px rgba(21, 128, 61, 0.6);
-	}
-
-	:global(.contribution-graph-dark),
-	:global(.contribution-graph[theme="dark"]) {
-		--cg-bg: rgba(13, 17, 23, 0.6);
-		--cg-text: var(--color-text-primary);
-		--cg-border: var(--border-standard);
-
-		/* Dark主题的绿色 */
-		--cg-level-0: rgba(22, 27, 34, 0.4);
-		--cg-level-1: rgba(16, 185, 129, 0.5);
-		--cg-level-2: rgba(5, 150, 105, 0.7);
-		--cg-level-3: rgba(4, 120, 87, 0.85);
-		--cg-level-4: rgba(6, 95, 70, 1);
-
-		--cg-glow-level-1: 0 0 20px rgba(16, 185, 129, 0.3);
-		--cg-glow-level-2: 0 0 20px rgba(5, 150, 105, 0.4);
-		--cg-glow-level-3: 0 0 20px rgba(4, 120, 87, 0.5);
-		--cg-glow-level-4: 0 0 20px rgba(6, 95, 70, 0.6);
-	}
-
-	/* ========== 主容器 - Glassmorphism ========== */
-	.contribution-graph {
-		position: relative;
-		background: var(--cg-bg);
-		backdrop-filter: blur(var(--cg-blur));
-		-webkit-backdrop-filter: blur(var(--cg-blur));
-		border: 1px solid var(--cg-border);
-		border-radius: 8px;
-		box-shadow: var(--cg-shadow);
-		padding: 2em;
-		font-family: 'Atkinson', sans-serif;
-		max-width: 100%;
-		overflow: visible;
-		animation: graphFadeIn 0.6s ease-out;
-	}
-
-	@keyframes graphFadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	/* ========== 自定义Tooltip ========== */
-	.custom-tooltip {
-		position: fixed;
-		background: rgba(13, 17, 23, 0.95);
-		backdrop-filter: blur(10px);
-		-webkit-backdrop-filter: blur(10px);
-		border: 1px solid var(--border-hover);
-		border-radius: 6px;
-		padding: 0.75em 1em;
-		color: var(--color-text-primary);
-		font-size: 0.85em;
-		font-weight: 400;
-		pointer-events: none;
-		opacity: 0;
-		transition: opacity 0.2s ease, transform 0.2s ease;
-		z-index: 1000;
-		box-shadow:
-			0 10px 30px rgba(0, 0, 0, 0.5),
-			0 0 20px rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-		white-space: nowrap;
-	}
-
-	.custom-tooltip.show {
-		opacity: 1;
-	}
-
-	.custom-tooltip .tooltip-date {
-		display: block;
-		font-size: 0.9em;
-		color: var(--color-text-secondary);
-		margin-bottom: 0.25em;
-		font-family: 'Space Mono', monospace;
-	}
-
-	.custom-tooltip .tooltip-count {
-		display: block;
-		font-size: 1.1em;
-		font-weight: 600;
-		color: rgba(16, 185, 129, 1);
-	}
-
-	/* ========== 统计数据 - Glassmorphism卡片 ========== */
-	.stats-container {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 1em;
-		margin-bottom: 2em;
-		padding-bottom: 2em;
-		border-bottom: 1px solid var(--cg-border);
-	}
-
-	.stat-item {
-		position: relative;
-		text-align: center;
-		padding: 1em 0.75em;
-		background: rgba(255, 255, 255, 0.03);
-		backdrop-filter: blur(10px);
-		-webkit-backdrop-filter: blur(10px);
-		border: 1px solid var(--border-standard);
-		border-radius: 6px;
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-		overflow: hidden;
-	}
-
-	.stat-item::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: linear-gradient(
-			135deg,
-			var(--border-hover) 0%,
-			rgba(255, 255, 255, 0.02) 50%,
-			rgba(255, 255, 255, var(--glass-opacity-bg-hover)) 100%
-		);
-		opacity: 0;
-		transition: opacity 0.3s ease;
-	}
-
-	.stat-item:hover {
-		transform: translateY(-4px);
-		background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-		border-color: rgba(255, 255, 255, 0.15);
-		box-shadow:
-			0 10px 30px rgba(0, 0, 0, 0.3),
-			0 0 20px rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-	}
-
-	.stat-item:hover::before {
-		opacity: 1;
-	}
-
-	.stat-value {
-		position: relative;
-		display: block;
-		font-size: 2.2em;
-		font-weight: 200;
-		color: var(--cg-text);
-		line-height: 1;
-		margin-bottom: 0.5em;
-		font-family: 'Space Mono', monospace;
-		transition: color 0.3s ease;
-	}
-
-	.stat-item:hover .stat-value {
-		color: rgba(16, 185, 129, 1);
-	}
-
-	.stat-label {
-		position: relative;
-		display: block;
-		font-size: 0.7em;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 0.15em;
-		color: var(--cg-text);
-		opacity: 0.6;
-		transition: opacity 0.3s ease;
-	}
-
-	.stat-item:hover .stat-label {
-		opacity: 1;
-	}
-
-	/* ========== 图表包装器 ========== */
-	.graph-wrapper {
-		min-width: max-content;
-	}
-
-	.graph-container {
-		display: inline-grid;
-		grid-template-areas:
-			"month-spacer months"
-			"days squares";
-		grid-template-columns: auto 1fr;
-		grid-gap: var(--cg-square-gap);
-	}
-
-	/* ========== 月份行 ========== */
-	.months-row {
-		grid-area: months;
-		display: grid;
-		grid-template-columns: repeat(weeks, var(--cg-square-size));
-		gap: var(--cg-square-gap);
-		padding-left: var(--cg-square-gap);
-	}
-
-	.month-spacer {
-		grid-area: month-spacer;
-	}
-
-	.month-label {
-		font-size: 0.7em;
-		font-weight: 500;
-		color: var(--cg-text);
-		text-transform: uppercase;
-		letter-spacing: 0.15em;
-		opacity: 0;
-		transition: opacity 0.2s ease;
-	}
-
-	.month-label.visible {
-		opacity: 0.7;
-	}
-
-	/* ========== 主图表区域 ========== */
-	.graph-main {
-		grid-area: squares;
-		display: grid;
-		grid-template-areas: "days-column squares";
-		grid-template-columns: auto 1fr;
-		grid-gap: var(--cg-square-gap);
-	}
-
-	/* ========== 星期标签 ========== */
-	.days-column {
-		grid-area: days-column;
-		display: grid;
-		grid-template-rows: repeat(7, var(--cg-square-size));
-		gap: var(--cg-square-gap);
-	}
-
-	.day-label {
-		font-size: 0.65em;
-		font-weight: 500;
-		color: var(--cg-text);
-		text-transform: uppercase;
-		display: flex;
-		align-items: center;
-		opacity: 0.6;
-		letter-spacing: 0.1em;
-	}
-
-	/* ========== 热力图方块 ========== */
-	.squares-container {
-		display: grid;
-		grid-template-rows: repeat(7, var(--cg-square-size));
-		grid-auto-flow: column;
-		gap: var(--cg-square-gap);
-	}
-
-	.square {
-		position: relative;
-		width: var(--cg-square-size);
-		height: var(--cg-square-size);
-		background: var(--cg-level-0);
-		border: 1px solid var(--border-subtle);
-		border-radius: 3px;
-		cursor: pointer;
-		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-		will-change: transform, box-shadow, background;
-	}
-
-	.square::after {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
-		opacity: 0;
-		transition: opacity 0.2s ease;
-		border-radius: 3px;
-	}
-
-	.square:hover::after {
-		opacity: 1;
-	}
-
-	.square:hover {
-		transform: scale(1.25) translateY(-2px);
-		z-index: 10;
-		outline: 2px solid rgba(255, 255, 255, 0.2);
-		outline-offset: 2px;
-	}
-
-	/* 贡献级别 */
-	.square.level-0 {
-		background: var(--cg-level-0);
-	}
-
-	.square.level-0:hover {
-		background: var(--border-standard);
-	}
-
-	.square.level-1 {
-		background: var(--cg-level-1);
-	}
-
-	.square.level-1:hover {
-		background: var(--cg-level-2);
-		box-shadow: var(--cg-glow-level-1);
-	}
-
-	.square.level-2 {
-		background: var(--cg-level-2);
-	}
-
-	.square.level-2:hover {
-		background: var(--cg-level-3);
-		box-shadow: var(--cg-glow-level-2);
-	}
-
-	.square.level-3 {
-		background: var(--cg-level-3);
-	}
-
-	.square.level-3:hover {
-		background: var(--cg-level-4);
-		box-shadow: var(--cg-glow-level-3);
-	}
-
-	.square.level-4 {
-		background: var(--cg-level-4);
-	}
-
-	.square.level-4:hover {
-		box-shadow: var(--cg-glow-level-4);
-	}
-
-	/* ========== 图例 ========== */
-	.legend {
-		display: flex;
-		align-items: center;
-		gap: 0.75em;
-		margin-top: 1.5em;
-		justify-content: flex-end;
-	}
-
-	.legend-label {
-		font-size: 0.7em;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 0.15em;
-		color: var(--cg-text);
-		opacity: 0.6;
-	}
-
-	.legend-squares {
-		display: flex;
-		gap: var(--cg-square-gap);
-		align-items: center;
-	}
-
-	.legend-squares .square {
-		cursor: default;
-		border-radius: 2px;
-	}
-
-	.legend-squares .square:hover {
-		transform: none;
-		box-shadow: none;
-	}
-
-	/* ========== GitHub链接 ========== */
-	.github-link {
-		margin-top: 1.5em;
-		text-align: right;
-	}
-
-	.github-link a {
-		display: inline-block;
-		font-size: 0.8em;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 0.15em;
-		color: var(--cg-text);
-		opacity: 0.7;
-		padding: 0.5em 1em;
-		background: rgba(255, 255, 255, 0.03);
-		border: 1px solid var(--border-standard);
-		border-radius: 4px;
-		transition: all 0.3s ease;
-	}
-
-	.github-link a:hover {
-		opacity: 1;
-		background: var(--border-standard);
-		border-color: rgba(255, 255, 255, 0.15);
-		transform: translateY(-2px);
-	}
-
-	/* ========== 响应式 ========== */
-	@media (max-width: 1024px) {
-		.contribution-graph {
-			padding: 1.5em;
-		}
-
-		.stats-container {
-			gap: 0.75em;
-		}
-
-		.stat-value {
-			font-size: 1.8em;
-		}
-	}
-
-	@media (max-width: 768px) {
-		.stats-container {
-			grid-template-columns: repeat(2, 1fr);
-			padding-bottom: 1.5em;
-			margin-bottom: 1.5em;
-		}
-
-		.stat-value {
-			font-size: 1.6em;
-		}
-
-		:global(.contribution-graph) {
-			--cg-square-size: 11px;
-			--cg-square-gap: 3px;
-		}
-	}
-
-	@media (max-width: 480px) {
-		.contribution-graph {
-			padding: 1em;
-		}
-
-		.stats-container {
-			grid-template-columns: 1fr 1fr;
-			gap: 0.5em;
-			padding-bottom: 1em;
-			margin-bottom: 1em;
-		}
-
-		.stat-item {
-			padding: 0.75em 0.5em;
-		}
-
-		.stat-value {
-			font-size: 1.4em;
-		}
-
-		:global(.contribution-graph) {
-			--cg-square-size: 10px;
-			--cg-square-gap: 2px;
-		}
-
-		.legend {
-			flex-wrap: wrap;
-			justify-content: center;
-		}
-
-		.github-link {
-			text-align: center;
-		}
-	}
-
-	/* ========== 减少动画偏好 ========== */
-	@media (prefers-reduced-motion: reduce) {
-		.square,
-		.stat-item,
-		.contribution-graph,
-		.custom-tooltip {
-			transition: none;
-			animation: none;
-		}
-
-		.square:hover {
-			transform: none;
-		}
-
-		.stat-item:hover {
-			transform: none;
-		}
-	}
+  /* ========== 基础变量 - Glassmorphism风格 ========== */
+  :global(.contribution-graph) {
+    --cg-square-size: 13px;
+    --cg-square-gap: 4px;
+    --cg-bg: rgba(255, 255, 255, 0.02);
+    --cg-text: #000000;
+    --cg-border: var(--border-hover);
+    --cg-shadow:
+      0 25px 50px rgba(0, 0, 0, 0.5), 0 0 100px rgba(255, 255, 255, 0.03),
+      inset 0 0 30px rgba(255, 255, 255, 0.02);
+    --cg-blur: 30px;
+
+    /* 贡献级别颜色 - 更柔和的绿色渐变 */
+    --cg-level-0: rgba(255, 255, 255, 0.03);
+    --cg-level-1: rgba(75, 192, 192, 0.4);
+    --cg-level-2: rgba(34, 197, 94, 0.6);
+    --cg-level-3: rgba(22, 163, 74, 0.8);
+    --cg-level-4: rgba(21, 128, 61, 1);
+
+    /* Glow效果 */
+    --cg-glow-level-1: 0 0 20px rgba(75, 192, 192, 0.3);
+    --cg-glow-level-2: 0 0 20px rgba(34, 197, 94, 0.4);
+    --cg-glow-level-3: 0 0 20px rgba(22, 163, 74, 0.5);
+    --cg-glow-level-4: 0 0 20px rgba(21, 128, 61, 0.6);
+  }
+
+  :global(.contribution-graph-dark),
+  :global(.contribution-graph[theme="dark"]) {
+    --cg-bg: rgba(13, 17, 23, 0.6);
+    --cg-text: var(--color-text-primary);
+    --cg-border: var(--border-standard);
+
+    /* Dark主题的绿色 */
+    --cg-level-0: rgba(22, 27, 34, 0.4);
+    --cg-level-1: rgba(16, 185, 129, 0.5);
+    --cg-level-2: rgba(5, 150, 105, 0.7);
+    --cg-level-3: rgba(4, 120, 87, 0.85);
+    --cg-level-4: rgba(6, 95, 70, 1);
+
+    --cg-glow-level-1: 0 0 20px rgba(16, 185, 129, 0.3);
+    --cg-glow-level-2: 0 0 20px rgba(5, 150, 105, 0.4);
+    --cg-glow-level-3: 0 0 20px rgba(4, 120, 87, 0.5);
+    --cg-glow-level-4: 0 0 20px rgba(6, 95, 70, 0.6);
+  }
+
+  /* ========== 主容器 - Glassmorphism ========== */
+  .contribution-graph {
+    position: relative;
+    background: var(--cg-bg);
+    backdrop-filter: blur(var(--cg-blur));
+    -webkit-backdrop-filter: blur(var(--cg-blur));
+    border: 1px solid var(--cg-border);
+    border-radius: 8px;
+    box-shadow: var(--cg-shadow);
+    padding: 2em;
+    font-family: "Atkinson", sans-serif;
+    max-width: 100%;
+    overflow: visible;
+    animation: graphFadeIn 0.6s ease-out;
+  }
+
+  @keyframes graphFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ========== 自定义Tooltip ========== */
+  .custom-tooltip {
+    position: fixed;
+    background: rgba(13, 17, 23, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-hover);
+    border-radius: 6px;
+    padding: 0.75em 1em;
+    color: var(--color-text-primary);
+    font-size: 0.85em;
+    font-weight: 400;
+    pointer-events: none;
+    opacity: 0;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+    z-index: 1000;
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.5),
+      0 0 20px rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+    white-space: nowrap;
+  }
+
+  .custom-tooltip.show {
+    opacity: 1;
+  }
+
+  .custom-tooltip .tooltip-date {
+    display: block;
+    font-size: 0.9em;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.25em;
+    font-family: "Space Mono", monospace;
+  }
+
+  .custom-tooltip .tooltip-count {
+    display: block;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: rgba(16, 185, 129, 1);
+  }
+
+  /* ========== 统计数据 - Glassmorphism卡片 ========== */
+  .stats-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1em;
+    margin-bottom: 2em;
+    padding-bottom: 2em;
+    border-bottom: 1px solid var(--cg-border);
+  }
+
+  .stat-item {
+    position: relative;
+    text-align: center;
+    padding: 1em 0.75em;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-standard);
+    border-radius: 6px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+
+  .stat-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      var(--border-hover) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(255, 255, 255, var(--glass-opacity-bg-hover)) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .stat-item:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+  }
+
+  .stat-item:hover::before {
+    opacity: 1;
+  }
+
+  .stat-value {
+    position: relative;
+    display: block;
+    font-size: 2.2em;
+    font-weight: 200;
+    color: var(--cg-text);
+    line-height: 1;
+    margin-bottom: 0.5em;
+    font-family: "Space Mono", monospace;
+    transition: color 0.3s ease;
+  }
+
+  .stat-item:hover .stat-value {
+    color: rgba(16, 185, 129, 1);
+  }
+
+  .stat-label {
+    position: relative;
+    display: block;
+    font-size: 0.7em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--cg-text);
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+
+  .stat-item:hover .stat-label {
+    opacity: 1;
+  }
+
+  /* ========== 图表包装器 ========== */
+  .graph-wrapper {
+    min-width: max-content;
+  }
+
+  .graph-container {
+    display: inline-grid;
+    grid-template-areas:
+      "month-spacer months"
+      "days squares";
+    grid-template-columns: auto 1fr;
+    grid-gap: var(--cg-square-gap);
+  }
+
+  /* ========== 月份行 ========== */
+  .months-row {
+    grid-area: months;
+    display: grid;
+    grid-template-columns: repeat(weeks, var(--cg-square-size));
+    gap: var(--cg-square-gap);
+    padding-left: var(--cg-square-gap);
+  }
+
+  .month-spacer {
+    grid-area: month-spacer;
+  }
+
+  .month-label {
+    font-size: 0.7em;
+    font-weight: 500;
+    color: var(--cg-text);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .month-label.visible {
+    opacity: 0.7;
+  }
+
+  /* ========== 主图表区域 ========== */
+  .graph-main {
+    grid-area: squares;
+    display: grid;
+    grid-template-areas: "days-column squares";
+    grid-template-columns: auto 1fr;
+    grid-gap: var(--cg-square-gap);
+  }
+
+  /* ========== 星期标签 ========== */
+  .days-column {
+    grid-area: days-column;
+    display: grid;
+    grid-template-rows: repeat(7, var(--cg-square-size));
+    gap: var(--cg-square-gap);
+  }
+
+  .day-label {
+    font-size: 0.65em;
+    font-weight: 500;
+    color: var(--cg-text);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    opacity: 0.6;
+    letter-spacing: 0.1em;
+  }
+
+  /* ========== 热力图方块 ========== */
+  .squares-container {
+    display: grid;
+    grid-template-rows: repeat(7, var(--cg-square-size));
+    grid-auto-flow: column;
+    gap: var(--cg-square-gap);
+  }
+
+  .square {
+    position: relative;
+    width: var(--cg-square-size);
+    height: var(--cg-square-size);
+    background: var(--cg-level-0);
+    border: 1px solid var(--border-subtle);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, box-shadow, background;
+  }
+
+  .square::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    border-radius: 3px;
+  }
+
+  .square:hover::after {
+    opacity: 1;
+  }
+
+  .square:hover {
+    transform: scale(1.25) translateY(-2px);
+    z-index: 10;
+    outline: 2px solid rgba(255, 255, 255, 0.2);
+    outline-offset: 2px;
+  }
+
+  /* 贡献级别 */
+  .square.level-0 {
+    background: var(--cg-level-0);
+  }
+
+  .square.level-0:hover {
+    background: var(--border-standard);
+  }
+
+  .square.level-1 {
+    background: var(--cg-level-1);
+  }
+
+  .square.level-1:hover {
+    background: var(--cg-level-2);
+    box-shadow: var(--cg-glow-level-1);
+  }
+
+  .square.level-2 {
+    background: var(--cg-level-2);
+  }
+
+  .square.level-2:hover {
+    background: var(--cg-level-3);
+    box-shadow: var(--cg-glow-level-2);
+  }
+
+  .square.level-3 {
+    background: var(--cg-level-3);
+  }
+
+  .square.level-3:hover {
+    background: var(--cg-level-4);
+    box-shadow: var(--cg-glow-level-3);
+  }
+
+  .square.level-4 {
+    background: var(--cg-level-4);
+  }
+
+  .square.level-4:hover {
+    box-shadow: var(--cg-glow-level-4);
+  }
+
+  /* ========== 图例 ========== */
+  .legend {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    margin-top: 1.5em;
+    justify-content: flex-end;
+  }
+
+  .legend-label {
+    font-size: 0.7em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--cg-text);
+    opacity: 0.6;
+  }
+
+  .legend-squares {
+    display: flex;
+    gap: var(--cg-square-gap);
+    align-items: center;
+  }
+
+  .legend-squares .square {
+    cursor: default;
+    border-radius: 2px;
+  }
+
+  .legend-squares .square:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ========== GitHub链接 ========== */
+  .github-link {
+    margin-top: 1.5em;
+    text-align: right;
+  }
+
+  .github-link a {
+    display: inline-block;
+    font-size: 0.8em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--cg-text);
+    opacity: 0.7;
+    padding: 0.5em 1em;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-standard);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+
+  .github-link a:hover {
+    opacity: 1;
+    background: var(--border-standard);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+
+  /* ========== 响应式 ========== */
+  @media (max-width: 1024px) {
+    .contribution-graph {
+      padding: 1.5em;
+    }
+
+    .stats-container {
+      gap: 0.75em;
+    }
+
+    .stat-value {
+      font-size: 1.8em;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stats-container {
+      grid-template-columns: repeat(2, 1fr);
+      padding-bottom: 1.5em;
+      margin-bottom: 1.5em;
+    }
+
+    .stat-value {
+      font-size: 1.6em;
+    }
+
+    :global(.contribution-graph) {
+      --cg-square-size: 11px;
+      --cg-square-gap: 3px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .contribution-graph {
+      padding: 1em;
+    }
+
+    .stats-container {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5em;
+      padding-bottom: 1em;
+      margin-bottom: 1em;
+    }
+
+    .stat-item {
+      padding: 0.75em 0.5em;
+    }
+
+    .stat-value {
+      font-size: 1.4em;
+    }
+
+    :global(.contribution-graph) {
+      --cg-square-size: 10px;
+      --cg-square-gap: 2px;
+    }
+
+    .legend {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .github-link {
+      text-align: center;
+    }
+  }
+
+  /* ========== 减少动画偏好 ========== */
+  @media (prefers-reduced-motion: reduce) {
+    .square,
+    .stat-item,
+    .contribution-graph,
+    .custom-tooltip {
+      transition: none;
+      animation: none;
+    }
+
+    .square:hover {
+      transform: none;
+    }
+
+    .stat-item:hover {
+      transform: none;
+    }
+  }
 </style>
 
 <script>
-	// 自定义Tooltip交互
-	document.addEventListener('DOMContentLoaded', () => {
-		const squares = document.querySelectorAll('.square');
-		const tooltip = document.getElementById('tooltip') as HTMLElement;
+  // 自定义Tooltip交互
+  document.addEventListener("DOMContentLoaded", () => {
+    const squares = document.querySelectorAll(".square");
+    const tooltip = document.getElementById("tooltip") as HTMLElement;
 
-		if (!tooltip) return;
+    if (!tooltip) return;
 
-		squares.forEach(square => {
-			square.addEventListener('mouseenter', (e) => {
-				const target = e.target as HTMLElement;
-				const date = target.dataset.date;
-				const count = parseInt(target.dataset.count || '0');
-				const level = parseInt(target.dataset.level || '0');
+    squares.forEach((square) => {
+      square.addEventListener("mouseenter", (e) => {
+        const target = e.target as HTMLElement;
+        const date = target.dataset.date;
+        const count = parseInt(target.dataset.count || "0");
+        const level = parseInt(target.dataset.level || "0");
 
-				if (!date) return;
+        if (!date) return;
 
-				// 格式化日期
-				const dateObj = new Date(date);
-				const formattedDate = dateObj.toLocaleDateString('zh-CN', {
-					year: 'numeric',
-					month: 'long',
-					day: 'numeric',
-					weekday: 'long'
-				});
+        // 格式化日期
+        const dateObj = new Date(date);
+        const formattedDate = dateObj.toLocaleDateString("zh-CN", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long",
+        });
 
-				// 设置tooltip内容
-				tooltip.innerHTML = `
-					<span class="tooltip-date">${formattedDate}</span>
-					<span class="tooltip-count">${count} contribution${count !== 1 ? 's' : ''}</span>
-				`;
+        // 清空并安全设置tooltip内容
+        tooltip.innerHTML = "";
 
-				// 显示tooltip
-				tooltip.classList.add('show');
-			});
+        const dateSpan = document.createElement("span");
+        dateSpan.className = "tooltip-date";
+        dateSpan.textContent = formattedDate;
+        tooltip.appendChild(dateSpan);
 
-			square.addEventListener('mousemove', (e) => {
-				if (!tooltip.classList.contains('show')) return;
+        const countSpan = document.createElement("span");
+        countSpan.className = "tooltip-count";
+        countSpan.textContent = `${count} contribution${count !== 1 ? "s" : ""}`;
+        tooltip.appendChild(countSpan);
 
-				const x = e.clientX;
-				const y = e.clientY;
-				const tooltipRect = tooltip.getBoundingClientRect();
+        // 显示tooltip
+        tooltip.classList.add("show");
+      });
 
-				// 计算位置，确保不会超出屏幕
-				let offsetX = 20;
-				let offsetY = -40;
+      square.addEventListener("mousemove", (e) => {
+        if (!tooltip.classList.contains("show")) return;
 
-				if (x + tooltipRect.width + offsetX > window.innerWidth) {
-					offsetX = -(tooltipRect.width + 20);
-				}
+        const x = e.clientX;
+        const y = e.clientY;
+        const tooltipRect = tooltip.getBoundingClientRect();
 
-				if (y + tooltipRect.height + offsetY < 0) {
-					offsetY = 20;
-				}
+        // 计算位置，确保不会超出屏幕
+        let offsetX = 20;
+        let offsetY = -40;
 
-				tooltip.style.left = `${x + offsetX}px`;
-				tooltip.style.top = `${y + offsetY}px`;
-			});
+        if (x + tooltipRect.width + offsetX > window.innerWidth) {
+          offsetX = -(tooltipRect.width + 20);
+        }
 
-			square.addEventListener('mouseleave', () => {
-				tooltip.classList.remove('show');
-			});
-		});
+        if (y + tooltipRect.height + offsetY < 0) {
+          offsetY = 20;
+        }
 
-		// 统计数字动画（可选）
-		if ('IntersectionObserver' in window) {
-			const observer = new IntersectionObserver((entries) => {
-				entries.forEach(entry => {
-					if (entry.isIntersecting) {
-						const statValues = document.querySelectorAll('.stat-value');
-						statValues.forEach(el => {
-							const targetValue = parseInt(el.dataset.value || '0');
-							if (targetValue > 0) {
-								animateNumber(el as HTMLElement, 0, targetValue, 1000);
-							}
-						});
-						observer.disconnect();
-					}
-				});
-			}, { threshold: 0.5 });
+        tooltip.style.left = `${x + offsetX}px`;
+        tooltip.style.top = `${y + offsetY}px`;
+      });
 
-			const statsContainer = document.querySelector('.stats-container');
-			if (statsContainer) {
-				observer.observe(statsContainer);
-			}
-		}
+      square.addEventListener("mouseleave", () => {
+        tooltip.classList.remove("show");
+      });
+    });
 
-		function animateNumber(element: HTMLElement, start: number, end: number, duration: number) {
-			const startTime = performance.now();
+    // 统计数字动画（可选）
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const statValues = document.querySelectorAll(".stat-value");
+              statValues.forEach((el) => {
+                const targetValue = parseInt(el.dataset.value || "0");
+                if (targetValue > 0) {
+                  animateNumber(el as HTMLElement, 0, targetValue, 1000);
+                }
+              });
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
 
-			function update(currentTime: number) {
-				const elapsed = currentTime - startTime;
-				const progress = Math.min(elapsed / duration, 1);
+      const statsContainer = document.querySelector(".stats-container");
+      if (statsContainer) {
+        observer.observe(statsContainer);
+      }
+    }
 
-				// Easing function (ease-out)
-				const easeOut = 1 - Math.pow(1 - progress, 3);
-				const currentValue = Math.round(start + (end - start) * easeOut);
+    function animateNumber(element: HTMLElement, start: number, end: number, duration: number) {
+      const startTime = performance.now();
 
-				element.textContent = currentValue.toString();
+      function update(currentTime: number) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
 
-				if (progress < 1) {
-					requestAnimationFrame(update);
-				}
-			}
+        // Easing function (ease-out)
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const currentValue = Math.round(start + (end - start) * easeOut);
 
-			requestAnimationFrame(update);
-		}
-	});
+        element.textContent = currentValue.toString();
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+
+      requestAnimationFrame(update);
+    }
+  });
 </script>

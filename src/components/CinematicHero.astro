@@ -5,534 +5,578 @@
  */
 
 interface Props {
-	title?: string;
-	subtitle?: string;
-	backgroundText?: string;
+  title?: string;
+  subtitle?: string;
+  backgroundText?: string;
 }
 
-const {
-	title = 'MY BLOG',
-	subtitle = '探索 · 发现 · 记录',
-	backgroundText = 'BLOG',
-} = Astro.props;
+const { title = "MY BLOG", subtitle = "探索 · 发现 · 记录", backgroundText = "BLOG" } = Astro.props;
 ---
 
 <section class="cinematic-hero">
-	<div class="background-effects">
-		<div class="gradient-orb orb-1"></div>
-		<div class="gradient-orb orb-2"></div>
-		<div class="gradient-orb orb-3"></div>
-		<div class="grid-pattern"></div>
-		<div class="noise-overlay"></div>
-	</div>
+  <div class="background-effects">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <div class="grid-pattern"></div>
+    <div class="noise-overlay"></div>
+  </div>
 
-	<div class="background-text">{backgroundText}</div>
+  <div class="background-text">{backgroundText}</div>
 
-	<div class="hero-content">
-		<div class="title-wrapper">
-			<h1 class="hero-title">
-				<span class="title-line typing-text">{title}</span>
-			</h1>
-			<div class="title-decoration"></div>
-		</div>
+  <div class="hero-content">
+    <div class="title-wrapper">
+      <h1 class="hero-title">
+        <span class="title-line typing-text">{title}</span>
+      </h1>
+      <div class="title-decoration"></div>
+    </div>
 
-		<p class="hero-subtitle">{subtitle}</p>
+    <p class="hero-subtitle">{subtitle}</p>
 
-		<div class="hero-actions">
-			<a href="/blog" class="action-button primary">
-				<span>浏览文章</span>
-				<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-					<path d="M5 12h14M12 5l7 7-7 7"/>
-				</svg>
-			</a>
-			<a href="/about" class="action-button secondary">
-				<span>关于我</span>
-			</a>
-		</div>
+    <div class="hero-actions">
+      <a href="/blog" class="action-button primary">
+        <span>浏览文章</span>
+        <svg
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M5 12h14M12 5l7 7-7 7"></path>
+        </svg>
+      </a>
+      <a href="/about" class="action-button secondary">
+        <span>关于我</span>
+      </a>
+    </div>
 
-		<div class="scroll-indicator">
-			<div class="mouse">
-				<div class="wheel"></div>
-			</div>
-			<div class="arrow">↓</div>
-		</div>
-	</div>
+    <div class="scroll-indicator">
+      <div class="mouse">
+        <div class="wheel"></div>
+      </div>
+      <div class="arrow">↓</div>
+    </div>
+  </div>
 
-	<div class="floating-particles">
-		<div class="particle"></div>
-		<div class="particle"></div>
-		<div class="particle"></div>
-		<div class="particle"></div>
-		<div class="particle"></div>
-		<div class="particle"></div>
-		<div class="particle"></div>
-		<div class="particle"></div>
-		<div class="particle"></div>
-		<div class="particle"></div>
-	</div>
+  <div class="floating-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
 </section>
 
 <script>
-	const typingText = document.querySelector('.typing-text');
-	if (typingText) {
-		const text = typingText.textContent;
-		typingText.textContent = '';
-		let index = 0;
+  const typeAnimation = () => {
+    const typingText = document.querySelector(".typing-text");
+    if (typingText) {
+      const text = typingText.textContent;
+      typingText.textContent = "";
+      let index = 0;
 
-		function type() {
-			if (index < text.length) {
-				typingText.textContent += text.charAt(index);
-				index++;
-				setTimeout(type, 100);
-			} else {
-				// 打字完成后移除光标效果
-				setTimeout(() => {
-					typingText.style.borderRight = 'none';
-				}, 1000);
-			}
-		}
+      const typeChar = () => {
+        if (index < text.length) {
+          typingText.textContent += text.charAt(index);
+          index++;
+          setTimeout(typeChar, 100);
+        } else {
+          // 打字完成后移除光标效果
+          setTimeout(() => {
+            typingText.style.borderRight = "none";
+          }, 1000);
+        }
+      };
 
-		// 延迟开始打字动画
-		setTimeout(type, 500);
-	}
+      // 延迟开始打字动画
+      setTimeout(typeChar, 500);
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", typeAnimation);
 </script>
 
 <style>
-	.cinematic-hero {
-		position: relative;
-		min-height: 100vh;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: #000000;
-		overflow: hidden;
-		margin-top: -80px;
-		padding-top: 80px;
-	}
+  .cinematic-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000000;
+    overflow: hidden;
+    margin-top: -80px;
+    padding-top: 80px;
+  }
 
-	/* 背景特效 */
-	.background-effects {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
-	}
+  /* 背景特效 */
+  .background-effects {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
 
-	.gradient-orb {
-		position: absolute;
-		border-radius: 50%;
-		filter: blur(80px);
-		opacity: 0.3;
-		animation: float 20s ease-in-out infinite;
-	}
+  .gradient-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.3;
+    animation: float 20s ease-in-out infinite;
+  }
 
-	.orb-1 {
-		width: 600px;
-		height: 600px;
-		background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
-		top: -200px;
-		right: -100px;
-		animation-delay: 0s;
-	}
+  .orb-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+    top: -200px;
+    right: -100px;
+    animation-delay: 0s;
+  }
 
-	.orb-2 {
-		width: 500px;
-		height: 500px;
-		background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
-		bottom: -150px;
-		left: -100px;
-		animation-delay: -7s;
-	}
+  .orb-2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+    bottom: -150px;
+    left: -100px;
+    animation-delay: -7s;
+  }
 
-	.orb-3 {
-		width: 400px;
-		height: 400px;
-		background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		animation-delay: -14s;
-	}
+  .orb-3 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: -14s;
+  }
 
-	@keyframes float {
-		0%, 100% {
-			transform: translate(0, 0) scale(1);
-		}
-		25% {
-			transform: translate(50px, -50px) scale(1.1);
-		}
-		50% {
-			transform: translate(-30px, 30px) scale(0.9);
-		}
-		75% {
-			transform: translate(-50px, -30px) scale(1.05);
-		}
-	}
+  @keyframes float {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    25% {
+      transform: translate(50px, -50px) scale(1.1);
+    }
+    50% {
+      transform: translate(-30px, 30px) scale(0.9);
+    }
+    75% {
+      transform: translate(-50px, -30px) scale(1.05);
+    }
+  }
 
-	/* 网格图案 */
-	.grid-pattern {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-image:
-			linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-		background-size: 50px 50px;
-		animation: gridMove 20s linear infinite;
-	}
+  /* 网格图案 */
+  .grid-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+  }
 
-	@keyframes gridMove {
-		0% {
-			transform: translate(0, 0);
-		}
-		100% {
-			transform: translate(50px, 50px);
-		}
-	}
+  @keyframes gridMove {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(50px, 50px);
+    }
+  }
 
-	/* 噪点叠加 */
-	.noise-overlay {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		opacity: 0.05;
-		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-		animation: noise 0.5s steps(10) infinite;
-	}
+  /* 噪点叠加 */
+  .noise-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    animation: noise 0.5s steps(10) infinite;
+  }
 
-	@keyframes noise {
-		0%, 100% {
-			transform: translate(0, 0);
-		}
-		10% {
-			transform: translate(-5%, -5%);
-		}
-		20% {
-			transform: translate(-10%, 5%);
-		}
-		30% {
-			transform: translate(5%, -10%);
-		}
-		40% {
-			transform: translate(-5%, 15%);
-		}
-		50% {
-			transform: translate(-10%, 5%);
-		}
-		60% {
-			transform: translate(15%, 0);
-		}
-		70% {
-			transform: translate(0, 10%);
-		}
-		80% {
-			transform: translate(-15%, 0);
-		}
-		90% {
-			transform: translate(10%, 5%);
-		}
-	}
+  @keyframes noise {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    10% {
+      transform: translate(-5%, -5%);
+    }
+    20% {
+      transform: translate(-10%, 5%);
+    }
+    30% {
+      transform: translate(5%, -10%);
+    }
+    40% {
+      transform: translate(-5%, 15%);
+    }
+    50% {
+      transform: translate(-10%, 5%);
+    }
+    60% {
+      transform: translate(15%, 0);
+    }
+    70% {
+      transform: translate(0, 10%);
+    }
+    80% {
+      transform: translate(-15%, 0);
+    }
+    90% {
+      transform: translate(10%, 5%);
+    }
+  }
 
-	/* 背景大文字 */
-	.background-text {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-size: 40vw;
-		font-weight: 900;
-		color: rgba(255, 255, 255, 0.02);
-		letter-spacing: 0.1em;
-		pointer-events: none;
-		user-select: none;
-		white-space: nowrap;
-	}
+  /* 背景大文字 */
+  .background-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 40vw;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.02);
+    letter-spacing: 0.1em;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
 
-	/* 内容区域 */
-	.hero-content {
-		position: relative;
-		z-index: 10;
-		text-align: center;
-		padding: 2em;
-		max-width: 1200px;
-	}
+  /* 内容区域 */
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 2em;
+    max-width: 1200px;
+  }
 
-	.title-wrapper {
-		margin-bottom: 2em;
-	}
+  .title-wrapper {
+    margin-bottom: 2em;
+  }
 
-	.hero-title {
-		margin: 0;
-		font-size: clamp(3em, 12vw, 10em);
-		font-weight: 900;
-		line-height: 1;
-		letter-spacing: -0.02em;
-	}
+  .hero-title {
+    margin: 0;
+    font-size: clamp(3em, 12vw, 10em);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
 
-	.title-line {
-		display: inline-block;
-		background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 50%, #ffffff 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		animation: titleGlow 3s ease-in-out infinite alternate;
-	}
+  .title-line {
+    display: inline-block;
+    background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 50%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleGlow 3s ease-in-out infinite alternate;
+  }
 
-	.typing-text {
-		border-right: 3px solid var(--color-text-secondary);
-		animation: blink 0.7s step-end infinite;
-		white-space: nowrap;
-		overflow: hidden;
-		display: inline-block;
-	}
+  .typing-text {
+    border-right: 3px solid var(--color-text-secondary);
+    animation: blink 0.7s step-end infinite;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+  }
 
-	@keyframes blink {
-		0%, 50% {
-			border-color: var(--color-text-secondary);
-		}
-		51%, 100% {
-			border-color: transparent;
-		}
-	}
+  @keyframes blink {
+    0%,
+    50% {
+      border-color: var(--color-text-secondary);
+    }
+    51%,
+    100% {
+      border-color: transparent;
+    }
+  }
 
-	@keyframes titleGlow {
-		0% {
-			filter: drop-shadow(0 0 20px var(--color-text-tertiary));
-		}
-		100% {
-			filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.8));
-		}
-	}
+  @keyframes titleGlow {
+    0% {
+      filter: drop-shadow(0 0 20px var(--color-text-tertiary));
+    }
+    100% {
+      filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.8));
+    }
+  }
 
-	.title-decoration {
-		width: 200px;
-		height: 4px;
-		background: linear-gradient(90deg, transparent, var(--color-text-tertiary), transparent);
-		margin: 1em auto;
-		animation: decorationMove 3s ease-in-out infinite;
-	}
+  .title-decoration {
+    width: 200px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--color-text-tertiary), transparent);
+    margin: 1em auto;
+    animation: decorationMove 3s ease-in-out infinite;
+  }
 
-	@keyframes decorationMove {
-		0%, 100% {
-			transform: scaleX(0.5);
-			opacity: 0.5;
-		}
-		50% {
-			transform: scaleX(1);
-			opacity: 1;
-		}
-	}
+  @keyframes decorationMove {
+    0%,
+    100% {
+      transform: scaleX(0.5);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
 
-	.hero-subtitle {
-		font-size: clamp(1.2em, 3vw, 2em);
-		color: var(--color-text-secondary);
-		letter-spacing: 0.3em;
-		text-transform: uppercase;
-		margin-bottom: 3em;
-		animation: fadeInUp 1s ease-out 0.3s both;
-	}
+  .hero-subtitle {
+    font-size: clamp(1.2em, 3vw, 2em);
+    color: var(--color-text-secondary);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 3em;
+    animation: fadeInUp 1s ease-out 0.3s both;
+  }
 
-	/* 按钮组 */
-	.hero-actions {
-		display: flex;
-		gap: 1.5em;
-		justify-content: center;
-		align-items: center;
-		flex-wrap: wrap;
-		animation: fadeInUp 1s ease-out 0.5s both;
-	}
+  /* 按钮组 */
+  .hero-actions {
+    display: flex;
+    gap: 1.5em;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 1s ease-out 0.5s both;
+  }
 
-	.action-button {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.75em;
-		padding: 1em 2em;
-		font-size: 1.1em;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		text-decoration: none;
-		border: 2px solid var(--color-text-muted);
-		position: relative;
-		overflow: hidden;
-		transition: all 0.3s ease;
-	}
+  .action-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75em;
+    padding: 1em 2em;
+    font-size: 1.1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    border: 2px solid var(--color-text-muted);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
 
-	.action-button::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: -100%;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-		transition: left 0.5s ease;
-	}
+  .action-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
 
-	.action-button:hover::before {
-		left: 100%;
-	}
+  .action-button:hover::before {
+    left: 100%;
+  }
 
-	.action-button.primary {
-		background: var(--border-hover);
-		color: #ffffff;
-		border-color: #ffffff;
-		backdrop-filter: blur(10px);
-	}
+  .action-button.primary {
+    background: var(--border-hover);
+    color: #ffffff;
+    border-color: #ffffff;
+    backdrop-filter: blur(10px);
+  }
 
-	.action-button.primary:hover {
-		background: #ffffff;
-		color: #000000;
-		transform: translateY(-3px);
-		box-shadow: 0 20px 40px var(--color-text-muted);
-	}
+  .action-button.primary:hover {
+    background: #ffffff;
+    color: #000000;
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px var(--color-text-muted);
+  }
 
-	.action-button.secondary {
-		background: transparent;
-		color: rgba(255, 255, 255, 0.8);
-		border-color: var(--color-text-tertiary);
-	}
+  .action-button.secondary {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    border-color: var(--color-text-tertiary);
+  }
 
-	.action-button.secondary:hover {
-		background: var(--border-hover);
-		color: #ffffff;
-		border-color: #ffffff;
-		transform: translateY(-3px);
-	}
+  .action-button.secondary:hover {
+    background: var(--border-hover);
+    color: #ffffff;
+    border-color: #ffffff;
+    transform: translateY(-3px);
+  }
 
-	/* 滚动指示器 */
-	.scroll-indicator {
-		position: absolute;
-		bottom: 3em;
-		left: 50%;
-		transform: translateX(-50%);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 1em;
-		animation: fadeInUp 1s ease-out 1s both;
-	}
+  /* 滚动指示器 */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 3em;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    animation: fadeInUp 1s ease-out 1s both;
+  }
 
-	.mouse {
-		width: 30px;
-		height: 50px;
-		border: 2px solid var(--color-text-tertiary);
-		border-radius: 20px;
-		position: relative;
-	}
+  .mouse {
+    width: 30px;
+    height: 50px;
+    border: 2px solid var(--color-text-tertiary);
+    border-radius: 20px;
+    position: relative;
+  }
 
-	.wheel {
-		width: 4px;
-		height: 10px;
-		background: rgba(255, 255, 255, 0.8);
-		border-radius: 2px;
-		position: absolute;
-		top: 10px;
-		left: 50%;
-		transform: translateX(-50%);
-		animation: scroll 2s ease-in-out infinite;
-	}
+  .wheel {
+    width: 4px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 2px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: scroll 2s ease-in-out infinite;
+  }
 
-	@keyframes scroll {
-		0%, 100% {
-			opacity: 1;
-			transform: translateX(-50%) translateY(0);
-		}
-		50% {
-			opacity: 0.3;
-			transform: translateX(-50%) translateY(15px);
-		}
-	}
+  @keyframes scroll {
+    0%,
+    100% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    50% {
+      opacity: 0.3;
+      transform: translateX(-50%) translateY(15px);
+    }
+  }
 
-	.arrow {
-		color: var(--color-text-tertiary);
-		font-size: 1.5em;
-		animation: bounce 2s ease-in-out infinite;
-	}
+  .arrow {
+    color: var(--color-text-tertiary);
+    font-size: 1.5em;
+    animation: bounce 2s ease-in-out infinite;
+  }
 
-	@keyframes bounce {
-		0%, 100% {
-			transform: translateY(0);
-		}
-		50% {
-			transform: translateY(10px);
-		}
-	}
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(10px);
+    }
+  }
 
-	/* 浮动粒子 */
-	.floating-particles {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		pointer-events: none;
-		overflow: hidden;
-	}
+  /* 浮动粒子 */
+  .floating-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
 
-	.particle {
-		position: absolute;
-		width: 4px;
-		height: 4px;
-		background: var(--color-text-muted);
-		border-radius: 50%;
-		animation: particleFloat 15s linear infinite;
-	}
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--color-text-muted);
+    border-radius: 50%;
+    animation: particleFloat 15s linear infinite;
+  }
 
-	.particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-	.particle:nth-child(2) { left: 20%; animation-delay: -2s; }
-	.particle:nth-child(3) { left: 30%; animation-delay: -4s; }
-	.particle:nth-child(4) { left: 40%; animation-delay: -6s; }
-	.particle:nth-child(5) { left: 50%; animation-delay: -8s; }
-	.particle:nth-child(6) { left: 60%; animation-delay: -10s; }
-	.particle:nth-child(7) { left: 70%; animation-delay: -12s; }
-	.particle:nth-child(8) { left: 80%; animation-delay: -14s; }
-	.particle:nth-child(9) { left: 90%; animation-delay: -7s; }
-	.particle:nth-child(10) { left: 95%; animation-delay: -3s; }
+  .particle:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+  }
+  .particle:nth-child(2) {
+    left: 20%;
+    animation-delay: -2s;
+  }
+  .particle:nth-child(3) {
+    left: 30%;
+    animation-delay: -4s;
+  }
+  .particle:nth-child(4) {
+    left: 40%;
+    animation-delay: -6s;
+  }
+  .particle:nth-child(5) {
+    left: 50%;
+    animation-delay: -8s;
+  }
+  .particle:nth-child(6) {
+    left: 60%;
+    animation-delay: -10s;
+  }
+  .particle:nth-child(7) {
+    left: 70%;
+    animation-delay: -12s;
+  }
+  .particle:nth-child(8) {
+    left: 80%;
+    animation-delay: -14s;
+  }
+  .particle:nth-child(9) {
+    left: 90%;
+    animation-delay: -7s;
+  }
+  .particle:nth-child(10) {
+    left: 95%;
+    animation-delay: -3s;
+  }
 
-	@keyframes particleFloat {
-		0% {
-			transform: translateY(100vh) scale(0);
-			opacity: 0;
-		}
-		10% {
-			opacity: 1;
-		}
-		90% {
-			opacity: 1;
-		}
-		100% {
-			transform: translateY(-100px) scale(1);
-			opacity: 0;
-		}
-	}
+  @keyframes particleFloat {
+    0% {
+      transform: translateY(100vh) scale(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100px) scale(1);
+      opacity: 0;
+    }
+  }
 
-	@media (max-width: 768px) {
-		.cinematic-hero {
-			min-height: 100vh;
-		}
+  @media (max-width: 768px) {
+    .cinematic-hero {
+      min-height: 100vh;
+    }
 
-		.hero-content {
-			padding: 1.5em;
-		}
+    .hero-content {
+      padding: 1.5em;
+    }
 
-		.hero-actions {
-			flex-direction: column;
-		}
+    .hero-actions {
+      flex-direction: column;
+    }
 
-		.action-button {
-			width: 100%;
-			justify-content: center;
-		}
+    .action-button {
+      width: 100%;
+      justify-content: center;
+    }
 
-		.background-text {
-			font-size: 30vw;
-		}
-	}
+    .background-text {
+      font-size: 30vw;
+    }
+  }
 </style>

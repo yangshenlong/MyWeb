@@ -1,0 +1,78 @@
+
+> receptive-accretion@0.0.1 lint
+> eslint "src/**/*.{astro,js,ts}"
+
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\components\BlogActivityHeatmap.astro
+  15:3   warning  'collection' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  98:33  warning  'index' is defined but never used. Allowed unused args must match /^_/u                @typescript-eslint/no-unused-vars
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\components\CTAButton.astro
+  14:12  error    'AstroNode' is not defined                                                          no-undef
+  14:24  error    'AstroNode' is not defined                                                          no-undef
+  31:7   warning  'element' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\components\ContributionGraph.astro
+   51:6   warning  'currentStreak' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  121:29  warning  'index' is defined but never used. Allowed unused args must match /^_/u                   @typescript-eslint/no-unused-vars
+  132:29  warning  'index' is defined but never used. Allowed unused args must match /^_/u                   @typescript-eslint/no-unused-vars
+  140:13  warning  'weekIndex' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  141:13  warning  'dayOfWeek' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  698:11  warning  'level' is assigned a value but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\components\CursorGlow.astro
+  34:6  warning  'isThrottled' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  35:6  warning  'lastThrottleTime' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  36:8  warning  'throttleDelay' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  50:6  warning  'animationId' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  55:9  warning  'speed2' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  56:9  warning  'speed3' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\components\GlassCard.astro
+   8:12  error    'AstroNode' is not defined                                                           no-undef
+   8:24  error    'AstroNode' is not defined                                                           no-undef
+  15:2   warning  'children' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\components\MagneticButton.astro
+  9:12  error  'AstroNode' is not defined  no-undef
+  9:24  error  'AstroNode' is not defined  no-undef
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\components\ParallaxSection.astro
+  8:12  error  'AstroNode' is not defined  no-undef
+  8:24  error  'AstroNode' is not defined  no-undef
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\components\ScrollReveal.astro
+  8:12  error  'AstroNode' is not defined  no-undef
+  8:24  error  'AstroNode' is not defined  no-undef
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\components\TechTag.astro
+  32:7  warning  'colorVar' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  51:7  warning  'element' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\components\TiltCard.astro
+  8:12  error  'AstroNode' is not defined  no-undef
+  8:24  error  'AstroNode' is not defined  no-undef
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\layouts\BlogPost.astro
+  9:8  warning  'GradientText' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\layouts\BlogPostGrass.astro
+    10:10  warning  'SITE_TITLE' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  1094:26  warning  'title' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  1099:5   warning  Unexpected console statement                                                  no-console
+  1103:6   warning  Unexpected console statement                                                  no-console
+  1158:6   warning  Unexpected console statement                                                  no-console
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\pages\blog\[...slug].astro
+   7:10  warning  'extractHeadings' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+  36:18  warning  'remarkPluginFrontmatter' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\pages\contact.astro
+    6:40  warning  'AUTHOR' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  660:12  warning  'data' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\24279\Desktop\myBlog\MyWeb\src\pages\tags\[tag].astro
+  8:22  warning  'SITE_DESCRIPTION' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+✖ 41 problems (12 errors, 29 warnings)
+

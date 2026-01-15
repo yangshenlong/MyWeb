@@ -1,514 +1,519 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import HeaderArchitectural from '../components/HeaderArchitectural.astro';
-import PageLoader from '../components/PageLoader.astro';
-import ScrollProgress from '../components/ScrollProgress.astro';
-import CursorGlow from '../components/CursorGlow.astro';
-import GradientText from '../components/GradientText.astro';
-import MagneticButton from '../components/MagneticButton.astro';
-import BackToTop from '../components/BackToTop.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import HeaderArchitectural from "../components/HeaderArchitectural.astro";
+import PageLoader from "../components/PageLoader.astro";
+import ScrollProgress from "../components/ScrollProgress.astro";
+import CursorGlow from "../components/CursorGlow.astro";
+import GradientText from "../components/GradientText.astro";
+import MagneticButton from "../components/MagneticButton.astro";
+import BackToTop from "../components/BackToTop.astro";
+import SkillScatterChart from "../components/SkillScatterChart.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 
 const skills = [
-	{ category: 'Shader 开发', items: ['HLSL', 'GLSL', 'Shader Graph', 'Compute Shader'] },
-	{ category: '渲染技术', items: ['Unity', 'Unreal Engine 5', 'PBR', 'Real-time GI', 'Deferred Rendering'] },
-	{ category: '工具开发', items: ['Python', 'C#', 'Maya API', 'Houdini'] },
-	{ category: '其他技能', items: ['Git', 'Linux', 'Technical Design'] }
+  { category: "Shader 开发", items: ["HLSL", "GLSL", "Shader Graph", "Compute Shader"] },
+  {
+    category: "渲染技术",
+    items: ["Unity", "Unreal Engine 5", "PBR", "Real-time GI", "Deferred Rendering"],
+  },
+  { category: "工具开发", items: ["Python", "C#", "Maya API", "Houdini"] },
+  { category: "其他技能", items: ["Git", "Linux", "Technical Design"] },
 ];
 
 const projects = [
-	{
-		title: 'Water Shader System',
-		category: 'Shader',
-		year: '2024',
-		description: 'Real-time water rendering with reflection, refraction, and foam effects using Gerstner waves.',
-		tags: ['HLSL', 'Unity', 'Shader Graph', 'Gerstner Waves']
-	},
-	{
-		title: 'Maya Auto UV Tool',
-		category: 'Tools',
-		year: '2024',
-		description: 'Python-based UV automation tool for procedural texture mapping and UV layout optimization.',
-		tags: ['Python', 'Maya API', 'GUI Development']
-	},
-	{
-		title: 'Volumetric GI System',
-		category: 'Rendering',
-		year: '2024',
-		description: 'Implementation of real-time volumetric global illumination using voxel cone tracing.',
-		tags: ['HLSL', 'Compute Shader', 'Voxel Cone Tracing']
-	},
-	{
-		title: 'Custom Render Pipeline',
-		category: 'Rendering',
-		year: '2024',
-		description: 'Built a custom rendering pipeline with forward+ rendering, instancing, and LOD systems.',
-		tags: ['Unity', 'C#', 'SRP', 'Instancing']
-	},
-	{
-		title: 'Procedural Vegetation',
-		category: 'Tools',
-		year: '2024',
-		description: 'Procedural grass and vegetation system with wind interaction and LOD transitions.',
-		tags: ['HLSL', 'Geometry Shader', 'GPU Instancing']
-	},
-	{
-		title: 'Shader Debugger',
-		category: 'Tools',
-		year: '2024',
-		description: 'Real-time shader debugging tool for visualizing intermediate shader values and states.',
-		tags: ['C#', 'Unity Editor', 'Graphics Debugging']
-	},
-	{
-		title: 'Dissolve Effect',
-		category: 'Shader',
-		year: '2024',
-		description: 'Procedural dissolve effects with noise-based erosion and emission edges.',
-		tags: ['HLSL', 'Noise Functions', 'Shader Graph']
-	},
-	{
-		title: 'Toon Rendering',
-		category: 'Rendering',
-		year: '2024',
-		description: 'Custom toon shading system with outline effects and color banding.',
-		tags: ['Unity', 'HLSL', 'Post-processing']
-	}
+  {
+    title: "Water Shader System",
+    category: "Shader",
+    year: "2024",
+    description:
+      "Real-time water rendering with reflection, refraction, and foam effects using Gerstner waves.",
+    tags: ["HLSL", "Unity", "Shader Graph", "Gerstner Waves"],
+  },
+  {
+    title: "Maya Auto UV Tool",
+    category: "Tools",
+    year: "2024",
+    description:
+      "Python-based UV automation tool for procedural texture mapping and UV layout optimization.",
+    tags: ["Python", "Maya API", "GUI Development"],
+  },
+  {
+    title: "Volumetric GI System",
+    category: "Rendering",
+    year: "2024",
+    description:
+      "Implementation of real-time volumetric global illumination using voxel cone tracing.",
+    tags: ["HLSL", "Compute Shader", "Voxel Cone Tracing"],
+  },
+  {
+    title: "Custom Render Pipeline",
+    category: "Rendering",
+    year: "2024",
+    description:
+      "Built a custom rendering pipeline with forward+ rendering, instancing, and LOD systems.",
+    tags: ["Unity", "C#", "SRP", "Instancing"],
+  },
+  {
+    title: "Procedural Vegetation",
+    category: "Tools",
+    year: "2024",
+    description:
+      "Procedural grass and vegetation system with wind interaction and LOD transitions.",
+    tags: ["HLSL", "Geometry Shader", "GPU Instancing"],
+  },
+  {
+    title: "Shader Debugger",
+    category: "Tools",
+    year: "2024",
+    description:
+      "Real-time shader debugging tool for visualizing intermediate shader values and states.",
+    tags: ["C#", "Unity Editor", "Graphics Debugging"],
+  },
+  {
+    title: "Dissolve Effect",
+    category: "Shader",
+    year: "2024",
+    description: "Procedural dissolve effects with noise-based erosion and emission edges.",
+    tags: ["HLSL", "Noise Functions", "Shader Graph"],
+  },
+  {
+    title: "Toon Rendering",
+    category: "Rendering",
+    year: "2024",
+    description: "Custom toon shading system with outline effects and color banding.",
+    tags: ["Unity", "HLSL", "Post-processing"],
+  },
 ];
 ---
 
 <!doctype html>
 <html lang="zh-CN">
-	<head>
-		<BaseHead title={`简历 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
-	</head>
-	<body class="dark">
-		<PageLoader />
-		<ScrollProgress />
-		<CursorGlow />
-		<HeaderArchitectural />
+  <head>
+    <BaseHead title={`简历 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="dark">
+    <PageLoader />
+    <ScrollProgress />
+    <CursorGlow />
+    <HeaderArchitectural />
 
-		<main class="resume-page">
-			<div class="page-header">
-					<div class="header-content">
-						<div class="header-label">RESUME</div>
-						<h1 class="header-title"><GradientText>杨慎龙</GradientText></h1>
-						<p class="header-subtitle">Technical Artist · Shader Development · Tools Pipeline</p>
-					</div>
-				</div>
+    <main class="resume-page">
+      <div class="page-header">
+        <div class="header-content">
+          <div class="header-label">RESUME</div>
+          <h1 class="header-title"><GradientText>杨慎龙</GradientText></h1>
+          <p class="header-subtitle">Technical Artist · Shader Development · Tools Pipeline</p>
+        </div>
+      </div>
 
-			<div class="resume-content">
-				<ScrollProgress delay={0}>
-					<section class="resume-section">
-						<h2 class="section-title">
-							<span class="title-icon">👤</span>
-							关于我
-						</h2>
-						<div class="section-content">
-							<p class="bio">
-								[关于我 - 占位符]
-							</p>
-							<div class="contact-info">
-								<div class="contact-item">
-									<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-										<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-										<polyline points="22,6 12,13 2,6"></polyline>
-									</svg>
-									<span>xgg000303@163.com</span>
-								</div>
-								<div class="contact-item">
-									<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-										<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-									</svg>
-									<a href="https://github.com/yangshenlong" target="_blank">github.com/yangshenlong</a>
-								</div>
-							</div>
-						</div>
-					</section>
-				</ScrollReveal>
+      <div class="resume-content">
+        <section class="resume-section">
+          <h2 class="section-title">
+            <span class="title-icon">💻</span>
+            专业技能
+          </h2>
+          <div class="skills-grid">
+            {
+              skills.map((skillGroup) => (
+                <div class="skill-category-block">
+                  <h3 class="skill-category">{skillGroup.category}</h3>
+                  <div class="skill-items">
+                    {skillGroup.items.map((item) => (
+                      <span class="skill-item">{item}</span>
+                    ))}
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </section>
 
-				<ScrollProgress delay={100}>
-					<section class="resume-section">
-						<h2 class="section-title">
-							<span class="title-icon">💻</span>
-							专业技能
-						</h2>
-						<div class="section-content">
-							{skills.map((skillGroup) => (
-								<div class="skill-group">
-									<h3 class="skill-category">{skillGroup.category}</h3>
-									<div class="skill-items">
-										{skillGroup.items.map((item) => (
-											<span class="skill-item">{item}</span>
-										))}
-									</div>
-								</div>
-							))}
-						</div>
-					</section>
-				</ScrollReveal>
+        <section class="resume-section">
+          <h2 class="section-title">
+            <span class="title-icon">📊</span>
+            技能分布
+          </h2>
+          <SkillScatterChart showLegend={true} />
+        </section>
 
-				<ScrollProgress delay={200}>
-					<section class="resume-section">
-						<h2 class="section-title">
-							<span class="title-icon">📁</span>
-							项目作品
-						</h2>
-						<div class="section-content">
-							<div class="projects-timeline">
-								{projects.map((project) => (
-									<div class="project-item">
-										<div class="project-year">{project.year}</div>
-										<div class="project-info">
-											<h3 class="project-title">{project.title}</h3>
-											<p class="project-description">{project.description}</p>
-											<div class="project-tags">
-												{project.tags.map((tag) => (
-													<span class="tag">{tag}</span>
-												))}
-											</div>
-										</div>
-									</div>
-								))}
-							</div>
-						</div>
-					</section>
-			</div>
+        <section class="resume-section">
+          <h2 class="section-title">
+            <span class="title-icon">👤</span>
+            关于我
+          </h2>
+          <div class="section-content">
+            <p class="bio">[关于我 - 占位符]</p>
+            <div class="contact-info">
+              <div class="contact-item">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                  ></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <span>xgg000303@163.com</span>
+              </div>
+              <div class="contact-item">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+                  ></path>
+                </svg>
+                <a href="https://github.com/yangshenlong" target="_blank">github.com/yangshenlong</a
+                >
+              </div>
+            </div>
+          </div>
+        </section>
 
-			<ScrollProgress>
-				<div class="cta-section">
-					<h2 class="cta-title">联系我</h2>
-					<p class="cta-description">可以通过邮件或 GitHub 联系我</p>
-					<div class="cta-buttons">
-						<MagneticButton href="mailto:xgg000303@163.com" class="cta-button primary">
-							<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-								<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-								<polyline points="22,6 12,13 2,6"></polyline>
-							</svg>
-							发送邮件
-						</MagneticButton>
-						<MagneticButton href="https://github.com/yangshenlong" class="cta-button secondary">
-							<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-								<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-							</svg>
-							GitHub
-						</MagneticButton>
-					</div>
-				</div>
-			</ScrollReveal>
-		</main>
+        <section class="resume-section">
+          <h2 class="section-title">
+            <span class="title-icon">📊</span>
+            技能分布
+          </h2>
+          <div class="section-content">
+            <SkillScatterChart showLegend={true} />
+          </div>
+        </section>
 
-		<BackToTop />
-		<Footer />
+        <section class="resume-section">
+          <h2 class="section-title">
+            <span class="title-icon">📁</span>
+            项目作品
+          </h2>
+          <div class="section-content">
+            <div class="projects-timeline">
+              {
+                projects.map((project) => (
+                  <div class="project-item">
+                    <div class="project-year">{project.year}</div>
+                    <div class="project-info">
+                      <h3 class="project-title">{project.title}</h3>
+                      <p class="project-description">{project.description}</p>
+                      <div class="project-tags">
+                        {project.tags.map((tag) => (
+                          <span class="tag">{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+      </div>
 
-		<style>
-			.resume-page {
-				min-height: 100vh;
-				background: var(--color-bg-primary);
-			}
+      <section class="cta-section">
+        <h2 class="cta-title">联系我</h2>
+        <p class="cta-description">可以通过邮件或 GitHub 联系我</p>
+        <div class="cta-buttons">
+          <MagneticButton href="mailto:xgg000303@163.com" class="cta-button primary">
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+              ></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            发送邮件
+          </MagneticButton>
+          <MagneticButton href="https://github.com/yangshenlong" class="cta-button secondary">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path
+                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+              ></path>
+            </svg>
+            GitHub
+          </MagneticButton>
+        </div>
+      </section>
+    </main>
 
-			.page-header {
-				padding: 6em 2em 4em;
-				text-align: center;
-				background: linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
-				border-bottom: 1px solid rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-			}
+    <BackToTop />
+    <Footer />
 
-			.header-content {
-				max-width: 800px;
-				margin: 0 auto;
-			}
+    <style>
+      .resume-page {
+        min-height: 100vh;
+        background: var(--color-bg-primary);
+      }
 
-			.header-label {
-				display: inline-block;
-				padding: 0.5em 1.5em;
-				background: rgba(99, 102, 241, 0.2);
-				border: 1px solid rgba(99, 102, 241, 0.3);
-				color: rgba(255, 255, 255, 0.9);
-				margin: 0 0 0.5em 0;
-				line-height: 1;
-				letter-spacing: -0.02em;
-			}
+      .page-header {
+        padding: 6em 2em 4em;
+        text-align: center;
+        background: linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
+        border-bottom: 1px solid rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+      }
 
-			.header-subtitle {
-				font-size: 1.3em;
-				color: rgba(255, 255, 255, 0.6);
-				letter-spacing: 0.2em;
-			}
+      .header-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
 
-			.resume-content {
-				max-width: 900px;
-				margin: 0 auto;
-				padding: 4em 2em;
-			}
+      .header-label {
+        display: inline-block;
+        padding: 0.5em 1.5em;
+        background: rgba(99, 102, 241, 0.2);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0 0 0.5em 0;
+        line-height: 1;
+        letter-spacing: -0.02em;
+      }
 
-			.resume-section {
-				margin-bottom: 4em;
-			}
+      .header-subtitle {
+        font-size: 1.3em;
+        color: rgba(255, 255, 255, 0.6);
+        letter-spacing: 0.2em;
+      }
 
-			.section-title {
-				display: flex;
-				align-items: center;
-				gap: 0.75em;
-				font-size: 2em;
-				font-weight: 700;
-				color: var(--color-text-primary);
-				margin: 0 0.2em 0;
-				padding-bottom: 0.5em;
-				border-bottom: 2px solid var(--border-standard);
-			}
+      .resume-content {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 4em 2em;
+      }
 
-			.title-icon {
-				font-size: 1.2em;
-			}
+      .resume-section {
+        margin-bottom: 4em;
+      }
 
-			.section-content {
-				background: rgba(255, 255, 255, var(--glass-opacity-bg));
-				border: 1px solid var(--border-standard);
-				border-radius: 16px;
-				padding: 2em;
-			}
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75em;
+        font-size: 1.8em;
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin: 0 0 1.5em 0;
+      }
 
-			.bio {
-				color: rgba(255, 255, 255, 0.8);
-				line-height: 1.8;
-				font-size: 1.05em;
-				margin: 0 0 2em 0;
-			}
+      .title-icon {
+        font-size: 1.2em;
+      }
 
-			.contact-info {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2em;
-			}
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2em;
+      }
 
-			.contact-item {
-				display: flex;
-				align-items: center;
-				gap: 0.75em;
-				color: rgba(255, 255, 255, 0.7);
-				font-size: 0.95em;
-			}
+      .skill-category-block {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75em;
+      }
 
-			.contact-item a {
-				color: rgba(99, 102, 241, 0.9);
-				text-decoration: none;
-				transition: color 0.3s ease;
-			}
+      .skill-category {
+        font-size: 1em;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
 
-			.contact-item a:hover {
-				color: #a855f7;
-			}
+      .skill-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+      }
 
-			.skill-group {
-				margin-bottom: 2em;
-			}
+      .skill-item {
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.9);
+        padding: 0.4em 0.8em;
+        border-radius: 6px;
+        font-size: 0.85em;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.3s ease;
+      }
 
-			.skill-group:last-child {
-				margin-bottom: 0;
-			}
+      .skill-item:hover {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: rgba(99, 102, 241, 0.4);
+      }
 
-			.skill-category {
-				font-size: 1.2em;
-				font-weight: 600;
-				color: #ffffff;
-				margin: 0 0 1em 0;
-			}
+      .projects-timeline {
+        position: relative;
+        padding-left: 2em;
+      }
 
-			.skill-items {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.75em;
-			}
+      .projects-timeline::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(180deg, #6366f1 0%, #a855f7 100%);
+      }
 
-			.skill-item {
-				background: rgba(99, 102, 241, 0.2);
-				color: rgba(255, 255, 255, 0.9);
-				padding: 0.5em 1em;
-				border-radius: 8px;
-				font-size: 0.95em;
-				font-weight: 500;
-				border: 1px solid rgba(99, 102, 241, 0.3);
-				transition: all 0.3s ease;
-			}
+      .project-item {
+        position: relative;
+        padding-bottom: 3em;
+      }
 
-			.skill-item:hover {
-				background: rgba(99, 102, 241, 0.3);
-				border-color: rgba(99, 102, 241, 0.5);
-				transform: translateY(-2px);
-			}
+      .project-item:last-child {
+        padding-bottom: 0;
+      }
 
-			.projects-timeline {
-				position: relative;
-				padding-left: 2em;
-			}
+      .project-year {
+        display: inline-block;
+        padding: 0.3em 0.8em;
+        background: rgba(99, 102, 241, 0.2);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.85em;
+        font-weight: 600;
+        border-radius: 6px;
+        margin-bottom: 0.75em;
+      }
 
-			.projects-timeline::before {
-				content: '';
-				position: absolute;
-				left: 0;
-				top: 0;
-				bottom: 0;
-				width: 2px;
-				background: linear-gradient(180deg, #6366f1 0%, #a855f7 100%);
-			}
+      .project-info {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border-standard);
+        border-radius: 12px;
+        padding: 1.5em;
+        transition: all 0.3s ease;
+      }
 
-			.project-item {
-				position: relative;
-				padding-bottom: 3em;
-			}
+      .project-info:hover {
+        background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+        border-color: rgba(99, 102, 241, 0.3);
+      }
 
-			.project-item:last-child {
-				padding-bottom: 0;
-			}
+      .project-title {
+        font-size: 1.3em;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0 0 0.5em 0;
+      }
 
-			.project-year {
-				display: inline-block;
-				padding: 0.3em 0.8em;
-				background: rgba(99, 102, 241, 0.2);
-				color: rgba(255, 255, 255, 0.9);
-				font-size: 0.85em;
-				font-weight: 600;
-				border-radius: 6px;
-				margin-bottom: 0.75em;
-			}
+      .project-description {
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.7;
+        margin: 0 0 1em 0;
+      }
 
-			.project-info {
-				background: rgba(255, 255, 255, 0.03);
-				border: 1px solid var(--border-standard);
-				border-radius: 12px;
-				padding: 1.5em;
-				transition: all 0.3s ease;
-			}
+      .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+      }
 
-			.project-info:hover {
-				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-				border-color: rgba(99, 102, 241, 0.3);
-			}
+      .tag {
+        font-size: 0.75em;
+        letter-spacing: 0.05em;
+        padding: 0.3em 0.8em;
+        background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+        border: 1px solid var(--border-standard);
+        color: rgba(255, 255, 255, 0.6);
+      }
 
-			.project-title {
-				font-size: 1.3em;
-				font-weight: 700;
-				color: #ffffff;
-				margin: 0 0 0.5em 0;
-			}
+      .cta-section {
+        background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.1) 100%);
+        padding: 6em 2em;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+      }
 
-			.project-description {
-				color: rgba(255, 255, 255, 0.7);
-				line-height: 1.7;
-				margin: 0 0 1em 0;
-			}
+      .cta-title {
+        font-size: clamp(2em, 5vw, 3.5em);
+        font-weight: 800;
+        color: #ffffff;
+        margin: 0 0 1em 0;
+      }
 
-			.project-tags {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.5em;
-			}
+      .cta-description {
+        font-size: 1.1em;
+        color: rgba(255, 255, 255, 0.6);
+        margin: 0 0 2em 0;
+      }
 
-			.tag {
-				font-size: 0.75em;
-				letter-spacing: 0.05em;
-				padding: 0.3em 0.8em;
-				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-				border: 1px solid var(--border-standard);
-				color: rgba(255, 255, 255, 0.6);
-			}
+      .cta-buttons {
+        display: flex;
+        gap: 1em;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
 
-			.cta-section {
-				background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.1) 100%);
-				padding: 6em 2em;
-				text-align: center;
-				border-top: 1px solid rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-			}
+      .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75em;
+        padding: 1.25em 2.5em;
+        font-size: 1em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        text-decoration: none;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+      }
 
-			.cta-title {
-				font-size: clamp(2em, 5vw, 3.5em);
-				font-weight: 800;
-				color: #ffffff;
-				margin: 0 0 1em 0;
-			}
+      .cta-button.primary {
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        color: #ffffff;
+        box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+      }
 
-			.cta-description {
-				font-size: 1.1em;
-				color: rgba(255, 255, 255, 0.6);
-				margin: 0 0 2em 0;
-			}
+      .cta-button.primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 60px rgba(99, 102, 241, 0.6);
+      }
 
-			.cta-buttons {
-				display: flex;
-				gap: 1em;
-				justify-content: center;
-				flex-wrap: wrap;
-			}
+      .cta-button.secondary {
+        background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
 
-			.cta-button {
-				display: inline-flex;
-				align-items: center;
-				gap: 0.75em;
-				padding: 1.25em 2.5em;
-				font-size: 1em;
-				font-weight: 600;
-				text-transform: uppercase;
-				letter-spacing: 0.1em;
-				text-decoration: none;
-				border-radius: 50px;
-				transition: all 0.3s ease;
-			}
+      .cta-button.secondary:hover {
+        background: var(--border-hover);
+        border-color: var(--color-text-muted);
+        transform: translateY(-3px);
+      }
 
-			.cta-button.primary {
-				background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-				color: #ffffff;
-				box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
-			}
+      @media (max-width: 768px) {
+        .page-header {
+          padding: 4em 1.5em 3em;
+        }
 
-			.cta-button.primary:hover {
-				transform: translateY(-3px);
-				box-shadow: 0 20px 60px rgba(99, 102, 241, 0.6);
-			}
+        .resume-content {
+          padding: 3em 1.5em;
+        }
 
-			.cta-button.secondary {
-				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-				color: #ffffff;
-				border: 1px solid rgba(255, 255, 255, 0.2);
-			}
+        .skills-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5em;
+        }
 
-			.cta-button.secondary:hover {
-				background: var(--border-hover);
-				border-color: var(--color-text-muted);
-				transform: translateY(-3px);
-			}
+        .projects-timeline {
+          padding-left: 1.5em;
+        }
 
-			@media (max-width: 768px) {
-				.page-header {
-					padding: 4em 1.5em 3em;
-				}
+        .cta-buttons {
+          flex-direction: column;
+        }
 
-				.resume-content {
-					padding: 3em 1.5em;
-				}
-
-				.section-content {
-					padding: 1.5em;
-				}
-
-				.contact-info {
-					flex-direction: column;
-					gap: 1em;
-				}
-
-				.projects-timeline {
-					padding-left: 1.5em;
-				}
-
-				.cta-buttons {
-					flex-direction: column;
-				}
-
-				.cta-button {
-					width: 100%;
-					justify-content: center;
-				}
-			}
-		</style>
-	</body>
+        .cta-button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    </style>
+  </body>
 </html>

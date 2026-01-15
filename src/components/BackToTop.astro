@@ -3,131 +3,140 @@
  * 返回顶部按钮组件
  * 带平滑滚动和进度指示
  */
-
 ---
 
 <div class="back-to-top" id="backToTop">
-	<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-		<path d="M12 19V5M5 12l7-7 7 7"/>
-	</svg>
-	<div class="progress-ring">
-		<svg viewBox="0 0 50 50">
-			<circle class="progress-bg" cx="25" cy="25" r="23"/>
-			<circle class="progress-bar" cx="25" cy="25" r="23" id="progressBar"/>
-		</svg>
-	</div>
+  <svg
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+  >
+    <path d="M12 19V5M5 12l7-7 7 7"></path>
+  </svg>
+  <div class="progress-ring">
+    <svg viewBox="0 0 50 50">
+      <circle class="progress-bg" cx="25" cy="25" r="23"></circle>
+      <circle class="progress-bar" cx="25" cy="25" r="23" id="progressBar"></circle>
+    </svg>
+  </div>
 </div>
 
 <script>
-	const backToTop = document.getElementById('backToTop');
-	const progressBar = document.getElementById('progressBar');
+  const backToTop = document.getElementById("backToTop") as HTMLElement | null;
+  const progressBar = document.getElementById("progressBar") as HTMLElement | null;
 
-	// 滚动监听
-	window.addEventListener('scroll', () => {
-		const scrolled = window.scrollY;
-		const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-		const progress = Math.min((scrolled / maxScroll) * 100, 100);
+  if (!backToTop || !progressBar) {
+    // Elements not found, cannot initialize
+  } else {
+    const btn = backToTop;
+    const bar = progressBar;
 
-		// 更新进度环
-		const circumference = 2 * Math.PI * 23;
-		const offset = circumference - (progress / 100) * circumference;
-		progressBar.style.strokeDasharray = circumference;
-		progressBar.style.strokeDashoffset = offset;
+    window.addEventListener("scroll", () => {
+      const scrolled = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = Math.min((scrolled / maxScroll) * 100, 100);
 
-		// 显示/隐藏按钮
-		if (scrolled > 300) {
-			backToTop.classList.add('visible');
-		} else {
-			backToTop.classList.remove('visible');
-		}
-	});
+      const circumference = 2 * Math.PI * 23;
+      const offset = circumference - (progress / 100) * circumference;
+      bar.style.strokeDasharray = String(circumference);
+      bar.style.strokeDashoffset = String(offset);
 
-	// 点击返回顶部
-	backToTop.addEventListener('click', () => {
-		window.scrollTo({
-			top: 0,
-			behavior: 'smooth'
-		});
-	});
+      if (scrolled > 300) {
+        btn.classList.add("visible");
+      } else {
+        btn.classList.remove("visible");
+      }
+    });
+
+    btn.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+  }
 </script>
 
 <style>
-	.back-to-top {
-		position: fixed;
-		bottom: 2em;
-		right: 2em;
-		width: 50px;
-		height: 50px;
-		background: rgba(255, 79, 0, 0.9);
-		border: none;
-		border-radius: 50%;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: #ffffff;
-		opacity: 0;
-		visibility: hidden;
-		transform: translateY(20px);
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-		z-index: 1000;
-		box-shadow: 0 4px 15px rgba(255, 79, 0, 0.4);
-	}
+  .back-to-top {
+    position: fixed;
+    bottom: 2em;
+    right: 2em;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 79, 0, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(255, 79, 0, 0.4);
+  }
 
-	.back-to-top.visible {
-		opacity: 1;
-		visibility: visible;
-		transform: translateY(0);
-	}
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
 
-	.back-to-top:hover {
-		background: #FF4F00;
-		transform: translateY(-3px);
-		box-shadow: 0 6px 20px rgba(255, 79, 0, 0.6);
-	}
+  .back-to-top:hover {
+    background: #ff4f00;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 79, 0, 0.6);
+  }
 
-	.back-to-top svg:first-child {
-		position: relative;
-		z-index: 2;
-	}
+  .back-to-top svg:first-child {
+    position: relative;
+    z-index: 2;
+  }
 
-	.progress-ring {
-		position: absolute;
-		top: -5px;
-		left: -5px;
-		width: 60px;
-		height: 60px;
-		pointer-events: none;
-	}
+  .progress-ring {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 60px;
+    height: 60px;
+    pointer-events: none;
+  }
 
-	.progress-ring svg {
-		transform: rotate(-90deg);
-	}
+  .progress-ring svg {
+    transform: rotate(-90deg);
+  }
 
-	.progress-bg {
-		fill: none;
-		stroke: rgba(255, 255, 255, 0.2);
-		stroke-width: 3;
-	}
+  .progress-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 3;
+  }
 
-	.progress-bar {
-		fill: none;
-		stroke: #ffffff;
-		stroke-width: 3;
-		stroke-linecap: round;
-	}
+  .progress-bar {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
 
-	@media (max-width: 768px) {
-		.back-to-top {
-			bottom: 1.5em;
-			right: 1.5em;
-			width: 45px;
-			height: 45px;
-		}
+  @media (max-width: 768px) {
+    .back-to-top {
+      bottom: 1.5em;
+      right: 1.5em;
+      width: 45px;
+      height: 45px;
+    }
 
-		.progress-ring {
-			width: 55px;
-			height: 55px;
-		}
-	}
+    .progress-ring {
+      width: 55px;
+      height: 55px;
+    }
+  }
 </style>

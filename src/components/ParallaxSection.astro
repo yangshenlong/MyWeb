@@ -5,52 +5,48 @@
  */
 
 interface Props {
-	children: any;
-	class?: string;
-	speed?: number;
+  class?: string;
+  speed?: number;
 }
 
-const { children, class: className, speed = 0.5 } = Astro.props;
+const { class: className, speed = 0.5 } = Astro.props;
 ---
 
-<div class:list={['parallax-section', className]} data-speed={speed}>
-	{children}
+<div class:list={["parallax-section", className]} data-speed={speed}>
+  <slot />
 </div>
 
 <style>
-	.parallax-section {
-		position: relative;
-		will-change: transform;
-		transition: transform 0.1s ease-out;
-	}
+  .parallax-section {
+    position: relative;
+    will-change: transform;
+    transition: transform 0.1s ease-out;
+  }
 </style>
 
 <script>
-	// 平滑滚动值
-	let scrollY = 0;
-	let targetScrollY = 0;
+  let scrollY = 0;
+  let targetScrollY = 0;
 
-	// 监听滚动
-	window.addEventListener('scroll', () => {
-		targetScrollY = window.scrollY;
-	});
+  window.addEventListener("scroll", () => {
+    targetScrollY = window.scrollY;
+  });
 
-	// 使用 requestAnimationFrame 平滑更新
-	function updateParallax() {
-		// 缓动效果
-		scrollY += (targetScrollY - scrollY) * 0.1;
+  function updateParallax() {
+    scrollY += (targetScrollY - scrollY) * 0.1;
 
-		document.querySelectorAll('.parallax-section').forEach(section => {
-			const speed = parseFloat(section.dataset.speed || '0.5');
-			const rect = section.getBoundingClientRect();
-			const sectionTop = rect.top + window.scrollY;
-			const offset = (scrollY - sectionTop) * speed;
+    document.querySelectorAll(".parallax-section").forEach((section) => {
+      const sectionEl = section as HTMLElement;
+      const speed = parseFloat(sectionEl.dataset.speed || "0.5");
+      const rect = sectionEl.getBoundingClientRect();
+      const sectionTop = rect.top + window.scrollY;
+      const offset = (scrollY - sectionTop) * speed;
 
-			section.style.transform = `translateY(${offset}px)`;
-		});
+      sectionEl.style.transform = `translateY(${offset}px)`;
+    });
 
-		requestAnimationFrame(updateParallax);
-	}
+    requestAnimationFrame(updateParallax);
+  }
 
-	updateParallax();
+  updateParallax();
 </script>
