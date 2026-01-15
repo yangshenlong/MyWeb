@@ -1,4 +1,5 @@
 ---
+import BaseHead from '../components/BaseHead.astro';
 import HeaderArchitectural from '../components/HeaderArchitectural.astro';
 import ProjectGridArchitectural from '../components/ProjectGridArchitectural.astro';
 import BackToTop from '../components/BackToTop.astro';
@@ -72,36 +73,226 @@ const allProjects = [
 		link: '#'
 	}
 ];
+
+// Extract all unique categories
+const allCategories = Array.from(new Set(allProjects.map(p => p.category)));
+const categoryCounts = allCategories.map(category => ({
+	category,
+	count: allProjects.filter(p => p.category === category).length
+}));
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Work | {SITE_TITLE}</title>
-		<meta name="description" content={SITE_DESCRIPTION} />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet" />
+		<BaseHead title={`Work | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 
-		<style is:global>
-			* {
+		<style>
+			.page-header {
+				padding: 180px 4em 6em;
+				background: var(--color-bg-primary);
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				max-width: 1600px;
+				margin: 0 auto;
+			}
+
+			.page-content {
+				max-width: 1600px;
+				margin: 0 auto;
+			}
+
+			.category-filter {
+				display: flex;
+				gap: 1em;
+				flex-wrap: wrap;
+				margin-bottom: 4em;
+				padding-bottom: 2em;
+				border-bottom: 1px solid var(--border-subtle);
+			}
+
+			.category-btn {
+				position: relative;
+				display: flex;
+				align-items: center;
+				gap: 0.75em;
+				padding: 0.75em 1.5em;
+				background: rgba(255, 255, 255, 0.03);
+				backdrop-filter: blur(10px);
+				border: 1px solid var(--border-subtle);
+				border-radius: var(--radius-full);
+				font-size: 0.85em;
+				color: var(--color-text-secondary);
+				cursor: pointer;
+				transition: all 0.3s ease;
+				overflow: hidden;
+			}
+
+			.category-btn::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: -100%;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(
+					90deg,
+					transparent,
+					rgba(255, 255, 255, 0.05),
+					transparent
+				);
+				transition: left 0.4s ease;
+			}
+
+			.category-btn:hover {
+				background: rgba(255, 255, 255, 0.08);
+				border-color: var(--border-hover);
+				color: var(--color-text-primary);
+				transform: translateY(-2px);
+			}
+
+			.category-btn:hover::before {
+				left: 100%;
+			}
+
+			.category-btn.active {
+				background: linear-gradient(
+					135deg,
+					rgba(var(--color-accent-primary), 0.2),
+					rgba(var(--color-accent-secondary), 0.15)
+				);
+				border-color: rgba(var(--color-accent-primary), 0.4);
+				color: rgba(255, 255, 255, 0.95);
+			}
+
+			.category-btn.active::after {
+				content: '';
+				position: absolute;
+				bottom: -1px;
+				left: 50%;
+				transform: translateX(-50%);
+				width: 20px;
+				height: 3px;
+				background: linear-gradient(90deg, #6366f1, #a855f7);
+				border-radius: 2px;
+			}
+
+			.category-count {
+				font-size: 0.75em;
+				color: var(--color-text-muted);
+				font-family: var(--font-mono);
+				padding: 0.2em 0.6em;
+				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+				border-radius: var(--radius-full);
+				transition: all 0.3s ease;
+			}
+
+			.category-btn.active .category-count {
+				color: rgba(255, 255, 255, 0.8);
+				background: rgba(99, 102, 241, 0.2);
+			}
+
+			.header-content {
+				flex: 1;
+			}
+
+			.breadcrumb {
+				display: flex;
+				align-items: center;
+				gap: 0.75em;
+				margin-bottom: 1.5em;
+			}
+
+			.breadcrumb-item {
+				font-size: 0.75em;
+				letter-spacing: 0.2em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.4);
+				transition: color 0.3s ease;
+			}
+
+			.breadcrumb-item:hover {
+				color: rgba(255, 255, 255, 0.7);
+			}
+
+			.breadcrumb-item.current {
+				color: rgba(255, 255, 255, 0.7);
+			}
+
+			.breadcrumb-separator {
+				color: rgba(255, 255, 255, 0.2);
+			}
+
+			.page-title {
+				font-size: clamp(3em, 8vw, 6em);
+				font-weight: 200;
+				letter-spacing: -0.03em;
+				line-height: 1;
+				margin: 0 0 0.5em 0;
+			}
+
+			.page-subtitle {
+				font-size: 1em;
+				letter-spacing: 0.2em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.4);
 				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
 			}
 
-			body {
-				font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-				background: #050505;
-				color: rgba(255, 255, 255, 0.9);
-				line-height: 1.6;
+			.header-decoration {
+				position: relative;
 			}
 
-			a {
-				color: inherit;
-				text-decoration: none;
+			.deco-number {
+				font-size: 8em;
+				font-weight: 100;
+				color: rgba(255, 255, 255, 0.03);
+				font-family: 'Space Mono', monospace;
+				line-height: 1;
+			}
+
+			@media (max-width: 1024px) {
+				.page-header {
+					padding: 180px 2em 4em;
+					flex-direction: column;
+					gap: 2em;
+				}
+
+				.header-decoration {
+					align-self: flex-end;
+				}
+
+				.deco-number {
+					font-size: 4em;
+				}
+			}
+
+			@media (max-width: 768px) {
+				.page-header {
+					padding: 120px 2em 4em;
+					flex-direction: column;
+					gap: 2em;
+					text-align: center;
+				}
+
+				.page-title {
+					font-size: 2.5em;
+				}
+
+				.header-decoration {
+					display: none;
+				}
+
+				.category-filter {
+					justify-content: center;
+				}
+
+				.category-btn {
+					flex: 1 0 auto;
+					min-width: 120px;
+				}
 			}
 		</style>
 	</head>
@@ -129,150 +320,53 @@ const allProjects = [
 		</section>
 
 		<!-- Projects Grid -->
-		<ProjectGridArchitectural projects={allProjects} />
+		<section class="page-content">
+			<!-- Category Filter -->
+			<div class="category-filter">
+				<button class="category-btn active" data-category="all">
+					全部
+					<span class="category-count">{allProjects.length}</span>
+				</button>
+				{categoryCounts.map(cat => (
+					<button class="category-btn" data-category={cat.category}>
+						{cat.category}
+						<span class="category-count">{cat.count}</span>
+					</button>
+				))}
+			</div>
+
+			<ProjectGridArchitectural projects={allProjects} />
+		</section>
 
 		<!-- Footer -->
 		<Footer />
 
 		<BackToTop />
 
-		<style>
-		.page-header {
-			padding: 180px 4em 6em;
-			background: #050505;
-			position: relative;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			max-width: 1600px;
-			margin: 0 auto;
-		}
+		<script>
+			// Category filter functionality
+			const filterButtons = document.querySelectorAll('.category-btn');
+			const projectItems = document.querySelectorAll('.project-item');
 
-		.header-content {
-			flex: 1;
-		}
+			filterButtons.forEach(btn => {
+				btn.addEventListener('click', () => {
+					const category = (btn as HTMLElement).dataset.category || 'all';
 
-		.breadcrumb {
-			display: flex;
-			align-items: center;
-			gap: 0.75em;
-			margin-bottom: 1.5em;
-		}
+					filterButtons.forEach(b => b.classList.remove('active'));
+					btn.classList.add('active');
 
-		.breadcrumb-item {
-			font-size: 0.75em;
-			letter-spacing: 0.2em;
-			text-transform: uppercase;
-			color: rgba(255, 255, 255, 0.4);
-			transition: color 0.3s ease;
-		}
+					projectItems.forEach(item => {
+						const projectEl = item as HTMLElement;
+						const itemCategory = projectEl.dataset.category || '';
 
-		.breadcrumb-item:hover {
-			color: rgba(255, 255, 255, 0.7);
-		}
-
-		.breadcrumb-item.current {
-			color: rgba(255, 255, 255, 0.7);
-		}
-
-		.breadcrumb-separator {
-			color: rgba(255, 255, 255, 0.2);
-		}
-
-		.page-title {
-			font-size: clamp(3em, 8vw, 6em);
-			font-weight: 200;
-			letter-spacing: -0.03em;
-			line-height: 1;
-			margin: 0 0 0.5em 0;
-		}
-
-		.page-subtitle {
-			font-size: 1em;
-			letter-spacing: 0.2em;
-			text-transform: uppercase;
-			color: rgba(255, 255, 255, 0.4);
-			margin: 0;
-		}
-
-		.header-decoration {
-			position: relative;
-		}
-
-		.deco-number {
-			font-size: 8em;
-			font-weight: 100;
-			color: rgba(255, 255, 255, 0.03);
-			font-family: 'Space Mono', monospace;
-			line-height: 1;
-		}
-
-			/* Footer styles moved to Footer.astro component */
-
-		.footer-content {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
-
-		.footer-left {
-			display: flex;
-			align-items: center;
-			gap: 1em;
-		}
-
-		.footer-text {
-			font-size: 0.85em;
-			color: rgba(255, 255, 255, 0.4);
-		}
-
-		.footer-divider {
-			color: rgba(255, 255, 255, 0.2);
-		}
-
-		.footer-right {
-			display: flex;
-			gap: 2em;
-		}
-
-		.footer-link {
-			font-size: 0.85em;
-			color: rgba(255, 255, 255, 0.5);
-			transition: color 0.3s ease;
-		}
-
-			@media (max-width: 1024px) {
-			.page-header {
-				padding: 180px 2em 4em;
-				flex-direction: column;
-				gap: 2em;
-			}
-
-			.header-decoration {
-				align-self: flex-end;
-			}
-
-			.deco-number {
-				font-size: 4em;
-			}
-		}
-
-		@media (max-width: 768px) {
-			.footer-content {
-				flex-direction: column;
-				gap: 1.5em;
-				text-align: center;
-			}
-
-			.footer-left {
-				flex-direction: column;
-				gap: 0.5em;
-			}
-
-			.footer-right {
-				gap: 1.5em;
-			}
-		}
-	</style>
+						if (category === 'all' || itemCategory === category) {
+							projectEl.style.display = '';
+						} else {
+							projectEl.style.display = 'none';
+						}
+					});
+				});
+			});
+		</script>
 	</body>
 </html>

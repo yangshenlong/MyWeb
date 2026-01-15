@@ -44,7 +44,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 
 			body {
 				font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-				background: #050505;
+				background: var(--color-bg-primary);
 				color: rgba(255, 255, 255, 0.9);
 				line-height: 1.8;
 				overflow-x: hidden;
@@ -61,7 +61,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 			}
 
 			::-webkit-scrollbar-track {
-				background: rgba(255, 255, 255, 0.02);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg));
 			}
 
 			::-webkit-scrollbar-thumb {
@@ -179,7 +179,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 				background: 
 					radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
 					radial-gradient(ellipse at 80% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
-					#050505;
+					var(--color-bg-primary);
 				position: relative;
 			}
 
@@ -218,11 +218,11 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 			}
 
 			.breadcrumb-item:hover {
-				color: rgba(255, 255, 255, 0.7);
+				color: var(--color-text-secondary);
 			}
 
 			.breadcrumb-item.current {
-				color: rgba(255, 255, 255, 0.7);
+				color: var(--color-text-secondary);
 			}
 
 			.breadcrumb-separator {
@@ -261,15 +261,15 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 			.meta-category,
 			.meta-author {
 				font-size: 0.85em;
-				color: rgba(255, 255, 255, 0.5);
+				color: var(--color-text-tertiary);
 				font-family: 'Space Mono', monospace;
 				letter-spacing: 0.1em;
 			}
 
 			.meta-category {
 				padding: 0.3em 0.8em;
-				background: rgba(255, 255, 255, 0.05);
-				border: 1px solid rgba(255, 255, 255, 0.08);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+				border: 1px solid var(--border-standard);
 			}
 
 			.tags-list {
@@ -299,7 +299,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 				height: 100%;
 				background: linear-gradient(90deg, 
 					transparent 0%, 
-					rgba(255, 255, 255, 0.1) 50%, 
+					var(--border-hover) 50%, 
 					transparent 100%);
 				transition: left 0.5s ease;
 			}
@@ -338,7 +338,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 				max-width: 95vw;
 				margin: 0 auto;
 				padding: 0 2em 6em;
-				background: #050505;
+				background: var(--color-bg-primary);
 			}
 
 			/* TOC Sidebar */
@@ -394,11 +394,11 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 				display: block;
 				line-height: 1.6;
 				border-left: 3px solid transparent;
-				background: rgba(255, 255, 255, 0.02);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg));
 			}
 
 			.toc-nav a:hover {
-				color: rgba(255, 255, 255, 0.95);
+				color: var(--color-text-primary);
 				background: rgba(99, 102, 241, 0.2);
 				border-left-color: rgba(99, 102, 241, 0.7);
 				transform: translateX(6px);
@@ -443,7 +443,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 			.article-body :global(h1) {
 				font-size: 2.5em;
 				font-weight: 600;
-				color: rgba(255, 255, 255, 0.95);
+				color: var(--color-text-primary);
 				margin: 0 0 1.2em 0;
 				padding-bottom: 0.5em;
 				border-bottom: 2px solid rgba(99, 102, 241, 0.3);
@@ -516,10 +516,10 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 				border-spacing: 0;
 				margin: 2em 0;
 				font-size: 0.95em;
-				background: rgba(255, 255, 255, 0.02);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg));
 				border-radius: 12px;
 				overflow: hidden;
-				border: 1px solid rgba(255, 255, 255, 0.08);
+				border: 1px solid var(--border-standard);
 				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 			}
 
@@ -527,7 +527,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 			.article-body :global(table td) {
 				padding: 1em 1.2em;
 				text-align: left;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+				border-bottom: 1px solid var(--border-standard);
 				min-width: 150px;
 				white-space: nowrap;
 			}
@@ -555,7 +555,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 			}
 
 			.article-body :global(table tbody tr:nth-child(even)) {
-				background: rgba(255, 255, 255, 0.02);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg));
 			}
 
 			.article-body :global(table tbody tr:hover) {
@@ -687,8 +687,8 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 			.article-body :global(pre.architecture-diagram code) {
 				white-space: pre;
 				tab-size: 2;
-				color: rgba(255, 255, 255, 0.95);
-				text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+				color: var(--color-text-primary);
+				text-shadow: 0 0 15px var(--color-text-muted);
 				font-weight: 500;
 			}
 
@@ -731,8 +731,8 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 			.article-body :global(pre.flow-diagram code) {
 				white-space: pre;
 				tab-size: 2;
-				color: rgba(255, 255, 255, 0.95);
-				text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+				color: var(--color-text-primary);
+				text-shadow: 0 0 15px var(--color-text-muted);
 				font-weight: 500;
 			}
 
@@ -775,8 +775,8 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 			.article-body :global(pre.tree-diagram code) {
 				white-space: pre;
 				tab-size: 2;
-				color: rgba(255, 255, 255, 0.95);
-				text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+				color: var(--color-text-primary);
+				text-shadow: 0 0 15px var(--color-text-muted);
 				font-weight: 500;
 			}
 
@@ -852,7 +852,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 				display: block;
 				text-align: center;
 				font-size: 0.85em;
-				color: rgba(255, 255, 255, 0.5);
+				color: var(--color-text-tertiary);
 				margin-top: -1em;
 				margin-bottom: 2em;
 				font-style: italic;
@@ -912,7 +912,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 				left: 50%;
 				top: 50%;
 				transform: translate(-50%, -50%);
-				background: #050505;
+				background: var(--color-bg-primary);
 				padding: 0 1em;
 				color: rgba(99, 102, 241, 0.6);
 				font-size: 1.2em;
@@ -923,12 +923,12 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 				text-align: center;
 				padding: 2em 0;
 				margin-top: 4em;
-				border-top: 1px solid rgba(255, 255, 255, 0.1);
+				border-top: 1px solid var(--border-hover);
 			}
 
 			.updated-info p {
 				font-size: 0.9em;
-				color: rgba(255, 255, 255, 0.5);
+				color: var(--color-text-tertiary);
 				font-style: italic;
 			}
 
@@ -936,7 +936,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 			.article-footer {
 				padding: 3em 4em;
 				background: #030303;
-				border-top: 1px solid rgba(255, 255, 255, 0.05);
+				border-top: 1px solid rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 			}
 
 			.footer-content {
@@ -969,7 +969,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : '';
 
 			.footer-link {
 				font-size: 0.85em;
-				color: rgba(255, 255, 255, 0.5);
+				color: var(--color-text-tertiary);
 				transition: color 0.3s ease;
 			}
 

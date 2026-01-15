@@ -1,4 +1,5 @@
 ---
+import BaseHead from '../../components/BaseHead.astro';
 import HeaderArchitectural from '../../components/HeaderArchitectural.astro';
 import GlassCard from '../../components/GlassCard.astro';
 import BackToTop from '../../components/BackToTop.astro';
@@ -38,33 +39,7 @@ const sortedPosts = taggedPosts.sort((a, b) =>
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>{tag} | {SITE_TITLE}</title>
-		<meta name="description" content={`${tag} 标签下的所有文章`} />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
-		<style is:global>
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
-			}
-
-			body {
-				font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-				background: #050505;
-				color: rgba(255, 255, 255, 0.9);
-				line-height: 1.6;
-			}
-
-			a {
-				color: inherit;
-				text-decoration: none;
-			}
-		</style>
+		<BaseHead title={`${tag} | ${SITE_TITLE}`} description={`${tag} 标签下的所有文章`} />
 	</head>
 
 	<body>
@@ -164,7 +139,7 @@ const sortedPosts = taggedPosts.sort((a, b) =>
 		<style>
 			.page-header {
 				padding: 180px 4em 6em;
-				background: #050505;
+				background: var(--color-bg-primary);
 				position: relative;
 				display: flex;
 				align-items: center;
@@ -235,7 +210,7 @@ const sortedPosts = taggedPosts.sort((a, b) =>
 			/* Posts Section */
 			.posts-section {
 				padding: 6em 4em;
-				background: #050505;
+				background: var(--color-bg-primary);
 			}
 
 			.posts-container {
@@ -285,7 +260,7 @@ const sortedPosts = taggedPosts.sort((a, b) =>
 				background: linear-gradient(
 					90deg,
 					transparent 0%,
-					rgba(255, 255, 255, 0.1) 50%,
+					var(--border-hover) 50%,
 					transparent 100%
 				);
 				transform: scaleX(0);
@@ -298,7 +273,7 @@ const sortedPosts = taggedPosts.sort((a, b) =>
 
 			.post-card:hover {
 				transform: translateX(8px);
-				background: rgba(255, 255, 255, 0.05);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 			}
 
 			.post-meta {
@@ -310,7 +285,7 @@ const sortedPosts = taggedPosts.sort((a, b) =>
 
 			.post-date {
 				font-size: 0.75em;
-				color: rgba(255, 255, 255, 0.5);
+				color: var(--color-text-tertiary);
 				font-family: 'Space Mono', monospace;
 				letter-spacing: 0.1em;
 			}
@@ -321,15 +296,15 @@ const sortedPosts = taggedPosts.sort((a, b) =>
 				text-transform: uppercase;
 				color: rgba(255, 255, 255, 0.4);
 				padding: 0.3em 0.8em;
-				background: rgba(255, 255, 255, 0.05);
-				border: 1px solid rgba(255, 255, 255, 0.08);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+				border: 1px solid var(--border-standard);
 			}
 
 			.post-title {
 				font-size: 1.5em;
 				font-weight: 300;
 				letter-spacing: -0.02em;
-				color: rgba(255, 255, 255, 0.95);
+				color: var(--color-text-primary);
 				margin: 0 0 0.75em 0;
 				line-height: 1.4;
 			}
@@ -351,9 +326,9 @@ const sortedPosts = taggedPosts.sort((a, b) =>
 				font-size: 0.7em;
 				letter-spacing: 0.1em;
 				padding: 0.3em 0.8em;
-				background: rgba(255, 255, 255, 0.05);
-				border: 1px solid rgba(255, 255, 255, 0.08);
-				color: rgba(255, 255, 255, 0.5);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+				border: 1px solid var(--border-standard);
+				color: var(--color-text-tertiary);
 			}
 
 			/* Empty State */
@@ -371,7 +346,7 @@ const sortedPosts = taggedPosts.sort((a, b) =>
 
 			.empty-message p {
 				font-size: 1em;
-				color: rgba(255, 255, 255, 0.5);
+				color: var(--color-text-tertiary);
 			}
 
 			/* Footer styles moved to Footer.astro component */

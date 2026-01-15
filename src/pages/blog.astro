@@ -24,24 +24,6 @@ allPosts.forEach(post => {
 });
 
 const sortedTags = Array.from(allTags).sort();
-
-// 计算所有标签的计数
-const tagCounts = new Map<string, number>();
-allPosts.forEach(post => {
-	(post.data.tags || []).forEach(tag => {
-		tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
-	});
-});
-
-// 获取最大计数用于标签云大小
-const maxCount = Math.max(...Array.from(tagCounts.values()));
-
-// 选取部分标签用于侧边栏标签云（选取前12个）
-const popularTags = Array.from(tagCounts.entries())
-	.sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'zh-CN'))
-	.slice(0, 12);
-
-const showMoreTagsLink = tagCounts.size > 12;
 ---
 
 <!doctype html>
@@ -160,6 +142,26 @@ const showMoreTagsLink = tagCounts.size > 12;
 			<div class="blog-container">
 				<!-- 搜索和过滤 -->
 				<aside class="sidebar">
+					<!-- Activity Heatmap Card -->
+					<GlassCard class="activity-card" hover={true}>
+						<div class="card-header">
+							<div class="header-icon">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+									<path d="M3 3v18h18" stroke-linecap="round" stroke-linejoin="round"/>
+									<path d="M7 16l4-4 4 4 5-6" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</div>
+							<h3>Activity</h3>
+						</div>
+						<BlogActivityHeatmap
+							collection="blog"
+							weeks={52}
+							showStats={true}
+							includeUpdates={true}
+							theme="dark"
+						/>
+					</GlassCard>
+
 					<!-- Search Card -->
 					<GlassCard class="search-card" hover={true}>
 						<div class="search-header">
@@ -200,32 +202,6 @@ const showMoreTagsLink = tagCounts.size > 12;
 									</svg>
 								</a>
 							</div>
-							<!-- 标签云 -->
-							<div class="tags-cloud-mini">
-								{popularTags.map(([tag, count]) => {
-									const sizeRatio = count / maxCount;
-									const fontSize = 0.75 + sizeRatio * 0.3;
-									const opacity = 0.5 + sizeRatio * 0.4;
-									return (
-										<a
-											href={`/tags/${encodeURIComponent(tag)}`}
-											class="tag-cloud-item"
-											style={`--font-size: ${fontSize}em; --opacity: ${opacity}`}
-										>
-											<span class="tag-cloud-name">{tag}</span>
-											{count > 1 && <span class="tag-cloud-count">{count}</span>}
-										</a>
-									);
-								})}
-							</div>
-							{showMoreTagsLink && (
-								<a href="/tags" class="view-more-tags">
-									<span>查看更多标签</span>
-									<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-										<path d="M5 12h14M12 5l7 7-7 7"/>
-									</svg>
-								</a>
-							)}
 							<div class="tags-filter">
 								<button
 									class="filter-all active"
@@ -251,26 +227,6 @@ const showMoreTagsLink = tagCounts.size > 12;
 							</div>
 						</GlassCard>
 					)}
-
-					<!-- Activity Heatmap Card -->
-					<GlassCard class="activity-card" hover={true}>
-						<div class="card-header">
-							<div class="header-icon">
-								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-									<path d="M3 3v18h18" stroke-linecap="round" stroke-linejoin="round"/>
-									<path d="M7 16l4-4 4 4 5-6" stroke-linecap="round" stroke-linejoin="round"/>
-								</svg>
-							</div>
-							<h3>Activity</h3>
-						</div>
-						<BlogActivityHeatmap
-							collection="blog"
-							weeks={52}
-							showStats={true}
-							includeUpdates={true}
-							theme="dark"
-						/>
-					</GlassCard>
 				</aside>
 
 				<!-- 文章列表 -->
@@ -872,90 +828,6 @@ const showMoreTagsLink = tagCounts.size > 12;
 			.filter-tag.active .filter-count {
 				background: rgba(99, 102, 241, 0.2);
 				color: rgba(255, 255, 255, 0.8);
-			}
-
-			/* Tags Cloud Mini */
-			.tags-cloud-mini {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.5em;
-				margin-bottom: 1em;
-				padding-bottom: 1em;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-			}
-
-			.tag-cloud-item {
-				display: inline-flex;
-				align-items: center;
-				gap: 0.35em;
-				padding: 0.35em 0.65em;
-				background: rgba(255, 255, 255, 0.04);
-				border: 1px solid rgba(255, 255, 255, 0.06);
-				border-radius: 4px;
-				transition: all 0.3s ease;
-			}
-
-			.tag-cloud-item:hover {
-				background: rgba(99, 102, 241, 0.15);
-				border-color: rgba(99, 102, 241, 0.3);
-				transform: translateY(-1px);
-			}
-
-			.tag-cloud-name {
-				font-size: var(--font-size);
-				opacity: var(--opacity);
-				color: rgba(255, 255, 255, 0.7);
-				transition: all 0.3s ease;
-			}
-
-			.tag-cloud-item:hover .tag-cloud-name {
-				color: rgba(255, 255, 255, 0.95);
-				opacity: 1;
-			}
-
-			.tag-cloud-count {
-				font-size: 0.65em;
-				color: rgba(255, 255, 255, 0.35);
-				font-family: 'Space Mono', monospace;
-				padding: 0.15em 0.4em;
-				background: rgba(255, 255, 255, 0.05);
-				border-radius: 2px;
-				transition: all 0.3s ease;
-			}
-
-			.tag-cloud-item:hover .tag-cloud-count {
-				background: rgba(99, 102, 241, 0.2);
-				color: rgba(255, 255, 255, 0.8);
-			}
-
-			.view-more-tags {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				gap: 0.4em;
-				font-size: 0.75em;
-				color: rgba(255, 255, 255, 0.4);
-				padding: 0.5em;
-				margin-bottom: 0.75em;
-				background: transparent;
-				border: 1px dashed rgba(255, 255, 255, 0.08);
-				border-radius: 4px;
-				transition: all 0.3s ease;
-			}
-
-			.view-more-tags:hover {
-				color: rgba(99, 102, 241, 0.8);
-				background: rgba(99, 102, 241, 0.05);
-				border-color: rgba(99, 102, 241, 0.2);
-				border-style: solid;
-			}
-
-			.view-more-tags svg {
-				transition: transform 0.3s ease;
-			}
-
-			.view-more-tags:hover svg {
-				transform: translateX(2px);
 			}
 
 			/* Posts Header */

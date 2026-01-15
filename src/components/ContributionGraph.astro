@@ -183,7 +183,7 @@ const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 		--cg-square-gap: 4px;
 		--cg-bg: rgba(255, 255, 255, 0.02);
 		--cg-text: #000000;
-		--cg-border: rgba(255, 255, 255, 0.1);
+		--cg-border: var(--border-hover);
 		--cg-shadow:
 			0 25px 50px rgba(0, 0, 0, 0.5),
 			0 0 100px rgba(255, 255, 255, 0.03),
@@ -207,8 +207,8 @@ const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 	:global(.contribution-graph-dark),
 	:global(.contribution-graph[theme="dark"]) {
 		--cg-bg: rgba(13, 17, 23, 0.6);
-		--cg-text: rgba(255, 255, 255, 0.95);
-		--cg-border: rgba(255, 255, 255, 0.08);
+		--cg-text: var(--color-text-primary);
+		--cg-border: var(--border-standard);
 
 		/* Dark主题的绿色 */
 		--cg-level-0: rgba(22, 27, 34, 0.4);
@@ -256,10 +256,10 @@ const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 		background: rgba(13, 17, 23, 0.95);
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
-		border: 1px solid rgba(255, 255, 255, 0.1);
+		border: 1px solid var(--border-hover);
 		border-radius: 6px;
 		padding: 0.75em 1em;
-		color: rgba(255, 255, 255, 0.95);
+		color: var(--color-text-primary);
 		font-size: 0.85em;
 		font-weight: 400;
 		pointer-events: none;
@@ -268,7 +268,7 @@ const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 		z-index: 1000;
 		box-shadow:
 			0 10px 30px rgba(0, 0, 0, 0.5),
-			0 0 20px rgba(255, 255, 255, 0.05);
+			0 0 20px rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 		white-space: nowrap;
 	}
 
@@ -279,7 +279,7 @@ const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 	.custom-tooltip .tooltip-date {
 		display: block;
 		font-size: 0.9em;
-		color: rgba(255, 255, 255, 0.7);
+		color: var(--color-text-secondary);
 		margin-bottom: 0.25em;
 		font-family: 'Space Mono', monospace;
 	}
@@ -308,7 +308,7 @@ const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 		background: rgba(255, 255, 255, 0.03);
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
-		border: 1px solid rgba(255, 255, 255, 0.08);
+		border: 1px solid var(--border-standard);
 		border-radius: 6px;
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		overflow: hidden;
@@ -323,9 +323,9 @@ const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 		bottom: 0;
 		background: linear-gradient(
 			135deg,
-			rgba(255, 255, 255, 0.1) 0%,
+			var(--border-hover) 0%,
 			rgba(255, 255, 255, 0.02) 50%,
-			rgba(255, 255, 255, 0.05) 100%
+			rgba(255, 255, 255, var(--glass-opacity-bg-hover)) 100%
 		);
 		opacity: 0;
 		transition: opacity 0.3s ease;
@@ -333,11 +333,11 @@ const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 
 	.stat-item:hover {
 		transform: translateY(-4px);
-		background: rgba(255, 255, 255, 0.05);
+		background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 		border-color: rgba(255, 255, 255, 0.15);
 		box-shadow:
 			0 10px 30px rgba(0, 0, 0, 0.3),
-			0 0 20px rgba(255, 255, 255, 0.05);
+			0 0 20px rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 	}
 
 	.stat-item:hover::before {
@@ -458,7 +458,7 @@ const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 		width: var(--cg-square-size);
 		height: var(--cg-square-size);
 		background: var(--cg-level-0);
-		border: 1px solid rgba(255, 255, 255, 0.06);
+		border: 1px solid var(--border-subtle);
 		border-radius: 3px;
 		cursor: pointer;
 		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -495,7 +495,7 @@ const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 	}
 
 	.square.level-0:hover {
-		background: rgba(255, 255, 255, 0.08);
+		background: var(--border-standard);
 	}
 
 	.square.level-1 {
@@ -583,14 +583,14 @@ const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 		opacity: 0.7;
 		padding: 0.5em 1em;
 		background: rgba(255, 255, 255, 0.03);
-		border: 1px solid rgba(255, 255, 255, 0.08);
+		border: 1px solid var(--border-standard);
 		border-radius: 4px;
 		transition: all 0.3s ease;
 	}
 
 	.github-link a:hover {
 		opacity: 1;
-		background: rgba(255, 255, 255, 0.08);
+		background: var(--border-standard);
 		border-color: rgba(255, 255, 255, 0.15);
 		transform: translateY(-2px);
 	}

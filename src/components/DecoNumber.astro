@@ -1,0 +1,166 @@
+---
+/**
+ * DecoNumber Component
+ * 装饰性大数字组件，用于页面区块的视觉装饰
+ */
+
+interface Props {
+	number: string;
+	position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+	class?: string;
+	opacity?: number;
+}
+
+const {
+	number,
+	position = 'top-right',
+	class: className = '',
+	opacity = 0.03
+} = Astro.props;
+
+const baseClass = 'deco-number';
+const positionClass = `deco-number--${position}`;
+const allClasses = [baseClass, positionClass, className].filter(Boolean).join(' ');
+
+const opacityStyle = `opacity: ${opacity};`;
+---
+
+<div class={allClasses} style={opacityStyle}>
+	{number}
+</div>
+
+<style>
+	.deco-number {
+		position: absolute;
+		font-size: clamp(6em, 12vw, 12em);
+		font-weight: var(--font-weight-light);
+		letter-spacing: -0.05em;
+		font-family: var(--font-primary);
+		color: var(--color-text-primary);
+		pointer-events: none;
+		user-select: none;
+		opacity: 0.03;
+		line-height: 1;
+		z-index: -1;
+	}
+
+	/* Position Variants */
+	.deco-number--top-left {
+		top: -2em;
+		left: -1em;
+		transform: translateX(-20%) translateY(-20%);
+	}
+
+	.deco-number--top-right {
+		top: -2em;
+		right: -1em;
+		transform: translateX(20%) translateY(-20%);
+	}
+
+	.deco-number--bottom-left {
+		bottom: -2em;
+		left: -1em;
+		transform: translateX(-20%) translateY(20%);
+	}
+
+	.deco-number--bottom-right {
+		bottom: -2em;
+		right: -1em;
+		transform: translateX(20%) translateY(20%);
+	}
+
+	/* Gradient Fill */
+	.deco-number::before {
+		content: attr(data-number);
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			135deg,
+			rgba(var(--color-accent-primary), 0.2) 0%,
+			rgba(var(--color-accent-secondary), 0.15) 100%
+		);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		pointer-events: none;
+	}
+
+	/* Decorative Line */
+	.deco-number::after {
+		content: '';
+		position: absolute;
+		width: 1px;
+		height: 60%;
+		background: linear-gradient(
+			180deg,
+			transparent,
+			rgba(var(--color-accent-primary), 0.3),
+			transparent
+		);
+	}
+
+	.deco-number--top-left .deco-number::after,
+	.deco-number--bottom-left .deco-number::after {
+		right: -0.5em;
+		top: 20%;
+	}
+
+	.deco-number--top-right .deco-number::after,
+	.deco-number--bottom-right .deco-number::after {
+		left: -0.5em;
+		top: 20%;
+	}
+
+	/* Corner Accent */
+	.deco-number .corner-accent {
+		position: absolute;
+		width: 20px;
+		height: 20px;
+		border: 1px solid rgba(var(--color-accent-primary), 0.2);
+	}
+
+	.deco-number--top-left .corner-accent {
+		top: 0;
+		left: 0;
+		border-right: none;
+		border-bottom: none;
+	}
+
+	.deco-number--top-right .corner-accent {
+		top: 0;
+		right: 0;
+		border-left: none;
+		border-bottom: none;
+	}
+
+	.deco-number--bottom-left .corner-accent {
+		bottom: 0;
+		left: 0;
+		border-right: none;
+		border-top: none;
+	}
+
+	.deco-number--bottom-right .corner-accent {
+		bottom: 0;
+		right: 0;
+		border-left: none;
+		border-top: none;
+	}
+
+	/* Responsive */
+	@media (max-width: 768px) {
+		.deco-number {
+			font-size: clamp(4em, 10vw, 8em);
+		}
+
+		.deco-number--top-left,
+		.deco-number--top-right {
+			top: -1em;
+		}
+
+		.deco-number--bottom-left,
+		.deco-number--bottom-right {
+			bottom: -1em;
+		}
+	}
+</style>

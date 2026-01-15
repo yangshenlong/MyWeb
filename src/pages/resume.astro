@@ -4,11 +4,10 @@ import Footer from '../components/Footer.astro';
 import HeaderArchitectural from '../components/HeaderArchitectural.astro';
 import PageLoader from '../components/PageLoader.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
-import BackToTop from '../components/BackToTop.astro';
 import CursorGlow from '../components/CursorGlow.astro';
-import ScrollReveal from '../components/ScrollReveal.astro';
 import GradientText from '../components/GradientText.astro';
 import MagneticButton from '../components/MagneticButton.astro';
+import BackToTop from '../components/BackToTop.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 const skills = [
@@ -90,18 +89,16 @@ const projects = [
 		<HeaderArchitectural />
 
 		<main class="resume-page">
-			<ScrollReveal>
-				<div class="page-header">
+			<div class="page-header">
 					<div class="header-content">
 						<div class="header-label">RESUME</div>
 						<h1 class="header-title"><GradientText>杨慎龙</GradientText></h1>
 						<p class="header-subtitle">Technical Artist · Shader Development · Tools Pipeline</p>
 					</div>
 				</div>
-			</ScrollReveal>
 
 			<div class="resume-content">
-				<ScrollReveal delay={0}>
+				<ScrollProgress delay={0}>
 					<section class="resume-section">
 						<h2 class="section-title">
 							<span class="title-icon">👤</span>
@@ -130,7 +127,7 @@ const projects = [
 					</section>
 				</ScrollReveal>
 
-				<ScrollReveal delay={100}>
+				<ScrollProgress delay={100}>
 					<section class="resume-section">
 						<h2 class="section-title">
 							<span class="title-icon">💻</span>
@@ -151,7 +148,7 @@ const projects = [
 					</section>
 				</ScrollReveal>
 
-				<ScrollReveal delay={200}>
+				<ScrollProgress delay={200}>
 					<section class="resume-section">
 						<h2 class="section-title">
 							<span class="title-icon">📁</span>
@@ -176,10 +173,9 @@ const projects = [
 							</div>
 						</div>
 					</section>
-				</ScrollReveal>
 			</div>
 
-			<ScrollReveal>
+			<ScrollProgress>
 				<div class="cta-section">
 					<h2 class="cta-title">联系我</h2>
 					<p class="cta-description">可以通过邮件或 GitHub 联系我</p>
@@ -208,14 +204,14 @@ const projects = [
 		<style>
 			.resume-page {
 				min-height: 100vh;
-				background: #0a0a0a;
+				background: var(--color-bg-primary);
 			}
 
 			.page-header {
 				padding: 6em 2em 4em;
 				text-align: center;
 				background: linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
-				border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+				border-bottom: 1px solid rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 			}
 
 			.header-content {
@@ -229,25 +225,9 @@ const projects = [
 				background: rgba(99, 102, 241, 0.2);
 				border: 1px solid rgba(99, 102, 241, 0.3);
 				color: rgba(255, 255, 255, 0.9);
-				font-size: 0.85em;
-				font-weight: 600;
-				text-transform: uppercase;
-				letter-spacing: 0.2em;
-				margin-bottom: 1.5em;
-				border-radius: 50px;
-			}
-
-			.header-title {
-				font-size: clamp(3em, 10vw, 6em);
-				font-weight: 900;
-				color: #ffffff;
 				margin: 0 0 0.5em 0;
 				line-height: 1;
 				letter-spacing: -0.02em;
-				background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 50%, #ffffff 100%);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
-				background-clip: text;
 			}
 
 			.header-subtitle {
@@ -272,10 +252,10 @@ const projects = [
 				gap: 0.75em;
 				font-size: 2em;
 				font-weight: 700;
-				color: #ffffff;
-				margin: 0 0 2em 0;
+				color: var(--color-text-primary);
+				margin: 0 0.2em 0;
 				padding-bottom: 0.5em;
-				border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+				border-bottom: 2px solid var(--border-standard);
 			}
 
 			.title-icon {
@@ -283,8 +263,8 @@ const projects = [
 			}
 
 			.section-content {
-				background: rgba(255, 255, 255, 0.02);
-				border: 1px solid rgba(255, 255, 255, 0.08);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg));
+				border: 1px solid var(--border-standard);
 				border-radius: 16px;
 				padding: 2em;
 			}
@@ -395,14 +375,14 @@ const projects = [
 
 			.project-info {
 				background: rgba(255, 255, 255, 0.03);
-				border: 1px solid rgba(255, 255, 255, 0.08);
+				border: 1px solid var(--border-standard);
 				border-radius: 12px;
 				padding: 1.5em;
 				transition: all 0.3s ease;
 			}
 
 			.project-info:hover {
-				background: rgba(255, 255, 255, 0.05);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 				border-color: rgba(99, 102, 241, 0.3);
 			}
 
@@ -429,8 +409,8 @@ const projects = [
 				font-size: 0.75em;
 				letter-spacing: 0.05em;
 				padding: 0.3em 0.8em;
-				background: rgba(255, 255, 255, 0.05);
-				border: 1px solid rgba(255, 255, 255, 0.08);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+				border: 1px solid var(--border-standard);
 				color: rgba(255, 255, 255, 0.6);
 			}
 
@@ -438,7 +418,7 @@ const projects = [
 				background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.1) 100%);
 				padding: 6em 2em;
 				text-align: center;
-				border-top: 1px solid rgba(255, 255, 255, 0.05);
+				border-top: 1px solid rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 			}
 
 			.cta-title {
@@ -487,14 +467,14 @@ const projects = [
 			}
 
 			.cta-button.secondary {
-				background: rgba(255, 255, 255, 0.05);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 				color: #ffffff;
 				border: 1px solid rgba(255, 255, 255, 0.2);
 			}
 
 			.cta-button.secondary:hover {
-				background: rgba(255, 255, 255, 0.1);
-				border-color: rgba(255, 255, 255, 0.3);
+				background: var(--border-hover);
+				border-color: var(--color-text-muted);
 				transform: translateY(-3px);
 			}
 

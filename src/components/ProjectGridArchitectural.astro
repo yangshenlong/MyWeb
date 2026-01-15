@@ -36,6 +36,7 @@ const { projects } = Astro.props;
 			<a
 				href={project.link || '#'}
 				class="project-item"
+				data-category={project.category}
 				style={`--delay: ${index * 100}ms`}
 				aria-label={`查看项目: ${project.title}`}
 			>
@@ -78,7 +79,7 @@ const { projects } = Astro.props;
 <style>
 	.project-grid-section {
 		padding: 8em 4em;
-		background: #050505;
+		background: var(--color-bg-primary);
 		position: relative;
 	}
 
@@ -95,7 +96,7 @@ const { projects } = Astro.props;
 		font-size: 0.75em;
 		font-weight: 200;
 		letter-spacing: 0.2em;
-		color: rgba(255, 255, 255, 0.3);
+		color: var(--color-text-muted);
 		font-family: 'Courier New', monospace;
 	}
 
@@ -109,7 +110,7 @@ const { projects } = Astro.props;
 		font-size: clamp(2em, 5vw, 4em);
 		font-weight: 200;
 		letter-spacing: -0.02em;
-		color: rgba(255, 255, 255, 0.95);
+		color: var(--color-text-primary);
 		margin: 0;
 		line-height: 1.1;
 	}
@@ -125,7 +126,7 @@ const { projects } = Astro.props;
 	.header-line {
 		height: 50px;
 		width: 1px;
-		background: rgba(255, 255, 255, 0.1);
+		background: var(--border-hover);
 	}
 
 	/* Projects Grid */
@@ -146,14 +147,14 @@ const { projects } = Astro.props;
 	.project-inner {
 		position: relative;
 		background: rgba(255, 255, 255, 0.015);
-		border: 1px solid rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 		overflow: hidden;
 		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.project-item:hover .project-inner {
 		background: rgba(255, 255, 255, 0.025);
-		border-color: rgba(255, 255, 255, 0.1);
+		border-color: var(--border-hover);
 		transform: translateY(-12px);
 		box-shadow:
 			0 35px 70px rgba(0, 0, 0, 0.6),
@@ -207,9 +208,9 @@ const { projects } = Astro.props;
 	}
 
 	.project-item:hover .project-number {
-		color: rgba(255, 255, 255, 0.08);
+		color: var(--border-standard);
 		transform: scale(1.05);
-		text-shadow: 0 0 60px rgba(255, 255, 255, 0.1);
+		text-shadow: 0 0 60px var(--border-hover);
 	}
 
 	.project-gradient {
@@ -254,7 +255,7 @@ const { projects } = Astro.props;
 	.project-year {
 		font-size: 0.7em;
 		letter-spacing: 0.1em;
-		color: rgba(255, 255, 255, 0.3);
+		color: var(--color-text-muted);
 		font-family: 'Courier New', monospace;
 	}
 
@@ -291,13 +292,13 @@ const { projects } = Astro.props;
 		letter-spacing: 0.1em;
 		padding: 0.4em 1em;
 		background: rgba(255, 255, 255, 0.03);
-		border: 1px solid rgba(255, 255, 255, 0.06);
-		color: rgba(255, 255, 255, 0.5);
+		border: 1px solid var(--border-subtle);
+		color: var(--color-text-tertiary);
 		transition: all 0.3s ease;
 	}
 
 	.project-item:hover .tag {
-		background: rgba(255, 255, 255, 0.06);
+		background: var(--border-subtle);
 		border-color: rgba(255, 255, 255, 0.12);
 		color: rgba(255, 255, 255, 0.75);
 	}
@@ -315,7 +316,7 @@ const { projects } = Astro.props;
 	}
 
 	.project-item:hover .project-border {
-		border-color: rgba(255, 255, 255, 0.08);
+		border-color: var(--border-standard);
 	}
 
 	/* Enhanced Corner Accents */

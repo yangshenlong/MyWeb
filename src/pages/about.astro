@@ -1,4 +1,5 @@
 ---
+import BaseHead from '../components/BaseHead.astro';
 import HeaderArchitectural from '../components/HeaderArchitectural.astro';
 import GlassCard from '../components/GlassCard.astro';
 import BackToTop from '../components/BackToTop.astro';
@@ -9,33 +10,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>About | {SITE_TITLE}</title>
-		<meta name="description" content={SITE_DESCRIPTION} />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
-		<style is:global>
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
-			}
-
-			body {
-				font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-				background: #050505;
-				color: rgba(255, 255, 255, 0.9);
-				line-height: 1.6;
-			}
-
-			a {
-				color: inherit;
-				text-decoration: none;
-			}
-		</style>
+		<BaseHead title={`About | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 	</head>
 
 	<body>
@@ -267,7 +242,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 		<style>
 			.page-header-section {
 				padding: calc(60px + var(--section-padding-y, 8em)) 4em 6em;
-				background: #050505;
+				background: var(--color-bg-primary);
 				position: relative;
 			}
 
@@ -331,7 +306,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			.page-description {
 				font-size: 1em;
 				line-height: 1.7;
-				color: rgba(255, 255, 255, 0.5);
+				color: var(--color-text-tertiary);
 				max-width: 500px;
 			}
 
@@ -383,8 +358,8 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				left: 50%;
 				transform: translate(-50%, -50%);
 				padding: 1em 2em;
-				background: rgba(255, 255, 255, 0.95);
-				color: #050505;
+				background: var(--color-text-primary);
+				color: var(--color-bg-primary);
 				font-size: 0.9em;
 				font-weight: 500;
 				letter-spacing: 0.1em;
@@ -414,7 +389,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			/* Skills Section */
 			.skills-section {
 				padding: 6em 4em;
-				background: #050505;
+				background: var(--color-bg-primary);
 			}
 
 			.skills-container {
@@ -458,7 +433,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			.skill-title {
 				font-size: 1.1em;
 				font-weight: 400;
-				color: rgba(255, 255, 255, 0.95);
+				color: var(--color-text-primary);
 				margin: 0;
 			}
 
@@ -490,9 +465,9 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				padding: 6em 4em;
 				background: linear-gradient(
 					180deg,
-					#050505 0%,
+					var(--color-bg-primary) 0%,
 					#0a0a0a 50%,
-					#050505 100%
+					var(--color-bg-primary) 100%
 				);
 			}
 
@@ -513,7 +488,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				top: 0;
 				bottom: 0;
 				width: 1px;
-				background: rgba(255, 255, 255, 0.1);
+				background: var(--border-hover);
 			}
 
 			.timeline-item {
@@ -531,7 +506,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			.marker-year {
 				font-size: 0.8em;
 				font-weight: 500;
-				color: rgba(255, 255, 255, 0.5);
+				color: var(--color-text-tertiary);
 				font-family: 'Space Mono', monospace;
 			}
 
@@ -553,7 +528,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			.card-title {
 				font-size: 1.3em;
 				font-weight: 400;
-				color: rgba(255, 255, 255, 0.95);
+				color: var(--color-text-primary);
 				margin: 0;
 			}
 
@@ -584,8 +559,8 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			.tag {
 				font-size: 0.75em;
 				padding: 0.3em 0.8em;
-				background: rgba(255, 255, 255, 0.05);
-				border: 1px solid rgba(255, 255, 255, 0.1);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+				border: 1px solid var(--border-hover);
 				color: rgba(255, 255, 255, 0.6);
 			}
 

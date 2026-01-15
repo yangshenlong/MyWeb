@@ -1,0 +1,173 @@
+---
+/**
+ * TechTag Component
+ * 技术标签组件，支持图标和颜色编码
+ * 用于展示技术栈、技能、标签等
+ */
+
+interface Props {
+	icon?: 'shader' | 'engine' | 'tool' | 'language' | 'framework' | 'database';
+	name: string;
+	color?: 'indigo' | 'purple' | 'orange' | 'cyan' | 'green';
+	size?: 'sm' | 'md' | 'lg';
+	href?: string;
+	class?: string;
+}
+
+const {
+	icon,
+	name,
+	color = 'indigo',
+	size = 'md',
+	href,
+	class: className = ''
+} = Astro.props;
+
+const baseClass = 'tech-tag';
+const sizeClass = `tech-tag--${size}`;
+const colorClass = `tech-tag--${color}`;
+const allClasses = [baseClass, sizeClass, colorClass, className].filter(Boolean).join(' ');
+
+// Map color names to CSS variables
+const colorVar = {
+	indigo: 'var(--color-accent-primary)',
+	purple: 'var(--color-accent-secondary)',
+	orange: 'var(--color-accent-tertiary)',
+	cyan: 'var(--color-cyan)',
+	green: 'var(--color-green)'
+}[color] || 'var(--color-accent-primary)';
+
+// Icon SVG paths
+const icons = {
+	shader: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',
+	engine: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>',
+	tool: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 0-3 3l-2.12 2.12a2.12 2.12 0 0 0 3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+	language: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+	framework: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h18v18H3zM9 9h6v6H9zM9 3h6v6H9zM3 15h6v6H3zM15 15h6v6H15z"/></svg>',
+	database: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/></svg>'
+};
+
+const iconSvg = icon ? icons[icon] : '';
+const element = href ? 'a' : 'span';
+const wrapperProps = href
+	? { href, class: allClasses }
+	: { class: allClasses };
+---
+
+<element {...wrapperProps}>
+	{icon && (
+		<span class="tech-tag__icon" set:html={iconSvg} />
+	)}
+	<span class="tech-tag__name">{name}</span>
+</element>
+
+<style>
+	.tech-tag {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5em;
+		padding: 0.4em 0.85em;
+		background: rgba(255, 255, 255, 0.03);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+		font-family: var(--font-mono);
+		font-size: 0.85em;
+		color: var(--color-text-secondary);
+		text-decoration: none;
+		transition: all 0.3s ease;
+		white-space: nowrap;
+	}
+
+	.tech-tag:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		border-color: var(--border-hover);
+		color: var(--color-text-primary);
+	}
+
+	.tech-tag__icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.2em;
+		height: 1.2em;
+		opacity: 0.7;
+		transition: opacity 0.3s ease;
+	}
+
+	.tech-tag:hover .tech-tag__icon {
+		opacity: 1;
+	}
+
+	.tech-tag__name {
+		font-weight: var(--font-weight-normal);
+		letter-spacing: 0.05em;
+	}
+
+	/* Color Variants */
+	.tech-tag--indigo:hover {
+		background: rgba(var(--color-accent-primary), 0.15);
+		border-color: rgba(var(--color-accent-primary), 0.4);
+		box-shadow: 0 4px 12px rgba(var(--color-accent-primary), 0.2);
+	}
+
+	.tech-tag--purple:hover {
+		background: rgba(var(--color-accent-secondary), 0.15);
+		border-color: rgba(var(--color-accent-secondary), 0.4);
+		box-shadow: 0 4px 12px rgba(var(--color-accent-secondary), 0.2);
+	}
+
+	.tech-tag--orange:hover {
+		background: rgba(var(--color-accent-tertiary), 0.15);
+		border-color: rgba(var(--color-accent-tertiary), 0.4);
+		box-shadow: 0 4px 12px rgba(var(--color-accent-tertiary), 0.2);
+	}
+
+	.tech-tag--cyan:hover {
+		background: rgba(var(--color-cyan), 0.15);
+		border-color: rgba(var(--color-cyan), 0.4);
+		box-shadow: 0 4px 12px rgba(var(--color-cyan), 0.2);
+	}
+
+	.tech-tag--green:hover {
+		background: rgba(var(--color-green), 0.15);
+		border-color: rgba(var(--color-green), 0.4);
+		box-shadow: 0 4px 12px rgba(var(--color-green), 0.2);
+	}
+
+	/* Size Variants */
+	.tech-tag--sm {
+		padding: 0.3em 0.65em;
+		font-size: 0.75em;
+		gap: 0.4em;
+	}
+
+	.tech-tag--sm .tech-tag__icon {
+		width: 1em;
+		height: 1em;
+	}
+
+	.tech-tag--lg {
+		padding: 0.5em 1em;
+		font-size: 0.95em;
+		gap: 0.6em;
+	}
+
+	.tech-tag--lg .tech-tag__icon {
+		width: 1.4em;
+		height: 1.4em;
+	}
+
+	/* Reduced Motion */
+	@media (prefers-reduced-motion: reduce) {
+		.tech-tag {
+			transition: none;
+		}
+
+		.tech-tag:hover {
+			transform: none;
+		}
+	}
+</style>

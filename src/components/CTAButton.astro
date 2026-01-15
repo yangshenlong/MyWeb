@@ -1,0 +1,219 @@
+---
+/**
+ * CTAButton Component
+ * 统一的按钮组件，支持三种变体：primary、secondary、ghost
+ * 采用玻璃拟态设计
+ */
+
+interface Props {
+	variant?: 'primary' | 'secondary' | 'ghost';
+	size?: 'sm' | 'md' | 'lg';
+	href?: string;
+	type?: 'button' | 'submit' | 'reset';
+	class?: string;
+	children: any;
+}
+
+const {
+	variant = 'primary',
+	size = 'md',
+	href,
+	type = 'button',
+	class: className = '',
+	children
+} = Astro.props;
+
+const baseClass = 'cta-button';
+const variantClass = `cta-button--${variant}`;
+const sizeClass = `cta-button--${size}`;
+const allClasses = [baseClass, variantClass, sizeClass, className].filter(Boolean).join(' ');
+
+const element = href ? 'a' : 'button';
+const attributes = href
+	? { href, class: allClasses }
+	: { type, class: allClasses };
+---
+
+<element {...attributes}>
+	<span class="cta-button__content">
+		{children}
+	</span>
+	<span class="cta-button__glow"></span>
+</element>
+
+<style>
+	.cta-button {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75em;
+		padding: 1em 2.5em;
+		background: rgba(255, 255, 255, var(--glass-opacity-bg));
+		backdrop-filter: blur(var(--glass-blur));
+		-webkit-backdrop-filter: blur(var(--glass-blur));
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+		font-family: var(--font-primary);
+		font-size: 1em;
+		font-weight: var(--font-weight-medium);
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-text-primary);
+		cursor: pointer;
+		overflow: hidden;
+		transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		text-decoration: none;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.cta-button__content {
+		position: relative;
+		z-index: 2;
+		display: flex;
+		align-items: center;
+		gap: 0.75em;
+	}
+
+	.cta-button__glow {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			135deg,
+			transparent 0%,
+			rgba(255, 255, 255, 0.1) 50%,
+			transparent 100%
+		);
+		opacity: 0;
+		transform: translateX(-100%);
+		transition: all 0.4s ease;
+		pointer-events: none;
+	}
+
+	/* Hover State */
+	.cta-button:hover {
+		transform: translateY(-2px);
+		box-shadow:
+			0 12px 40px rgba(0, 0, 0, 0.3),
+			0 4px 12px rgba(0, 0, 0, 0.2);
+	}
+
+	.cta-button:hover .cta-button__glow {
+		opacity: 1;
+		transform: translateX(0);
+		animation: shimmer 0.6s ease;
+	}
+
+	@keyframes shimmer {
+		0% { transform: translateX(-100%); }
+		100% { transform: translateX(100%); }
+	}
+
+	/* Active State */
+	.cta-button:active {
+		transform: translateY(0) scale(0.98);
+		box-shadow:
+			0 4px 16px rgba(0, 0, 0, 0.2),
+			0 2px 8px rgba(0, 0, 0, 0.15);
+	}
+
+	/* Primary Variant */
+	.cta-button--primary {
+		background: linear-gradient(
+			135deg,
+			rgba(var(--color-accent-primary), 0.8),
+			rgba(var(--color-accent-secondary), 0.8)
+		);
+		border-color: rgba(var(--color-accent-primary), 0.3);
+		box-shadow:
+			0 0 20px rgba(var(--color-accent-primary), 0.2);
+	}
+
+	.cta-button--primary:hover {
+		background: linear-gradient(
+			135deg,
+			rgba(var(--color-accent-primary), 1),
+			rgba(var(--color-accent-secondary), 1)
+		);
+		border-color: rgba(var(--color-accent-primary), 0.5);
+		box-shadow:
+			0 0 30px rgba(var(--color-accent-primary), 0.4),
+			0 12px 40px rgba(0, 0, 0, 0.3);
+	}
+
+	/* Secondary Variant */
+	.cta-button--secondary {
+		background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+		border-color: var(--border-hover);
+	}
+
+	.cta-button--secondary:hover {
+		background: rgba(255, 255, 255, 0.1);
+		border-color: rgba(var(--color-accent-primary), 0.4);
+		box-shadow:
+			0 0 20px rgba(var(--color-accent-primary), 0.15);
+	}
+
+	/* Ghost Variant */
+	.cta-button--ghost {
+		background: transparent;
+		border-color: transparent;
+		box-shadow: none;
+	}
+
+	.cta-button--ghost:hover {
+		background: rgba(255, 255, 255, 0.05);
+		border-color: var(--border-subtle);
+	}
+
+	/* Size Variants */
+	.cta-button--sm {
+		padding: 0.6em 1.5em;
+		font-size: 0.85em;
+		letter-spacing: 0.08em;
+	}
+
+	.cta-button--md {
+		padding: 1em 2.5em;
+		font-size: 1em;
+		letter-spacing: 0.1em;
+	}
+
+	.cta-button--lg {
+		padding: 1.25em 3em;
+		font-size: 1.1em;
+		letter-spacing: 0.12em;
+	}
+
+	/* Focus State for Accessibility */
+	.cta-button:focus-visible {
+		outline: none;
+		box-shadow:
+			0 0 0 3px rgba(var(--color-accent-primary), 0.3),
+			0 0 20px rgba(var(--color-accent-primary), 0.2);
+	}
+
+	/* Disabled State */
+	.cta-button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		transform: none;
+	}
+
+	.cta-button:disabled:hover {
+		transform: none;
+		box-shadow: none;
+	}
+
+	/* Reduced Motion */
+	@media (prefers-reduced-motion: reduce) {
+		.cta-button,
+		.cta-button__glow {
+			transition: none;
+			animation: none;
+		}
+
+		.cta-button:hover {
+			transform: none;
+		}
+	}
+</style>

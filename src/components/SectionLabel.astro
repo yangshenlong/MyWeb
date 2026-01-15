@@ -1,0 +1,160 @@
+---
+/**
+ * SectionLabel Component
+ * 统一的区块标签组件，包含编号、装饰线和标签文字
+ * 用于页面区块标题前的装饰性标签
+ */
+
+interface Props {
+	number: string;
+	label: string;
+	position?: 'left' | 'center';
+	class?: string;
+}
+
+const {
+	number,
+	label,
+	position = 'left',
+	class: className = ''
+} = Astro.props;
+
+const baseClass = 'section-label';
+const positionClass = `section-label--${position}`;
+const allClasses = [baseClass, positionClass, className].filter(Boolean).join(' ');
+---
+
+<div class={allClasses}>
+	<span class="section-label__number">{number}</span>
+	<span class="section-label__line"></span>
+	<span class="section-label__text">{label}</span>
+</div>
+
+<style>
+	.section-label {
+		display: flex;
+		align-items: center;
+		gap: 1.5em;
+		margin-bottom: 2.5em;
+	}
+
+	.section-label--center {
+		justify-content: center;
+	}
+
+	.section-label__number {
+		font-size: 0.65em;
+		font-weight: var(--font-weight-light);
+		letter-spacing: 0.3em;
+		font-family: var(--font-mono);
+		color: rgba(var(--color-accent-primary), 0.6);
+		position: relative;
+	}
+
+	.section-label__number::before {
+		content: '';
+		position: absolute;
+		left: -0.8em;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 0.5em;
+		height: 0.5em;
+		border: 1px solid rgba(var(--color-accent-primary), 0.3);
+		border-radius: 50%;
+		background: rgba(var(--color-accent-primary), 0.1);
+	}
+
+	.section-label__line {
+		width: 60px;
+		height: 1px;
+		background: linear-gradient(
+			90deg,
+			rgba(var(--color-accent-primary), 0.6),
+			rgba(var(--color-accent-primary), 0.1)
+		);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.section-label__line::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(
+			90deg,
+			transparent,
+			rgba(255, 255, 255, 0.3),
+			transparent
+		);
+		animation: lineShimmer 3s ease-in-out infinite;
+	}
+
+	@keyframes lineShimmer {
+		0%, 100% {
+			left: -100%;
+		}
+		50% {
+			left: 100%;
+		}
+	}
+
+	.section-label__text {
+		font-size: 0.75em;
+		font-weight: var(--font-weight-normal);
+		letter-spacing: 0.3em;
+		text-transform: uppercase;
+		color: var(--color-text-tertiary);
+		font-family: var(--font-mono);
+		position: relative;
+		padding-right: 2em;
+	}
+
+	.section-label__text::after {
+		content: '→';
+		position: absolute;
+		right: 0;
+		opacity: 0;
+		transform: translateX(-10px);
+		transition: all 0.3s ease;
+		color: rgba(var(--color-accent-primary), 1);
+	}
+
+	.section-label:hover .section-label__text::after {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	/* Responsive */
+	@media (max-width: 768px) {
+		.section-label {
+			gap: 1em;
+			margin-bottom: 2em;
+		}
+
+		.section-label__line {
+			width: 40px;
+		}
+
+		.section-label__number {
+			font-size: 0.55em;
+		}
+
+		.section-label__text {
+			font-size: 0.65em;
+		}
+	}
+
+	/* Reduced Motion */
+	@media (prefers-reduced-motion: reduce) {
+		.section-label__line::before {
+			animation: none;
+		}
+
+		.section-label__text::after {
+			transition: none;
+		}
+	}
+</style>

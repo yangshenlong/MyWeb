@@ -35,7 +35,7 @@ import { SITE_TITLE } from '../consts';
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				background: #050505;
+				background: var(--color-bg-primary);
 				padding: 6em 2em 4em;
 			}
 
@@ -48,7 +48,7 @@ import { SITE_TITLE } from '../consts';
 				font-size: clamp(8em, 20vw, 15em);
 				font-weight: 100;
 				line-height: 1;
-				color: rgba(255, 255, 255, 0.05);
+				color: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 				font-family: 'Space Mono', monospace;
 				margin-bottom: 0.2em;
 			}
@@ -56,14 +56,14 @@ import { SITE_TITLE } from '../consts';
 			.error-title {
 				font-size: clamp(1.5em, 4vw, 3em);
 				font-weight: 300;
-				color: rgba(255, 255, 255, 0.95);
+				color: var(--color-text-primary);
 				margin: 0 0 1em 0;
 				letter-spacing: 0.1em;
 			}
 
 			.error-description {
 				font-size: 1em;
-				color: rgba(255, 255, 255, 0.5);
+				color: var(--color-text-tertiary);
 				margin: 0 0 3em 0;
 				line-height: 1.7;
 			}
@@ -73,7 +73,7 @@ import { SITE_TITLE } from '../consts';
 				align-items: center;
 				gap: 0.75em;
 				padding: 1em 2em;
-				background: rgba(255, 255, 255, 0.05);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
 				border: 1px solid rgba(255, 255, 255, 0.15);
 				color: rgba(255, 255, 255, 0.9);
 				text-decoration: none;
@@ -85,7 +85,7 @@ import { SITE_TITLE } from '../consts';
 			}
 
 			.back-link:hover {
-				background: rgba(255, 255, 255, 0.1);
+				background: var(--border-hover);
 				border-color: rgba(255, 255, 255, 0.25);
 				transform: translateY(-2px);
 			}
