@@ -1,44 +1,44 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
-import '../styles/global.css';
-import type { ImageMetadata } from 'astro';
-import FallbackImage from '../assets/blog-placeholder-1.jpg';
-import { SITE_TITLE, AUTHOR } from '../consts';
+import "../styles/global.css";
+import type { ImageMetadata } from "astro";
+import FallbackImage from "../assets/blog-placeholder-1.jpg";
+import { SITE_TITLE, AUTHOR } from "../consts";
 
 interface Props {
-	title: string;
-	description: string;
-	image?: ImageMetadata;
-	type?: 'website' | 'article';
+  title: string;
+  description: string;
+  image?: ImageMetadata;
+  type?: "website" | "article";
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage, type = 'website' } = Astro.props;
-const siteUrl = Astro.site?.href || '';
+const { title, description, image = FallbackImage, type = "website" } = Astro.props;
+const siteUrl = Astro.site?.href || "";
 
 // JSON-LD Structured Data
 const jsonLd = {
-	'@context': 'https://schema.org',
-	'@type': type === 'article' ? 'BlogPosting' : 'WebSite',
-	headline: title,
-	description: description,
-	image: new URL(image.src, siteUrl).href,
-	url: canonicalURL.href,
-	author: {
-		'@type': 'Person',
-		name: AUTHOR.name,
-		url: AUTHOR.github
-	},
-	publisher: {
-		'@type': 'Person',
-		name: AUTHOR.name
-	},
-	mainEntityOfPage: {
-		'@type': 'WebPage',
-		'@id': canonicalURL.href
-	}
+  "@context": "https://schema.org",
+  "@type": type === "article" ? "BlogPosting" : "WebSite",
+  headline: title,
+  description: description,
+  image: new URL(image.src, siteUrl).href,
+  url: canonicalURL.href,
+  author: {
+    "@type": "Person",
+    name: AUTHOR.name,
+    url: AUTHOR.github,
+  },
+  publisher: {
+    "@type": "Person",
+    name: AUTHOR.name,
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": canonicalURL.href,
+  },
 };
 ---
 
@@ -48,16 +48,49 @@ const jsonLd = {
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
-	rel="alternate"
-	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL('rss.xml', siteUrl)}
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE_TITLE}
+  href={new URL("rss.xml", siteUrl)}
 />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Font preloads -->
-<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
-<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+<!-- Resource hints -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Font preloads with font-display: swap -->
+<link
+  rel="preload"
+  href="/fonts/atkinson-regular.woff"
+  as="font"
+  type="font/woff"
+  crossorigin
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<link
+  rel="preload"
+  href="/fonts/atkinson-bold.woff"
+  as="font"
+  type="font/woff"
+  crossorigin
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<!-- Service Worker registration -->
+<script>
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((registration) => {
+          console.log("ServiceWorker registration successful");
+        })
+        .catch((error) => {
+          console.log("ServiceWorker registration failed:", error);
+        });
+    });
+  }
+</script>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -84,4 +117,4 @@ const jsonLd = {
 <meta property="twitter:image" content={new URL(image.src, siteUrl).href} />
 
 <!-- JSON-LD Structured Data -->
-<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
