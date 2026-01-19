@@ -36,6 +36,10 @@ export default defineConfig({
 
 	// Vite configuration for additional optimizations
 	vite: {
+		// Pagefind 在构建后生成，需要特殊处理
+		optimizeDeps: {
+			exclude: ['/pagefind/pagefind.js']
+		},
 		build: {
 			rollupOptions: {
 				output: {
@@ -43,7 +47,9 @@ export default defineConfig({
 					chunkFileNames: 'chunks/[hash].js',
 					entryFileNames: 'entry/[hash].js',
 					assetFileNames: 'assets/[hash][extname]'
-				}
+				},
+				// 排除 Pagefind 模块
+				external: ['/pagefind/pagefind.js']
 			}
 		}
 	}

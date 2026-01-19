@@ -1,5 +1,7 @@
 ---
 import { SITE_TITLE } from '../consts';
+import ThemeToggle from './ThemeToggle.astro';
+import SearchModal from './SearchModal.astro';
 
 const navItems = [
 	{ title: '作品', href: '/projects' },
@@ -44,11 +46,24 @@ const navItems = [
 			))}
 		</ul>
 
-		<!-- Menu Toggle -->
-		<button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navItems">
-			<span class="toggle-line"></span>
-			<span class="toggle-line"></span>
-		</button>
+		<!-- Actions -->
+		<div class="header-actions">
+			<!-- Search -->
+			<div class="header-search">
+				<SearchModal />
+			</div>
+
+			<!-- Theme Toggle -->
+			<div class="header-theme">
+				<ThemeToggle />
+			</div>
+
+			<!-- Menu Toggle -->
+			<button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navItems">
+				<span class="toggle-line"></span>
+				<span class="toggle-line"></span>
+			</button>
+		</div>
 	</nav>
 
 	<!-- Bottom Border -->
@@ -189,6 +204,21 @@ const navItems = [
 		align-items: center;
 	}
 
+	/* Header Actions */
+	.header-actions {
+		display: flex;
+		align-items: center;
+		gap: 1em;
+		position: relative;
+		z-index: 2;
+	}
+
+	.header-search,
+	.header-theme {
+		display: flex;
+		align-items: center;
+	}
+
 	.nav-item {
 		display: flex;
 		align-items: center;
@@ -199,6 +229,12 @@ const navItems = [
 		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 		animation: slideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
 		animation-delay: var(--delay);
+	}
+
+	.nav-item:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 4px;
+		border-radius: 4px;
 	}
 
 	@keyframes slideDown {
@@ -267,6 +303,7 @@ const navItems = [
 		padding: 0.5em;
 		position: relative;
 		z-index: 1001;
+		order: 2;
 	}
 
 	.toggle-line {
@@ -318,6 +355,11 @@ const navItems = [
 	@media (max-width: 768px) {
 		.arch-nav {
 			padding: 1em 1.5em;
+		}
+
+		.header-theme {
+			display: flex;
+			order: 1;
 		}
 
 		.menu-toggle {

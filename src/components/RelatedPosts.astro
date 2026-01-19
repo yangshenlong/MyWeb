@@ -1,0 +1,277 @@
+---
+/**
+ * 相关文章推荐组件
+ * 基于标签、分类和时间的智能推荐
+ */
+
+import type { CollectionEntry } from 'astro:content';
+import { getRelatedPosts } from '../utils/recommendation';
+import GlassCard from './GlassCard.astro';
+
+interface Props {
+	currentPost: CollectionEntry<'blog'>;
+	allPosts: CollectionEntry<'blog'>[];
+	limit?: number;
+	title?: string;
+}
+
+const { currentPost, allPosts, limit = 4, title = '相关推荐' } = Astro.props;
+
+// 获取相关文章
+const relatedPosts = getRelatedPosts(currentPost, allPosts, limit);
+
+if (relatedPosts.length === 0) {
+	// 如果没有相关文章，不显示组件
+	return null;
+}
+---
+
+<section class="related-posts" aria-label="相关文章推荐">
+	<div class="related-header">
+		<div class="header-icon">
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+				<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+			</svg>
+		</div>
+		<h2>{title}</h2>
+		<span class="post-count">{relatedPosts.length} 篇</span>
+	</div>
+
+	<div class="related-grid">
+		{relatedPosts.map((post, index) => {
+			const postTags = post.data.tags || [];
+			const slug = post.id.replace(/\.(md|mdx)$/, '');
+			const postUrl = `/blog/${slug}`;
+			const formattedDate = new Date(post.data.pubDate).toLocaleDateString('zh-CN', {
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric',
+			});
+
+			return (
+				<article class="related-post" style={`--delay: ${index * 100}ms`}>
+					<GlassCard hover={true} delay={index * 100}>
+						<a href={postUrl} class="related-link">
+							<div class="related-meta">
+								<time class="related-date" datetime={post.data.pubDate.toISOString()}>
+									{formattedDate}
+								</time>
+								{post.data.category && (
+									<span class="related-category">{post.data.category}</span>
+								)}
+							</div>
+
+							<h3 class="related-title">{post.data.title}</h3>
+
+							{post.data.description && (
+								<p class="related-description">{post.data.description}</p>
+							)}
+
+							{postTags.length > 0 && (
+								<div class="related-tags">
+									{postTags.slice(0, 3).map((tag) => (
+										<span class="tag">{tag}</span>
+									))}
+								</div>
+							)}
+
+							<div class="related-footer">
+								<span class="read-more">
+									阅读全文
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+										<path d="M5 12h14M12 5l7 7-7 7"></path>
+									</svg>
+								</span>
+							</div>
+						</a>
+					</GlassCard>
+				</article>
+			);
+		})}
+	</div>
+</section>
+
+<style>
+	.related-posts {
+		margin-top: 4em;
+	}
+
+	.related-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75em;
+		margin-bottom: 2em;
+		padding-bottom: 1em;
+		border-bottom: 1px solid var(--border-standard);
+	}
+
+	.header-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		background: rgba(99, 102, 241, 0.1);
+		border: 1px solid rgba(99, 102, 241, 0.2);
+		border-radius: 8px;
+		color: var(--color-primary);
+	}
+
+	.related-header h2 {
+		flex: 1;
+		font-size: 1.25em;
+		font-weight: 500;
+		color: var(--color-text-primary);
+		margin: 0;
+		letter-spacing: -0.02em;
+	}
+
+	.post-count {
+		font-size: 0.85em;
+		color: var(--color-text-muted);
+		font-family: 'Space Mono', monospace;
+		padding: 0.35em 0.75em;
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid var(--border-subtle);
+		border-radius: 6px;
+	}
+
+	.related-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: 1.5em;
+	}
+
+	.related-post {
+		animation: fadeInUp 0.6s ease-out backwards;
+		animation-delay: var(--delay);
+	}
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.related-link {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.related-meta {
+		display: flex;
+		align-items: center;
+		gap: 1em;
+		margin-bottom: 1em;
+	}
+
+	.related-date {
+		font-size: 0.75em;
+		color: var(--color-text-muted);
+		font-family: 'Space Mono', monospace;
+	}
+
+	.related-category {
+		font-size: 0.7em;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-primary);
+		padding: 0.25em 0.6em;
+		background: rgba(99, 102, 241, 0.1);
+		border: 1px solid rgba(99, 102, 241, 0.2);
+		border-radius: 4px;
+	}
+
+	.related-title {
+		font-size: 1.1em;
+		font-weight: 500;
+		color: var(--color-text-primary);
+		margin: 0 0 0.75em 0;
+		line-height: 1.4;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.related-description {
+		font-size: 0.9em;
+		line-height: 1.6;
+		color: var(--color-text-tertiary);
+		margin: 0 0 1em 0;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.related-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		margin-bottom: 1em;
+	}
+
+	.related-tags .tag {
+		font-size: 0.7em;
+		color: var(--color-text-muted);
+		padding: 0.25em 0.6em;
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid var(--border-subtle);
+		border-radius: 4px;
+	}
+
+	.related-footer {
+		display: flex;
+		justify-content: flex-end;
+		padding-top: 0.75em;
+		border-top: 1px solid var(--border-subtle);
+	}
+
+	.read-more {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		font-size: 0.8em;
+		color: var(--color-text-muted);
+		transition: all var(--transition-base);
+	}
+
+	.read-more svg {
+		transition: transform var(--transition-base);
+	}
+
+	.related-post:hover .read-more {
+		color: var(--color-primary);
+	}
+
+	.related-post:hover .read-more svg {
+		transform: translateX(4px);
+	}
+
+	/* 响应式 */
+	@media (max-width: 768px) {
+		.related-header {
+			flex-wrap: wrap;
+		}
+
+		.related-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	/* 无障碍 */
+	@media (prefers-reduced-motion: reduce) {
+		.related-post,
+		.read-more svg {
+			animation: none;
+			transition: none;
+		}
+	}
+</style>

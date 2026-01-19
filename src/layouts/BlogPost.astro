@@ -1,6 +1,7 @@
 ---
 import { Image, type ImageMetadata } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
 import HeaderArchitectural from "../components/HeaderArchitectural.astro";
 import BackToTop from "../components/BackToTop.astro";
@@ -9,6 +10,9 @@ import CursorGlow from "../components/CursorGlow.astro";
 import GradientText from "../components/GradientText.astro";
 import SkipLink from "../components/SkipLink.astro";
 import TableOfContents from "../components/TableOfContents.astro";
+import RelatedPosts from "../components/RelatedPosts.astro";
+import SocialShare from "../components/SocialShare.astro";
+import GiscusComments from "../components/GiscusComments.astro";
 import Footer from "../components/Footer.astro";
 
 type Props = CollectionEntry<"blog">["data"] & {
@@ -27,6 +31,12 @@ const {
   author,
   headings = [],
 } = Astro.props;
+
+// 获取所有博客文章用于相关推荐
+const allPosts = await getCollection("blog");
+
+// 根据 title 查找当前完整文章对象（用于 RelatedPosts）
+const currentPostFull = allPosts.find(post => post.data.title === title);
 
 // Format date
 const formatDate = (date: Date) => {
@@ -60,7 +70,21 @@ try {
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead
+      title={title}
+      description={description}
+      type="article"
+      image={heroImage}
+      datePublished={pubDate}
+      dateModified={updatedDate}
+      tags={tags}
+      category={category}
+      breadcrumb={[
+        { name: '首页', item: '/' },
+        { name: '技术文章', item: '/blog' },
+        { name: category || 'Article' }
+      ]}
+    />
     <style is:global>
       * {
         margin: 0;
@@ -303,22 +327,12 @@ try {
             }
 
             <div class="article-actions">
-              <button class="action-btn" id="shareBtn" aria-label="分享文章">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                >
-                  <circle cx="18" cy="5" r="3"></circle>
-                  <circle cx="6" cy="12" r="3"></circle>
-                  <circle cx="18" cy="19" r="3"></circle>
-                  <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"></path>
-                </svg>
-                <span>分享</span>
-              </button>
+              <SocialShare
+                title={title}
+                description={description}
+                showLabels={false}
+                orientation="horizontal"
+              />
             </div>
           </div>
 
@@ -345,6 +359,35 @@ try {
               <span class="nav-text">查看所有文章</span>
             </a>
           </nav>
+
+          <!-- Related Posts -->
+          {
+            currentPostFull && (
+              <RelatedPosts
+                currentPost={currentPostFull}
+                allPosts={allPosts}
+                limit={4}
+                title="相关推荐"
+              />
+            )
+          }
+
+          <!-- Comments -->
+          <GiscusComments
+            repo=""
+            repoId=""
+            category="Announcements"
+            categoryId=""
+          >
+          </GiscusComments>
+          {
+            /*
+              Giscus 配置说明:
+              - repo: "owner/repo" 格式
+              - repoId: 从 giscus.app 获取
+              - categoryId: 从 giscus.app 获取
+            */
+          }
         </div>
       </article>
     </main>
@@ -967,21 +1010,6 @@ try {
         position: relative;
       }
 
-      .article-body :global(pre)::before {
-        content: attr(data-language);
-        position: absolute;
-        top: 0.5em;
-        right: 1.5em;
-        padding: 0.25em 0.6em;
-        background: rgba(99, 102, 241, 0.3);
-        border-radius: 4px;
-        font-size: 0.7em;
-        font-family: var(--font-mono);
-        color: rgba(255, 255, 255, 0.8);
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-      }
-
       .copy-code-btn {
         position: absolute;
         top: 0.5em;
@@ -1008,7 +1036,24 @@ try {
         opacity: 1;
       }
 
+      /* 添加代码块语言标签和顶部装饰条 */
       .article-body :global(pre)::before {
+        content: attr(data-language);
+        position: absolute;
+        top: 0.5em;
+        right: 1.5em;
+        padding: 0.25em 0.6em;
+        background: rgba(99, 102, 241, 0.3);
+        border-radius: 4px;
+        font-size: 0.7em;
+        font-family: var(--font-mono);
+        color: rgba(255, 255, 255, 0.8);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        z-index: 1;
+      }
+
+      .article-body :global(pre)::after {
         content: "";
         position: absolute;
         top: 0;

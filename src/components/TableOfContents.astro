@@ -1,4 +1,13 @@
 ---
+/**
+ * 增强版目录组件
+ * 功能：
+ * - 显示文章目录
+ * - 当前章节高亮
+ * - 阅读进度指示
+ * - 平滑滚动
+ */
+
 interface Props {
 	headings: { text: string; level: number; id: string }[];
 }
@@ -16,19 +25,143 @@ const mainHeadings = headings.filter((h) => h.level >= 2 && h.level <= 3);
 
 <nav class="table-of-contents" aria-label="文章目录">
 	<div class="toc-header">
-		<h3>目录</h3>
+		<div class="header-left">
+			<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+				<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+				<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+			</svg>
+			<h3>目录</h3>
+		</div>
 		<span class="toc-count">{mainHeadings.length} 节</span>
 	</div>
-	<ul class="toc-list">
-		{mainHeadings.map((heading) => (
-			<li class={`toc-item toc-level-${heading.level}`}>
-				<a href={`#${heading.id}`} class="toc-link">
+
+	<!-- 阅读进度条 -->
+	<div class="toc-progress-container">
+		<div class="toc-progress-bar" id="tocProgressBar"></div>
+	</div>
+
+	<ul class="toc-list" id="tocList">
+		{mainHeadings.map((heading, index) => (
+			<li
+				class={`toc-item toc-level-${heading.level}`}
+				data-heading-id={heading.id}
+				style={`--delay: ${index * 50}ms`}
+			>
+				<a href={`#${heading.id}`} class="toc-link" data-heading-id={heading.id}>
+					<span class="toc-indicator"></span>
 					<span class="toc-text">{heading.text}</span>
 				</a>
 			</li>
 		))}
 	</ul>
 </nav>
+
+<script>
+	// TOC 增强功能
+	document.addEventListener('DOMContentLoaded', () => {
+		const tocLinks = document.querySelectorAll('.toc-link');
+		const progressBar = document.getElementById('tocProgressBar');
+		const tocItems = document.querySelectorAll('.toc-item');
+
+		if (tocLinks.length === 0) return;
+
+		// 平滑滚动
+		tocLinks.forEach((link) => {
+			link.addEventListener('click', (e) => {
+				e.preventDefault();
+				const targetId = link.getAttribute('data-heading-id');
+				const target = document.getElementById(targetId);
+
+				if (target) {
+					const offsetTop = target.offsetTop - 100; // Header height + padding
+					window.scrollTo({
+						top: offsetTop,
+						behavior: 'smooth'
+					});
+
+					// Update URL without jumping
+					history.pushState(null, null, `#${targetId}`);
+				}
+			});
+		});
+
+		// Intersection Observer for current heading
+		const observerOptions = {
+			rootMargin: '-100px 0px -70% 0px',
+			threshold: 0
+		};
+
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					const id = entry.target.id;
+					const activeLink = document.querySelector(`.toc-link[data-heading-id="${id}"]`);
+
+					// Remove active class from all
+					tocLinks.forEach((link) => link.classList.remove('active'));
+					tocItems.forEach((item) => item.classList.remove('active'));
+
+					// Add active class to current
+					if (activeLink) {
+						activeLink.classList.add('active');
+						const activeItem = activeLink.closest('.toc-item');
+						if (activeItem) {
+							activeItem.classList.add('active');
+						}
+					}
+				}
+			});
+		}, observerOptions);
+
+		// Observe all headings
+		const allHeadings = document.querySelectorAll('h2, h3');
+		allHeadings.forEach((heading) => {
+			if (heading.id) {
+				observer.observe(heading);
+			}
+		});
+
+		// 阅读进度计算
+		function updateProgress() {
+			const windowHeight = window.innerHeight;
+			const documentHeight = document.documentElement.scrollHeight - windowHeight;
+			const scrolled = window.scrollY;
+			const progress = Math.min((scrolled / documentHeight) * 100, 100);
+
+			if (progressBar) {
+				progressBar.style.width = `${progress}%`;
+			}
+		}
+
+		// 节流函数
+		function throttle(func: Function, limit: number) {
+			let inThrottle: boolean;
+			return function() {
+				if (!inThrottle) {
+					func();
+					inThrottle = true;
+					setTimeout(() => inThrottle = false, limit);
+				}
+			}
+		}
+
+		// 监听滚动事件
+		window.addEventListener('scroll', throttle(updateProgress, 100));
+
+		// 初始化进度
+		updateProgress();
+
+		// 设置初始激活状态
+		const firstLink = document.querySelector('.toc-link[data-heading-id]');
+		if (firstLink) {
+			firstLink.classList.add('active');
+			const firstItem = firstLink.closest('.toc-item');
+			if (firstItem) {
+				firstItem.classList.add('active');
+			}
+		}
+	});
+</script>
 
 <style>
 	.table-of-contents {
@@ -37,23 +170,38 @@ const mainHeadings = headings.filter((h) => h.level >= 2 && h.level <= 3);
 		align-self: flex-start;
 		max-width: 300px;
 		min-width: 200px;
+		background: rgba(255, 255, 255, var(--glass-opacity-bg));
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		border-radius: 12px;
+		padding: 1.5em;
 	}
 
 	.toc-header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-bottom: 1.5em;
+		margin-bottom: 1em;
 		padding-bottom: 1em;
 		border-bottom: 1px solid var(--border-hover);
 	}
 
+	.header-left {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+	}
+
+	.header-left svg {
+		color: var(--color-primary-muted);
+		flex-shrink: 0;
+	}
+
 	.toc-header h3 {
 		font-size: 0.9em;
-		font-weight: 600;
+		font-weight: 500;
 		color: var(--color-text-primary);
 		margin: 0;
-		letter-spacing: 0.05em;
+		letter-spacing: 0.02em;
 	}
 
 	.toc-count {
@@ -62,6 +210,29 @@ const mainHeadings = headings.filter((h) => h.level >= 2 && h.level <= 3);
 		font-family: 'Space Mono', monospace;
 	}
 
+	/* 进度条 */
+	.toc-progress-container {
+		position: relative;
+		width: 100%;
+		height: 3px;
+		background: rgba(255, 255, 255, 0.06);
+		border-radius: 2px;
+		overflow: hidden;
+		margin-bottom: 1.25em;
+	}
+
+	.toc-progress-bar {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 0%;
+		background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+		border-radius: 2px;
+		transition: width 0.3s ease;
+	}
+
+	/* 目录列表 */
 	.toc-list {
 		list-style: none;
 		padding: 0;
@@ -69,59 +240,101 @@ const mainHeadings = headings.filter((h) => h.level >= 2 && h.level <= 3);
 	}
 
 	.toc-item {
-		margin-bottom: 0.75em;
+		margin-bottom: 0.5em;
+		opacity: 0;
+		animation: fadeInUp 0.4s ease-out forwards;
+		animation-delay: var(--delay);
+	}
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
 	}
 
 	.toc-link {
-		display: block;
-		color: rgba(255, 255, 255, 0.6);
+		display: flex;
+		align-items: flex-start;
+		gap: 0.5em;
+		padding: 0.5em 0.75em;
+		color: var(--color-text-tertiary);
 		text-decoration: none;
 		transition: all 0.3s ease;
+		border-radius: 6px;
 		position: relative;
 	}
 
 	.toc-link:hover {
-		color: var(--color-text-primary);
-		transform: translateX(4px);
+		color: var(--color-text-secondary);
+		background: rgba(255, 255, 255, 0.03);
+		transform: translateX(2px);
 	}
 
-	.toc-link::before {
+	.toc-link.active {
+		color: var(--color-primary);
+		background: rgba(99, 102, 241, 0.1);
+		font-weight: 500;
+	}
+
+	.toc-indicator {
+		position: relative;
+		width: 8px;
+		height: 8px;
+		margin-top: 0.4em;
+		flex-shrink: 0;
+	}
+
+	.toc-indicator::before {
 		content: '';
 		position: absolute;
-		left: -12px;
 		top: 50%;
-		transform: translateY(-50%);
+		left: 50%;
+		transform: translate(-50%, -50%);
 		width: 6px;
-		height: 2px;
-		background: rgba(255, 255, 255, 0.2);
+		height: 6px;
+		border-radius: 50%;
+		background: var(--border-hover);
 		transition: all 0.3s ease;
 	}
 
-	.toc-link:hover::before {
-		background: rgba(255, 255, 255, 0.6);
-		width: 12px;
+	.toc-link:hover .toc-indicator::before {
+		background: var(--color-primary-muted);
+		transform: translate(-50%, -50%) scale(1.2);
+	}
+
+	.toc-link.active .toc-indicator::before {
+		background: var(--color-primary);
+		transform: translate(-50%, -50%) scale(1.3);
+		box-shadow: 0 0 8px var(--color-primary-muted);
 	}
 
 	.toc-text {
 		display: block;
 		font-size: 0.85em;
 		line-height: 1.5;
+		word-break: break-word;
 	}
 
 	.toc-level-2 {
-		font-weight: 500;
+		font-weight: 400;
 	}
 
 	.toc-level-3 {
-		padding-left: 1.5em;
-		font-weight: 400;
+		padding-left: 2em;
+		font-weight: 300;
 	}
 
 	.toc-level-3 .toc-text {
 		font-size: 0.8em;
-		color: var(--color-text-tertiary);
+		color: var(--color-text-muted);
 	}
 
+	/* 响应式 */
 	@media (max-width: 1400px) {
 		.table-of-contents {
 			max-width: 250px;
@@ -132,6 +345,18 @@ const mainHeadings = headings.filter((h) => h.level >= 2 && h.level <= 3);
 	@media (max-width: 1024px) {
 		.table-of-contents {
 			display: none;
+		}
+	}
+
+	/* 无障碍 */
+	@media (prefers-reduced-motion: reduce) {
+		.toc-item,
+		.toc-link,
+		.toc-indicator::before,
+		.toc-progress-bar {
+			transition: none;
+			animation: none;
+			opacity: 1;
 		}
 	}
 </style>

@@ -1,0 +1,15 @@
+{
+  "indexAttrs": ["content", "description", "title"],
+  "excludeSelectors": [
+    "[data-pagefind-ignore]",
+    ".page-footer",
+    "nav",
+    "header",
+    "footer",
+    ".toc-list",
+    ".search-modal"
+  ],
+  "rootSelector": "main, article, .article-content",
+  "language": "zh",
+  "verbose": false
+}
