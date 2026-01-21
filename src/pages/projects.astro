@@ -4,6 +4,7 @@ import HeaderArchitectural from '../components/HeaderArchitectural.astro';
 import ProjectGridArchitectural from '../components/ProjectGridArchitectural.astro';
 import BackToTop from '../components/BackToTop.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
+import SkipLink from '../components/SkipLink.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
@@ -299,6 +300,7 @@ const categoryCounts = allCategories.map(category => ({
 
 	<body>
 		<ScrollProgress />
+		<SkipLink />
 		<HeaderArchitectural />
 
 		<!-- Page Header -->

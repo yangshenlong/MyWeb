@@ -1,0 +1,207 @@
+---
+/**
+ * StaggerGroup 组件
+ * 子元素交错进入动画
+ * @example
+ * <StaggerGroup stagger={100}>
+ *   <div>项目 1</div>
+ *   <div>项目 2</div>
+ *   <div>项目 3</div>
+ * </StaggerGroup>
+ */
+
+import { ANIMATION_DURATION, ANIMATION_EASING, prefersReducedMotion } from '@utils/animation.js';
+
+interface Props {
+  /** 子元素动画延迟间隔（毫秒） */
+  stagger?: number;
+  /** 动画时长 */
+  duration?: number;
+  /** 动画缓动函数 */
+  easing?: string;
+  /** 动画方向 */
+  direction?: 'up' | 'down' | 'left' | 'right' | 'fade';
+  /** 自定义类名 */
+  className?: string;
+  /** 是否在视口时触发 */
+  triggerOnView?: boolean;
+  /** 触发偏移量（像素） */
+  viewOffset?: number;
+}
+
+const {
+  stagger = 100,
+  duration = ANIMATION_DURATION.normal,
+  easing = ANIMATION_EASING.smooth,
+  direction = 'up',
+  className,
+  triggerOnView = true,
+  viewOffset = 50
+} = Astro.props;
+
+const shouldReduceMotion = prefersReducedMotion();
+const actualDuration = shouldReduceMotion ? 0 : duration;
+---
+
+<div
+  class:list={['stagger-group', `direction-${direction}`, className]}
+  data-stagger={stagger}
+  data-duration={actualDuration}
+  data-easing={easing}
+  data-trigger={triggerOnView}
+  data-offset={viewOffset}
+>
+  <slot />
+</div>
+
+<style>
+  .stagger-group {
+    --stagger: 100ms;
+    --duration: 300ms;
+    --easing: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .stagger-group > * {
+    opacity: 0;
+    animation: staggerFadeIn var(--duration) var(--easing) both;
+    animation-delay: calc(var(--stagger) * var(--child-index, 0));
+  }
+
+  /* 触发动画的类 */
+  .stagger-group.animate > *,
+  .stagger-group:not([data-trigger='true']) > * {
+    opacity: 1;
+  }
+
+  /* 方向变体 */
+  .stagger-group.direction-up > * {
+    transform: translateY(30px);
+    animation-name: staggerSlideUp;
+  }
+
+  .stagger-group.direction-down > * {
+    transform: translateY(-30px);
+    animation-name: staggerSlideDown;
+  }
+
+  .stagger-group.direction-left > * {
+    transform: translateX(30px);
+    animation-name: staggerSlideLeft;
+  }
+
+  .stagger-group.direction-right > * {
+    transform: translateX(-30px);
+    animation-name: staggerSlideRight;
+  }
+
+  .stagger-group.direction-fade > * {
+    transform: none;
+    animation-name: staggerFadeIn;
+  }
+
+  /* 动画结束状态 */
+  .stagger-group.animate > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* 动画定义 */
+  @keyframes staggerFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes staggerSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes staggerSlideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes staggerSlideLeft {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes staggerSlideRight {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* 减少动画偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .stagger-group > * {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  const staggerGroups = document.querySelectorAll('.stagger-group[data-trigger="true"]');
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const group = entry.target as HTMLElement;
+          const offset = parseInt(group.dataset.offset || '50', 10);
+
+          // 延迟一点触发，让元素进入视口更多
+          setTimeout(() => {
+            group.classList.add('animate');
+          }, offset);
+
+          // 动画触发后停止观察
+          observer.unobserve(group);
+        }
+      });
+    },
+    {
+      threshold: 0.1,
+      rootMargin: '50px'
+    }
+  );
+
+  staggerGroups.forEach((group) => {
+    // 为子元素设置索引
+    const children = Array.from(group.children);
+    children.forEach((child, index) => {
+      (child as HTMLElement).style.setProperty('--child-index', index.toString());
+    });
+
+    observer.observe(group);
+  });
+</script>

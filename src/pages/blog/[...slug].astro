@@ -42,10 +42,14 @@ const headings: { text: string; level: number; id: string }[] = [];
 const layout = post.id === 'grass-technical-analysis' ? BlogPostGrass : BlogPost;
 const LayoutComponent = layout;
 
-// 将标题添加到 props 中
+// 提取文章 slug
+const postSlug = post.id.replace(/\.(md|mdx)$/, '');
+
+// 将标题和 slug 添加到 props 中
 const propsWithHeadings = {
 	...post.data,
-	headings
+	headings,
+	postSlug
 };
 ---
 

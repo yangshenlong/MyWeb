@@ -1,0 +1,212 @@
+---
+/**
+ * StarButton 星标按钮组件
+ * 用于收藏/取消收藏文章
+ */
+
+import type { ComponentProps } from '@types/index.js';
+
+interface Props extends ComponentProps {
+  /** 文章 slug */
+  postSlug: string;
+  /** 初始收藏状态（可选，默认自动检测） */
+  starred?: boolean;
+  /** 是否显示数量 */
+  showCount?: boolean;
+  /** 尺寸 */
+  size?: 'sm' | 'md' | 'lg';
+  /** 是否禁用动画 */
+  noAnimation?: boolean;
+}
+
+const {
+  postSlug,
+  starred: initialStarred,
+  showCount = false,
+  size = 'md',
+  noAnimation = false,
+  className = '',
+  ariaLabel
+} = Astro.props;
+
+// 尺寸配置
+const sizes = {
+  sm: { icon: 16, text: '0.75rem' },
+  md: { icon: 20, text: '0.875rem' },
+  lg: { icon: 24, text: '1rem' }
+};
+const sizeConfig = sizes[size];
+---
+
+<button
+  class:list={['star-button', `size-${size}`, className]}
+  data-post-slug={postSlug}
+  data-initial-starred={initialStarred}
+  aria-label={ariaLabel || '收藏这篇文章'}
+  aria-pressed="false"
+>
+  <svg class="star-icon star-icon-empty" width={sizeConfig.icon} height={sizeConfig.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M11.049 2.927c.317 0 .574.112.79.336l-5.904 10.616c-.357.635-1.317.27-1.651-.766l-.096-.15c-.462-.68-.68-1.461-.346-1.853c.023-.05.053-.112.076-.174-.17l.067-.01c.19-.046.393-.116.597-.207.374-.407.77-.696-1.126-.794-.425-.228-.226-1.1.306-1.87-2.08-1.298-1.504-3.354-4.368-5.444-.045-.076-.09-.157-.104-.237-.027-1.064.56-2.24 1.45-3.628 2.717-2.336 4.997-4.64 1.956-1.388 2.878-2.39 4.182-.953.777-2.22.902-2.39 1.466-.04.18.285.072.435.11.128.22.253.298.488.256.674.11.937-.157.456-.47.928-1.17-.33-.507-.237-.668-.982-1.028-1.048-.38-.357-.736-.086-1.448.086-.412.153-.762.334-.903.578-.595.36-.607-.972-.047-.38.023-.754.143-1.124.275-.35.38-.75.425-1.217.091-1.44.936-.26.507-.516.958-.7 1.06-1.417.696-1.486 2.085-.163 1.95-1.856 3.076-.36.6.617-1.133.824-1.715.31-.403.709-.487 1.41-.08 1.785-.587 2.682-.194 1.075.277 1.526.996 1.526 1.016 0 1.865-.694 2.267-1.693.155-.833.122-1.588.086-2.036.893-.448 1.372-.487 2.46.05 3.248.69.653.864 1.584.705 2.682.242 1.017.046 1.324.413.429.91.632.053.045.09.086.083.105.15.12.156.12.156.12.156.015.033.036.064.072.11.108.108.108.084.05.002.002.004.002.004.002.002.004 0 0 .073.037.073.037.073.037.068.035.108.053.053.053.053.053.053.073.037.073.037.037.037.037.037.068.035.108.053.053.053.053.053.053.053.073.037.037.037.037.037.037.037.068.035.108.053.053.053.053.053.053.053.053.073.037.037.037.037.037.037.037.068.035.108.053.053.053.053.053.053.053.073.037.037.037.037.037.037.037.068.035.108.053.053.053.053.053.053.053.073.037.037.037.037.037.037.037.068.035.108.053.053.053.053.053.053.073.037.037.037.037.037.037 8.588 5.96 2.294 1.148-.848 8.588-5.96c-.75 4.094-3.06 6.847-6.947 6.847-.35 0-.694-.036-1.038-.094-.034-.058-.068-.122-.095-.19-.086-.33-.164-.527-.164-.91v-.002c.035-.577.233-1.267.629-1.56.83-.12.062-.24.126.18-.191.045-.062.29-.062.29-.062.29s0 .228.062.29c.064.187.121.358.17.545.05.187.35.34.587.17.545.092.092.092.092.092.092 0 0-.073.037-.073.037-.073.037C23.026 2.294 20.492 0 18.5 0c-1.807 0-3.278 1.355-3.493 3.064l-.008.065c-.007.052-.015-.104-.022-.156-.017-.017-.034-.032-.052-.047-.047-.047-.047-.047-.047-.047-.047z" />
+    </svg>
+  <svg class="star-icon star-icon-filled" width={sizeConfig.icon} height={sizeConfig.icon} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M8.425 13.5l.792-1.03c.445-.584.674-1.168.822-1.755l.798-1.03-1.59-2.063-1.59-3.096 0-1.49.878-3.124 2.352-4.686l.242-.472c.08-.156.14-.258.21-.416.21-.66.416-1.32.63-1.98.63-3.15 0-2.533 1.452-4.874 3.725-3.91.68-6.3 3.5-6.3 3.5c0 2.02 1.62 3.5 3.5 3.5 1.933 0 3.48-1.57 3.48-3.5 0-.485-.102-.953-.284-1.38-.182-.65-.336-1.282-.464-1.908-.336-.598-.036-1.19.036-1.756.098-.07.022-.14.045-.21.067-.35.086-.35-.128-.728-.24-1.088-.368-.525-.18-1.08-.18-1.643 0-1.858 1.272-3.374 2.812-4.57 1.406-.658 2.594-1.506 3.236-2.543.643-.884.976-1.746.976-2.687 0-.65-.18-1.355-.18-2.063 0-1.505.803-2.772 1.805-3.83l.642-.865c.386-.52.444-1.002.52-1.584.966-.582.445-1.16.878-1.732 1.316l-.39.652c-.377.626-.63 1.246-.824 1.908-.194.66-.336 1.33-.36 2.013 0 .485.102.953.284 1.38.182.65.336 1.282.464 1.908.368.598.036 1.19.036 1.756.098.07.022.14.045.21.067.35.086.35.128.728.24 1.088.368.525.18 1.088 1.643 0 1.858-1.272 3.374-2.812 4.57-1.406.658-2.594 1.506-3.236 2.543-.643.884-.976 1.746-.976 2.687 0 .65.18 1.355.18 2.063 0 1.505-.803 2.772-1.805 3.83l-.642.865c-.386.52-.444 1.002-.52 1.584-.966.582-.445 1.16-.878 1.732-1.316l.39-.652c.377-.626.63-1.246.824-1.908.194-.66.336-1.33-.36-2.013 0-.485-.102-.953-.284-1.38z" />
+  </svg>
+  {showCount && <span class="star-count">0</span>}
+</button>
+
+<style>
+  .star-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.625rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--star-text, 0.875rem);
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  .star-button:hover {
+    background: rgba(255, 215, 0, 0.05);
+    border-color: rgba(255, 215, 0, 0.2);
+    color: rgba(255, 215,0, 0.8);
+  }
+
+  .star-button:active {
+    transform: scale(0.95);
+  }
+
+  .star-button.starred {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+  }
+
+  .star-button.starred:hover {
+    background: rgba(255, 215, 0, 0.15);
+    border-color: rgba(255, 215, 0, 0.3);
+    color: #ffed4e;
+  }
+
+  /* 尺寸变体 */
+  .size-sm {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .size-lg {
+    padding: 0.5rem 0.875rem;
+  }
+
+  /* 星标图标 */
+  .star-icon {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .star-icon-empty {
+    display: block;
+  }
+
+  .star-icon-filled {
+    display: none;
+  }
+
+  .star-button.starred .star-icon-empty {
+    display: none;
+  }
+
+  .star-button.starred .star-icon-filled {
+    display: block;
+    animation: starPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes starPop {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* 收藏数量 */
+  .star-count {
+    font-size: 0.75em;
+    font-weight: 500;
+    font-family: 'Space Mono', monospace;
+    color: rgba(255, 255, 255, 0.5);
+    min-width: 1.2em;
+    text-align: center;
+  }
+
+  .star-button.starred .star-count {
+    color: #ffd700;
+  }
+
+  /* 减少动画偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .star-icon {
+      transition: none !important;
+    }
+
+    .star-button.starred .star-icon-filled {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script define:vars={{ postSlug, initialStarred, showCount, noAnimation }}>
+  import { isPostStarred, toggleStarredPost, getStarredCount, onStarChange } from '../../utils/star-storage.js';
+
+  const button = document.querySelector(`[data-post-slug="${postSlug}"]`) as HTMLButtonElement;
+  const countElement = button?.querySelector('.star-count') as HTMLElement;
+
+  // 初始化状态
+  const starred = initialStarred ?? isPostStarred(postSlug);
+  updateButton(starred);
+  updateCount();
+
+  // 监听全局状态变化
+  const cleanup = onStarChange(({ postSlug: changedSlug }) => {
+    if (changedSlug === postSlug) {
+      const newState = isPostStarred(postSlug);
+      updateButton(newState);
+      updateCount();
+    }
+  });
+
+  // 点击事件
+  button?.addEventListener('click', () => {
+    const newState = toggleStarredPost(postSlug);
+    updateButton(newState);
+    updateCount();
+  });
+
+  // 清理
+  document.addEventListener('astro:page-load', cleanup);
+
+  function updateButton(isStarred: boolean) {
+    if (!button) return;
+
+    button.classList.toggle('starred', isStarred);
+    button.setAttribute('aria-pressed', String(isStarred));
+
+    const ariaLabel = isStarred ? '取消收藏' : '收藏这篇文章';
+    button.setAttribute('aria-label', ariaLabel);
+  }
+
+  function updateCount() {
+    if (!countElement || !showCount) return;
+    countElement.textContent = getStarredCount().toString();
+  }
+</script>

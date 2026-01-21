@@ -12,6 +12,8 @@
     "format:check": "prettier --check \"src/**/*.{astro,js,ts,json,css}\"",
     "lint": "eslint \"src/**/*.{astro,js,ts}\"",
     "lint:fix": "eslint \"src/**/*.{astro,js,ts}\" --fix",
+    "lint:css": "stylelint \"src/**/*.{css,astro}\"",
+    "lint:css:fix": "stylelint \"src/**/*.{css,astro}\" --fix",
     "type-check": "astro check",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -25,7 +27,11 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{json,css,md}": [
+    "*.{css,astro}": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
       "prettier --write"
     ]
   },

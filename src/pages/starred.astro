@@ -1,0 +1,543 @@
+---
+import HeaderArchitectural from "../components/HeaderArchitectural.astro";
+import Footer from "../components/Footer.astro";
+import BackToTop from "../components/BackToTop.astro";
+import ScrollProgress from "../components/ScrollProgress.astro";
+import SkipLink from "../components/SkipLink.astro";
+import { getCollection } from "astro:content";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+// 获取所有博客文章（用于客户端过滤）
+const allPosts = await getCollection("blog");
+const postsData = allPosts.map(post => ({
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description,
+  pubDate: post.data.pubDate,
+  tags: post.data.tags || [],
+  category: post.data.category
+}));
+
+// 按日期排序
+const sortedPosts = postsData.sort(
+  (a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
+);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的收藏 | {SITE_TITLE}</title>
+    <meta name="description" content={`查看您收藏的所有文章 - ${SITE_DESCRIPTION}`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Space+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Space+Mono:wght@400;500&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <style is:global>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background: #050505;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      ::selection {
+        background: rgba(99, 102, 241, 0.3);
+        color: rgba(255, 255, 255, 1);
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    </style>
+  </head>
+
+  <body>
+    <ScrollProgress />
+    <SkipLink />
+    <HeaderArchitectural />
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="breadcrumb">
+          <span class="breadcrumb-item">
+            <a href="/">首页</a>
+          </span>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-item current">我的收藏</span>
+        </div>
+
+        <div class="hero-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8.425 13.5l.792-1.03c.445-.584.674-1.168.822-1.755l.798-1.03-1.59-2.063-1.59-3.096 0-1.49.878-3.124 2.352-4.686l.242-.472c.08-.156.14-.258.21-.416.21-.66.416-1.32.63-1.98.63-3.15 0-2.533 1.452-4.874 3.725-3.91.68-6.3 3.5-6.3 3.5c0 2.02 1.62 3.5 3.5 3.5 1.933 0 3.48-1.57 3.48-3.5 0-.485-.102-.953-.284-1.38-.182-.65-.336-1.282-.464-1.908-.336-.598-.036-1.19.036-1.756.098-.07.022-.14.045-.21.067-.35.086-.35.128.728.24 1.088.368.525.18 1.08.18 1.643 0 1.858-1.272 3.374-2.812 4.57-1.406.658-2.594 1.506-3.236 2.543-.643.884-.976 1.746-.976 2.687 0 .65.18 1.355.18 2.063 0 1.505-.803 2.772-1.805 3.83l-.642.865c-.386.52-.444 1.002-.52 1.584-.966.582-.445 1.16-.878 1.732-1.316l.39-.652c.377-.626.63-1.246.824-1.908.194-.66.336-1.33-.36-2.013 0-.485-.102-.953-.284-1.38z" />
+          </svg>
+        </div>
+
+        <h1 class="hero-title">我的收藏</h1>
+        <p class="hero-description">收藏您喜欢的文章，随时回来阅读</p>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number" id="starredCount">0</span>
+            <span class="stat-label">篇收藏</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Content Section -->
+    <section class="content-section">
+      <div class="content-container">
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <path d="M11.049 2.927c.317 0 .574.112.79.336l-5.904 10.616c-.357.635-1.317.27-1.651-.766l-.096-.15c-.462-.68-.68-1.461-.346-1.853.023-.05.053-.112.076-.174-.17l.067-.01c.19-.046.393-.116.597-.207.374-.407.77-.696-1.126-.794-.425-.228-.226-1.1.306-1.87-2.08-1.298-1.504-3.354-4.368-5.444-.045-.076-.09-.157-.104-.237-.027-1.064.56-2.24 1.45-3.628 2.717-2.336 4.997-4.64 1.956-1.388 2.878-2.39 4.182-.953.777-2.22.902-2.39 1.466-.04.18.285.072.435.11.128.22.253.298.488.256.674.11.937-.157.456-.47.928-1.17-.33-.507-.237-.668-.982-1.028-1.048-.38-.357-.736-.086-1.448.086-.412.153-.762.334-.903.578-.595.36-.607-.972-.047-.38.023-.754.143-1.124.275-.35.38-.75.425-1.217.091-1.44.936-.26.507-.516.958-.7 1.06-1.417.696-1.486 2.085-.163 1.95-1.856 3.076-.36.6.617-1.133.824-1.715.31-.403.709-.487 1.41-.08 1.785-.587 2.682-.194 1.075.277 1.526.996 1.526 1.016 0 1.865-.694 2.267-1.693.155-.833.122-1.588.086-2.036.893-.448 1.372-.487 2.46.05 3.248.69.653.864 1.584.705 2.682.242 1.017.046 1.324.413.429.91.632.053.045.09.086.083.105.15.12.156.12.156.12.156.015.033.036.064.072.11.108.108.108.084.05.002.002.004.002.004.002.004 0 0 .073.037.073.037.073.037.068.035.108.053.053.053.053.053.053.073.037.073.037.037.037.037.037.068.035.108.053.053.053.053.053.053.053.073.037.037.037.037.037.037.037.068.035.108.053.053.053.053.053.053.053.073.037.037.037.037.037.037.037.068.035.108.053.053.053.053.053.053.053.073.037.037.037.037.037.037.037.068.035.108.053.053.053.053.053.053.053.073.037.037.037.037.037.037.037.068.035.108.053.053.053.053.053.053.053.073.037.037.037.037.037.037.037.068.035.108.053.053.053.053.053.053.073.037.037.037.037.037.037.037.068.035.108.053.053.053.053.053.053.053.073.037.037.037.037.037.037.037.068.035.108.053.053.053.053.053.053.073.037.037.037.037.037.037 8.588 5.96 2.294 1.148-.848 8.588-5.96c-.75 4.094-3.06 6.847-6.947 6.847-.35 0-.694-.036-1.038-.094-.034-.058-.068-.122-.095-.19-.086-.33-.164-.527-.164-.91v-.002c.035-.577.233-1.267.629-1.56.83-.12.062-.24.126.18-.191.045-.062.29-.062.29-.062.29s0 .228.062.29c.064.187.121.358.17.545.05.187.35.34.587.17.545.092.092.092.092.092.092 0 0-.073.037-.073.037-.073.037C23.026 2.294 20.492 0 18.5 0c-1.807 0-3.278 1.355-3.493 3.064l-.008.065c-.007.052-.015-.104-.022-.156-.017-.017-.034-.032-.052-.047-.047-.047-.047-.047-.047-.047-.047z" />
+            </svg>
+          </div>
+          <h2>还没有收藏</h2>
+          <p>点击文章上的星标按钮来收藏您喜欢的内容</p>
+          <a href="/blog" class="btn-browse">
+            浏览文章
+          </a>
+        </div>
+
+        <!-- Posts Grid -->
+        <div class="posts-grid" id="postsGrid" style="display: none;">
+          <!-- Posts will be rendered here by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <Footer />
+    <BackToTop />
+
+    <script define:vars={{ sortedPosts }}>
+      // Posts data from server
+      const postsData = sortedPosts;
+
+      // Get starred posts from localStorage
+      function getStarredSlugs(): string[] {
+        try {
+          const data = localStorage.getItem('blog_starred_posts');
+          if (!data) return [];
+          const parsed = JSON.parse(data);
+          return Object.entries(parsed)
+            .filter(([_, data]: [string, any]) => data.starred)
+            .sort(([, a]: [string, any], [, b]: [string, any]) =>
+              new Date(b.starredAt).getTime() - new Date(a.starredAt).getTime()
+            )
+            .map(([slug]) => slug);
+        } catch {
+          return [];
+        }
+      }
+
+      // Render starred posts
+      function renderStarredPosts() {
+        const starredSlugs = getStarredSlugs();
+        const emptyState = document.getElementById('emptyState') as HTMLElement;
+        const postsGrid = document.getElementById('postsGrid') as HTMLElement;
+        const starredCount = document.getElementById('starredCount') as HTMLElement;
+
+        // Update count
+        starredCount.textContent = starredSlugs.length.toString();
+
+        if (starredSlugs.length === 0) {
+          emptyState.style.display = 'block';
+          postsGrid.style.display = 'none';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+        postsGrid.style.display = 'grid';
+
+        // Filter and render posts
+        const starredPosts = postsData.filter(post => starredSlugs.includes(post.slug));
+
+        postsGrid.innerHTML = starredPosts.map((post, index) => {
+          const postUrl = `/blog/${post.slug}`;
+          const formattedDate = new Date(post.pubDate).toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+
+          return `
+            <article class="post-card" style="--delay: ${index * 60}ms">
+              <a href="${postUrl}" class="post-link">
+                <div class="post-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+                  </svg>
+                </div>
+                <div class="post-content">
+                  <h3 class="post-title">${post.title}</h3>
+                  ${post.description ? `<p class="post-description">${post.description}</p>` : ''}
+                  <div class="post-meta">
+                    <time class="post-date">${formattedDate}</time>
+                    ${post.category ? `<span class="post-category">${post.category}</span>` : ''}
+                  </div>
+                  ${post.tags.length > 0 ? `
+                    <div class="post-tags">
+                      ${post.tags.slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                  ` : ''}
+                </div>
+              </a>
+            </article>
+          `;
+        }).join('');
+      }
+
+      // Initial render
+      renderStarredPosts();
+
+      // Listen for star changes
+      window.addEventListener('star-toggled', renderStarredPosts);
+    </script>
+
+    <style>
+      /* Hero Section */
+      .hero-section {
+        padding: calc(60px + 4rem) 2rem 3rem;
+        background: #050505;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+      }
+
+      .breadcrumb-item {
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+        transition: color 0.3s ease;
+      }
+
+      .breadcrumb-item:hover {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .breadcrumb-item.current {
+        color: rgba(99, 102, 241, 0.8);
+      }
+
+      .breadcrumb-separator {
+        color: rgba(255, 255, 255, 0.2);
+      }
+
+      .hero-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+        border: 2px solid rgba(255, 215, 0, 0.2);
+        border-radius: 50%;
+        color: #ffd700;
+        margin-bottom: 1.5rem;
+      }
+
+      .hero-title {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.95);
+        margin: 0 0 1rem 0;
+      }
+
+      .hero-description {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin: 0 0 2rem 0;
+      }
+
+      .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+      }
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: 600;
+        color: rgba(255, 215, 0, 0.9);
+        font-family: "Space Mono", monospace;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      /* Content Section */
+      .content-section {
+        padding: 3rem 0 6rem;
+        background: #050505;
+      }
+
+      .content-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 6rem 2rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .empty-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        height: 120px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 50%;
+        margin-bottom: 2rem;
+        color: rgba(255, 255, 255, 0.2);
+      }
+
+      .empty-state h2 {
+        font-size: 1.5rem;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.6);
+        margin: 0 0 0.5rem 0;
+      }
+
+      .empty-state p {
+        font-size: 1rem;
+        margin: 0 0 2rem 0;
+      }
+
+      .btn-browse {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 2rem;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: 8px;
+        color: rgba(99, 102, 241, 0.9);
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+      }
+
+      .btn-browse:hover {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: rgba(99, 102, 241, 0.5);
+        transform: translateY(-2px);
+      }
+
+      /* Posts Grid */
+      .posts-grid {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .post-card {
+        animation: fadeInUp 0.5s ease-out backwards;
+        animation-delay: var(--delay);
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .post-link {
+        display: flex;
+        gap: 1rem;
+        padding: 1.25rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+      }
+
+      .post-link:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 215, 0, 0.2);
+        transform: translateX(4px);
+      }
+
+      .post-icon {
+        flex-shrink: 0;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        border-radius: 10px;
+        color: rgba(255, 215, 0, 0.7);
+      }
+
+      .post-content {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .post-title {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.95);
+        margin: 0 0 0.5rem 0;
+        line-height: 1.4;
+      }
+
+      .post-description {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin: 0 0 0.75rem 0;
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .post-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .post-date {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+        font-family: "Space Mono", monospace;
+      }
+
+      .post-category {
+        font-size: 0.75rem;
+        padding: 0.15rem 0.5rem;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        border-radius: 4px;
+        color: #a78bfa;
+      }
+
+      .post-tags {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .tag {
+        font-size: 0.75rem;
+        padding: 0.15rem 0.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .hero-section {
+          padding: calc(60px + 2rem) 1rem 2rem;
+        }
+
+        .content-section {
+          padding: 2rem 0 4rem;
+        }
+
+        .content-container {
+          padding: 0 1rem;
+        }
+
+        .post-link {
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .post-icon {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    </style>
+  </body>
+</html>

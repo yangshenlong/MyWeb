@@ -1,0 +1,358 @@
+---
+/**
+ * Toast 消息提示组件
+ * 用于显示操作反馈、错误提示等
+ * @example
+ * // 在页面中包含容器
+ * <ToastContainer />
+ * // 在脚本中调用
+ * Toast.show('操作成功', 'success')
+ */
+
+import type { ToastType } from '../../types';
+
+interface ToastContainerProps {
+  /** 位置 */
+  position?: 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  /** 最大显示数量 */
+  maxToasts?: number;
+}
+
+const { position = 'top-right', maxToasts = 5 } = Astro.props;
+---
+
+<div
+  id="toast-container"
+  class:list={['toast-container', `position-${position}`]}
+  data-max-toasts={maxToasts}
+  role="status"
+  aria-live="polite"
+>
+  <!-- Toast 消息会动态插入到这里 -->
+</div>
+
+<style>
+  .toast-container {
+    position: fixed;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    pointer-events: none;
+  }
+
+  /* 位置变体 */
+  .toast-container.position-top {
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .toast-container.position-bottom {
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .toast-container.position-top-left {
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .toast-container.position-top-right {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .toast-container.position-bottom-left {
+    bottom: 1rem;
+    left: 1rem;
+  }
+
+  .toast-container.position-bottom-right {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  /* Toast 项目样式 */
+  .toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 280px;
+    max-width: 400px;
+    animation: toastSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
+  }
+
+  .toast.removing {
+    animation: toastSlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  /* Toast 图标 */
+  .toast-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Toast 内容 */
+  .toast-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toast-title {
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .toast-message {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+
+  /* Toast 关闭按钮 */
+  .toast-close {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+  }
+
+  .toast-close:hover {
+    background: var(--color-muted);
+  }
+
+  /* Toast 进度条 */
+  .toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: currentColor;
+    animation: toastProgress linear;
+  }
+
+  /* 类型变体 */
+  .toast.type-success {
+    border-left: 4px solid hsl(142, 76%, 36%);
+    color: hsl(142, 76%, 36%);
+  }
+
+  .toast.type-error {
+    border-left: 4px solid hsl(0, 84%, 60%);
+    color: hsl(0, 84%, 60%);
+  }
+
+  .toast.type-info {
+    border-left: 4px solid hsl(199, 89%, 48%);
+    color: hsl(199, 89%, 48%);
+  }
+
+  .toast.type-warning {
+    border-left: 4px solid hsl(43, 96%, 56%);
+    color: hsl(43, 96%, 56%);
+  }
+
+  /* 动画 */
+  @keyframes toastSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes toastSlideOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes toastProgress {
+    from {
+      width: 100%;
+    }
+    to {
+      width: 0%;
+    }
+  }
+
+  /* 响应式 */
+  @media (max-width: 640px) {
+    .toast {
+      min-width: auto;
+      max-width: calc(100vw - 2rem);
+    }
+
+    .toast-container.position-top,
+    .toast-container.position-bottom {
+      left: 1rem;
+      right: 1rem;
+      transform: none;
+    }
+  }
+
+  /* 减少动画偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .toast,
+    .toast-progress {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script define:vars={{ position, maxToasts }}>
+  interface ToastItem {
+    id: string;
+    type: ToastType;
+    title?: string;
+    message: string;
+    duration?: number;
+  }
+
+  class ToastManager {
+    private container: HTMLElement;
+    private toasts: Map<string, HTMLElement> = new Map();
+    private maxToasts: number;
+
+    constructor() {
+      const container = document.getElementById('toast-container');
+      if (!container) {
+        throw new Error('Toast container not found');
+      }
+      this.container = container;
+      this.maxToasts = maxToasts;
+    }
+
+    private createIcon(type: ToastType): string {
+      const icons = {
+        success: '<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',
+        error: '<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>',
+        info: '<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>',
+        warning: '<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>'
+      };
+      return icons[type] || icons.info;
+    }
+
+    show(title: string, message: string, type: ToastType = 'info', duration = 4000): string {
+      const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+      // 检查是否超过最大数量
+      if (this.toasts.size >= this.maxToasts) {
+        const firstToast = this.toasts.keys().next().value;
+        if (firstToast) {
+          this.remove(firstToast);
+        }
+      }
+
+      // 创建 Toast 元素
+      const toast = document.createElement('div');
+      toast.className = `toast type-${type}`;
+      toast.id = id;
+      toast.setAttribute('role', 'alert');
+      toast.innerHTML = `
+        <span class="toast-icon">${this.createIcon(type)}</span>
+        <div class="toast-content">
+          ${title ? `<div class="toast-title">${title}</div>` : ''}
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" aria-label="关闭">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+        ${duration > 0 ? '<div class="toast-progress" style="animation-duration: ' + duration + 'ms"></div>' : ''}
+      `;
+
+      // 添加关闭按钮事件
+      const closeBtn = toast.querySelector('.toast-close');
+      closeBtn?.addEventListener('click', () => this.remove(id));
+
+      // 添加到容器
+      this.container.appendChild(toast);
+      this.toasts.set(id, toast);
+
+      // 自动移除
+      if (duration > 0) {
+        setTimeout(() => this.remove(id), duration);
+      }
+
+      return id;
+    }
+
+    remove(id: string): void {
+      const toast = this.toasts.get(id);
+      if (toast) {
+        toast.classList.add('removing');
+        setTimeout(() => {
+          toast.remove();
+          this.toasts.delete(id);
+        }, 300);
+      }
+    }
+
+    success(message: string, title?: string): string {
+      return this.show(title || '成功', message, 'success');
+    }
+
+    error(message: string, title?: string): string {
+      return this.show(title || '错误', message, 'error');
+    }
+
+    info(message: string, title?: string): string {
+      return this.show(title || '提示', message, 'info');
+    }
+
+    warning(message: string, title?: string): string {
+      return this.show(title || '警告', message, 'warning');
+    }
+
+    clear(): void {
+      this.toasts.forEach((_, id) => this.remove(id));
+    }
+  }
+
+  // 创建全局 Toast 实例
+  let toastManager: ToastManager | null = null;
+
+  // 等待 DOM 加载
+  function initToast() {
+    if (!toastManager) {
+      toastManager = new ToastManager();
+    }
+    return toastManager;
+  }
+
+  // 导出到全局
+  if (typeof window !== 'undefined') {
+    window.addEventListener('DOMContentLoaded', () => {
+      const Toast = initToast();
+      (window as unknown as { Toast: typeof Toast }).Toast = Toast;
+    });
+  }
+</script>

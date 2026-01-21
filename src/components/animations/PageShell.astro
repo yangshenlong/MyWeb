@@ -1,0 +1,136 @@
+---
+/**
+ * PageShell 组件
+ * 页面级过渡容器，与 View Transitions API 集成
+ * @example
+ * <PageShell transitionName="fade">
+ *   <main>
+ *     <!-- 页面内容 -->
+ *   </main>
+ * </PageShell>
+ */
+
+interface Props {
+  /** 过渡效果名称 */
+  transitionName?: 'fade' | 'slide' | 'scale' | 'none';
+  /** 过渡时长 */
+  duration?: number;
+  /** 自定义类名 */
+  className?: string;
+}
+
+const { transitionName = 'fade', duration = 300, className } = Astro.props;
+---
+
+<div
+  class:list={['page-shell', `transition-${transitionName}`, className]}
+  data-duration={duration}
+>
+  <slot />
+</div>
+
+<style>
+  .page-shell {
+    --transition-duration: 300ms;
+  }
+
+  /* 淡入淡出过渡 */
+  .page-shell.transition-fade {
+    view-transition-name: page;
+    animation: fadeIn var(--transition-duration) ease-out;
+  }
+
+  /* 滑动过渡 */
+  .page-shell.transition-slide {
+    view-transition-name: page;
+    animation: slideIn var(--transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* 缩放过渡 */
+  .page-shell.transition-scale {
+    view-transition-name: page;
+    animation: scaleIn var(--transition-duration) cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* 动画定义 */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* View Transitions API 支持 */
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(page),
+  ::view-transition-new(page) {
+    animation-duration: var(--transition-duration);
+  }
+
+  ::view-transition-old(page) {
+    animation-name: fadeOut;
+  }
+
+  ::view-transition-new(page) {
+    animation-name: fadeIn;
+  }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* 减少动画偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .page-shell,
+    ::view-transition-old(page),
+    ::view-transition-new(page) {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  // 检测浏览器是否支持 View Transitions API
+  if ('viewTransition' in document) {
+    // 为所有内部链接添加页面过渡
+    document.addEventListener('astro:page-load', () => {
+      const duration = document.documentElement.dataset.pageTransition || '300';
+      document.documentElement.style.setProperty('--page-transition', `${duration}ms`);
+    });
+  }
+
+  // 页面加载时的初始动画
+  window.addEventListener('load', () => {
+    document.body.classList.add('page-loaded');
+  });
+</script>

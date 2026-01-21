@@ -8,6 +8,7 @@ import BackToTop from '../components/BackToTop.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
 import PageLoader from '../components/PageLoader.astro';
 import PageTransition from '../components/PageTransition.astro';
+import SkipLink from '../components/SkipLink.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
@@ -82,9 +83,10 @@ const services = [
 		<PageLoader />
 		<PageTransition />
 		<ScrollProgress />
+		<SkipLink />
 		<HeaderArchitectural />
 
-		<main>
+		<main id="main-content">
 			<HeroArchitectural />
 
 			<!-- Services Section -->

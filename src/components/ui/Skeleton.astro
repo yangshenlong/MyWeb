@@ -1,0 +1,240 @@
+---
+/**
+ * Skeleton 骨架屏组件
+ * 用于内容加载时的占位动画
+ * @example
+ * <Skeleton variant="card" />
+ * <Skeleton variant="text" lines={3} />
+ * <Skeleton variant="circle" size={48} />
+ */
+
+import type { ComponentProps } from '@types/index.js';
+
+interface Props extends ComponentProps {
+  /** 骨架屏变体 */
+  variant?: 'text' | 'circular' | 'rectangular' | 'card' | 'post' | 'hero';
+  /** 宽度 */
+  width?: string | number;
+  /** 高度 */
+  height?: string | number;
+  /** 文本行数（仅 text 变体） */
+  lines?: number;
+  /** 是否显示动画 */
+  animation?: 'pulse' | 'wave' | 'none';
+  /** 基础背景色 */
+  baseColor?: string;
+  /** 高亮背景色 */
+  highlightColor?: string;
+}
+
+const {
+  variant = 'text',
+  width,
+  height,
+  lines = 1,
+  animation = 'pulse',
+  className,
+  baseColor = 'var(--skeleton-base)',
+  highlightColor = 'var(--skeleton-highlight)'
+} = Astro.props;
+
+// 计算样式
+const style = `
+  ${width ? `--skeleton-width: ${typeof width === 'number' ? `${width}px` : width};` : ''}
+  ${height ? `--skeleton-height: ${typeof height === 'number' ? `${height}px` : height};` : ''}
+  --skeleton-base: ${baseColor};
+  --skeleton-highlight: ${highlightColor};
+`;
+---
+
+<div
+  class:list={['skeleton', `variant-${variant}`, `animation-${animation}`, className]}
+  data-lines={lines}
+  style={style}
+  aria-hidden="true"
+/>
+<style>
+  /* CSS 变量 */
+  :root {
+    --skeleton-base: hsl(var(--color-muted) / 0.3);
+    --skeleton-highlight: hsl(var(--color-muted) / 0.5);
+    --skeleton-width: 100%;
+    --skeleton-height: 1em;
+  }
+
+  .skeleton {
+    width: var(--skeleton-width);
+    background: var(--skeleton-base);
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  /* 动画效果 */
+  .skeleton.animation-pulse {
+    animation: skeletonPulse 2s ease-in-out infinite;
+  }
+
+  .skeleton.animation-wave {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton.animation-wave::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--skeleton-highlight) 50%,
+      transparent 100%
+    );
+    animation: skeletonWave 1.5s ease-in-out infinite;
+    transform: translateX(-100%);
+  }
+
+  @keyframes skeletonPulse {
+    0%,
+    100% {
+      background: var(--skeleton-base);
+    }
+    50% {
+      background: var(--skeleton-highlight);
+    }
+  }
+
+  @keyframes skeletonWave {
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  /* 文本变体 */
+  .skeleton.variant-text {
+    height: var(--skeleton-height);
+    min-width: 80px;
+  }
+
+  .skeleton.variant-text[data-lines] {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    width: var(--skeleton-width);
+  }
+
+  .skeleton.variant-text[data-lines]::before,
+  .skeleton.variant-text[data-lines]::after {
+    content: '';
+    display: block;
+    height: var(--skeleton-height);
+    background: inherit;
+    border-radius: inherit;
+  }
+
+  .skeleton.variant-text[data-lines='1']::after {
+    display: none;
+  }
+
+  .skeleton.variant-text[data-lines='2']::after {
+    width: 70%;
+  }
+
+  .skeleton.variant-text[data-lines='3']::before {
+    width: 100%;
+  }
+
+  .skeleton.variant-text[data-lines='3']::after {
+    width: 80%;
+  }
+
+  /* 圆形变体 */
+  .skeleton.variant-circular {
+    border-radius: 50%;
+    width: var(--skeleton-width);
+    height: var(--skeleton-width);
+    aspect-ratio: 1;
+  }
+
+  /* 矩形变体 */
+  .skeleton.variant-rectangular {
+    height: var(--skeleton-height);
+  }
+
+  /* 卡片变体 */
+  .skeleton.variant-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .skeleton.variant-card::before {
+    content: '';
+    display: block;
+    height: 200px;
+    background: inherit;
+    border-radius: 4px;
+  }
+
+  .skeleton.variant-card::after {
+    content: '';
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* 文章卡片变体 */
+  .skeleton.variant-post {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .skeleton.variant-post::before {
+    content: '';
+    display: block;
+    height: 180px;
+    background: inherit;
+    border-radius: 8px;
+  }
+
+  .skeleton.variant-post::after {
+    content: '';
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
+
+  /* Hero 变体 */
+  .skeleton.variant-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+
+  .skeleton.variant-hero::before {
+    content: '';
+    display: block;
+    height: 300px;
+    background: inherit;
+    border-radius: 12px;
+  }
+
+  /* 减少动画偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton {
+      animation: none !important;
+    }
+
+    .skeleton.animation-wave::after {
+      animation: none !important;
+    }
+  }
+</style>

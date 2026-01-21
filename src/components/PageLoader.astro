@@ -21,17 +21,13 @@
   // 页面加载完成后立即隐藏loader（无延迟）
   window.addEventListener("load", () => {
     loader.classList.add("loaded");
-    setTimeout(() => {
-      loader.style.display = "none";
-    }, 500);
+    loader.style.display = "none";
   });
 
   // 如果页面已经加载完成（直接访问缓存），立即隐藏loader
   if (document.readyState === "complete") {
     loader.classList.add("loaded");
-    setTimeout(() => {
-      loader.style.display = "none";
-    }, 100);
+    loader.style.display = "none";
   }
 </script>
 

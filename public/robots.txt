@@ -2,5 +2,7 @@
 User-agent: *
 Allow: /
 
-# Sitemap
+# Sitemap - Update this URL to match your actual deployment URL
+# Example: https://yangshenlong.github.io/sitemap-index.xml
+# Or set PUBLIC_SITE_URL environment variable
 Sitemap: https://yourname.github.io/sitemap-index.xml

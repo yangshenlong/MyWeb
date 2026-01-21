@@ -1,0 +1,137 @@
+---
+/**
+ * Breadcrumb 面包屑导航组件
+ * 显示当前页面在网站结构中的位置
+ * @example
+ * <Breadcrumb
+ *   items={[
+ *     { label: '首页', href: '/' },
+ *     { label: '博客', href: '/blog' },
+ *     { label: '文章标题' }
+ *   ]}
+ * />
+ */
+
+import type { BreadcrumbItem } from '@types/index.js';
+import type { ComponentProps } from '@types/index.js';
+
+interface Props extends ComponentProps {
+  /** 面包屑项目 */
+  items: BreadcrumbItem[];
+  /** 分隔符 */
+  separator?: string;
+  /** 是否添加结构化数据 */
+  schema?: boolean;
+}
+
+const { items, separator = '/', schema = true, className } = Astro.props;
+
+// 生成结构化数据
+const structuredData = schema
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.label,
+        ...(item.href && { item: item.href })
+      }))
+    }
+  : null;
+---
+
+{schema && structuredData && (
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+)}
+
+<nav class:list={['breadcrumb', className]} aria-label="面包屑导航">
+  <ol class="breadcrumb-list">
+    {items.map((item, index) => (
+      <li class:list={['breadcrumb-item', index === items.length - 1 && 'active']}>
+        {item.href ? (
+          <a href={item.href} class="breadcrumb-link" aria-label={item.ariaLabel || item.label}>
+            {item.label}
+          </a>
+        ) : (
+          <span class="breadcrumb-current" aria-current="page">
+            {item.label}
+          </span>
+        )}
+        {index < items.length - 1 && <span class="breadcrumb-separator" aria-hidden="true">{separator}</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb {
+    --breadcrumb-color: var(--color-text-secondary);
+    --breadcrumb-hover: var(--color-primary);
+    --breadcrumb-separator: var(--color-text-tertiary);
+    --breadcrumb-font-size: 0.875rem;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0.5rem;
+  }
+
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+    font-size: var(--breadcrumb-font-size);
+    color: var(--breadcrumb-color);
+  }
+
+  .breadcrumb-item:not(.active):hover {
+    color: var(--breadcrumb-hover);
+  }
+
+  .breadcrumb-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .breadcrumb-current {
+    color: var(--color-text-primary);
+    font-weight: 500;
+  }
+
+  .breadcrumb-separator {
+    color: var(--breadcrumb-separator);
+    user-select: none;
+    margin: 0 0.25rem;
+  }
+
+  /* 响应式 */
+  @media (max-width: 640px) {
+    .breadcrumb {
+      --breadcrumb-font-size: 0.75rem;
+    }
+
+    .breadcrumb-list {
+      gap: 0.25rem;
+    }
+
+    .breadcrumb-separator {
+      margin: 0 0.125rem;
+    }
+  }
+</style>

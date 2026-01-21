@@ -158,16 +158,16 @@ if (breadcrumb && breadcrumb.length > 0) {
 <!-- Service Worker registration -->
 <script>
   if ("serviceWorker" in navigator && location.protocol === "https:") {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then((registration) => {
-          console.log("ServiceWorker registration successful");
-        })
-        .catch((error) => {
-          console.log("ServiceWorker registration failed:", error);
-        });
-    });
+     window.addEventListener("load", () => {
+       navigator.serviceWorker
+         .register("/sw.js")
+         .then(() => {
+           // Service Worker registered successfully
+         })
+         .catch(() => {
+           // Service Worker registration failed
+         });
+     });
   }
 </script>
 
@@ -177,7 +177,6 @@ if (breadcrumb && breadcrumb.length > 0) {
     const storedTheme = localStorage.getItem('theme');
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     const theme = storedTheme || 'auto';
-    const appliedTheme = theme === 'auto' ? systemTheme : theme;
     document.documentElement.setAttribute('data-theme', theme);
   })();
 </script>

@@ -29,11 +29,19 @@
   let mouseY = 0;
   let currentX = 0;
   let currentY = 0;
+  let lastMouseUpdate = 0;
+  let isAnimating = false;
 
   // 使用 Passives 事件监听器提升性能
   const updateMousePosition = (e: MouseEvent) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
+    lastMouseUpdate = Date.now();
+    // 只在鼠标移动时启动动画
+    if (!isAnimating) {
+      isAnimating = true;
+      animate();
+    }
   };
 
   // 只在需要时启用鼠标跟踪
@@ -41,22 +49,29 @@
     document.addEventListener("mousemove", updateMousePosition, { passive: true });
   }
 
-  // 优化的动画循环
+  // 优化的动画循环 - 当鼠标停止移动 100ms 后自动停止
   function animate() {
+    const now = Date.now();
+    // 如果 100ms 内没有鼠标移动，停止动画循环
+    if (now - lastMouseUpdate > 100) {
+      isAnimating = false;
+      return;
+    }
+
     currentX += (mouseX - currentX) * 0.15;
     currentY += (mouseY - currentY) * 0.15;
 
     // 使用 transform3d 触发硬件加速
-    layers[0].style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-    layers[1].style.transform = `translate3d(${currentX * 0.9 + mouseX * 0.1}px, ${currentY * 0.9 + mouseY * 0.1}px, 0)`;
-    layers[2].style.transform = `translate3d(${currentX * 0.8 + mouseX * 0.2}px, ${currentY * 0.8 + mouseY * 0.2}px, 0)`;
+    if (layers[0]?.style && layers[1]?.style && layers[2]?.style) {
+      layers[0].style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+      layers[1].style.transform = `translate3d(${currentX * 0.9 + mouseX * 0.1}px, ${currentY * 0.9 + mouseY * 0.1}px, 0)`;
+      layers[2].style.transform = `translate3d(${currentX * 0.8 + mouseX * 0.2}px, ${currentY * 0.8 + mouseY * 0.2}px, 0)`;
+    }
 
-    requestAnimationFrame(animate);
-  }
-
-  // 启动动画
-  if (!prefersReducedMotion && !isMobile) {
-    animate();
+    // 只在动画状态为 true 时继续
+    if (isAnimating) {
+      requestAnimationFrame(animate);
+    }
   }
 
   // 窗口大小变化时重新检查

@@ -93,19 +93,33 @@
 	// Pagefind 搜索集成
 	let pagefind: any = null;
 
-	// 初始化 Pagefind
+	// 初始化 Pagefind - 使用脚本标签动态加载避免 Vite 静态分析错误
 	async function initPagefind() {
 		if (pagefind) return pagefind;
 
-		try {
-			// 动态加载 Pagefind（仅在构建后可用）
-			const module = await import('/pagefind/pagefind.js');
-			pagefind = module;
+		// 检查是否已经加载
+		if ((window as any).pagefind) {
+			pagefind = (window as any).pagefind;
 			return pagefind;
-		} catch (error) {
-			console.warn('Pagefind 未初始化，请先运行构建生成搜索索引');
-			return null;
 		}
+
+		return new Promise((resolve) => {
+			const script = document.createElement('script');
+			script.src = '/pagefind/pagefind.js';
+			script.async = true;
+
+			script.onload = () => {
+				pagefind = (window as any).pagefind;
+				resolve(pagefind);
+			};
+
+			script.onerror = () => {
+				console.warn('Pagefind 未初始化，搜索功能不可用（请先运行 npm run build 生成搜索索引）');
+				resolve(null);
+			};
+
+			document.head.appendChild(script);
+		});
 	}
 
 	// 搜索模态框管理

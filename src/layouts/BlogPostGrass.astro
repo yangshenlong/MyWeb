@@ -7,13 +7,15 @@ import BackToTop from "../components/BackToTop.astro";
 import ScrollProgress from "../components/ScrollProgress.astro";
 import CursorGlow from "../components/CursorGlow.astro";
 import GradientText from "../components/GradientText.astro";
+import StarButton from "../components/StarButton.astro";
 import { SITE_TITLE } from "../consts";
 
 type Props = CollectionEntry<"blog">["data"] & {
   heroImage?: ImageMetadata | string;
+  postSlug?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, tags, category, author } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags, category, author, postSlug = '' } = Astro.props;
 
 const formatDate = (date: Date) => {
   return new Date(date).toLocaleDateString("zh-CN", {
@@ -159,6 +161,7 @@ const updatedText = updatedDate ? formatDate(updatedDate) : "";
           {
             updatedDate && (
               <div class="updated-info">
+                {postSlug && <StarButton postSlug={postSlug} size="md" />}
                 <p>最后更新: {updatedText}</p>
               </div>
             )

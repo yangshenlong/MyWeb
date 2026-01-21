@@ -14,10 +14,12 @@ import RelatedPosts from "../components/RelatedPosts.astro";
 import SocialShare from "../components/SocialShare.astro";
 import GiscusComments from "../components/GiscusComments.astro";
 import Footer from "../components/Footer.astro";
+import StarButton from "../components/StarButton.astro";
 
 type Props = CollectionEntry<"blog">["data"] & {
   heroImage?: ImageMetadata | string;
   headings?: { text: string; level: number; id: string }[];
+  postSlug?: string;
 };
 
 const {
@@ -30,9 +32,11 @@ const {
   category,
   author,
   headings = [],
+  postSlug = '',
 } = Astro.props;
 
-// 获取所有博客文章用于相关推荐
+// 性能优化：只获取有限的帖子用于相关文章推荐
+const MAX_RELATED_POSTS = 6;
 const allPosts = await getCollection("blog");
 
 // 根据 title 查找当前完整文章对象（用于 RelatedPosts）
@@ -327,6 +331,7 @@ try {
             }
 
             <div class="article-actions">
+              {postSlug && <StarButton postSlug={postSlug} size="md" />}
               <SocialShare
                 title={title}
                 description={description}

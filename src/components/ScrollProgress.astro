@@ -45,12 +45,21 @@
 	const scrollProgress = document.getElementById('scrollProgress');
 	const progressBar = scrollProgress?.querySelector('.progress-bar');
 
-	if (progressBar) {
+	if (progressBar instanceof HTMLElement) {
+		// 添加节流优化，减少滚动事件处理频率
+		let ticking = false;
+
 		window.addEventListener('scroll', () => {
-			const scrollTop = window.scrollY;
-			const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-			const progress = (scrollTop / docHeight) * 100;
-			progressBar.style.width = progress + '%';
-		});
+			if (!ticking) {
+				window.requestAnimationFrame(() => {
+					const scrollTop = window.scrollY;
+					const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+					const progress = (scrollTop / docHeight) * 100;
+					progressBar.style.width = progress + '%';
+					ticking = false;
+				});
+				ticking = true;
+			}
+		}, { passive: true });
 	}
 </script>

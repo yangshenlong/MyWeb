@@ -46,11 +46,37 @@ export default defineConfig({
 					// Smaller, more efficient chunk naming
 					chunkFileNames: 'chunks/[hash].js',
 					entryFileNames: 'entry/[hash].js',
-					assetFileNames: 'assets/[hash][extname]'
+					assetFileNames: 'assets/[hash][extname]',
+					// 代码分割优化
+					manualChunks: (id) => {
+						// 将 node_modules 中的代码打包到 vendor chunk
+						if (id.includes('node_modules')) {
+							// 特定库单独打包
+							if (id.includes('pagefind')) {
+								return 'vendor.pagefind';
+							}
+							return 'vendor';
+						}
+					}
 				},
 				// 排除 Pagefind 模块
 				external: ['/pagefind/pagefind.js']
-			}
+			},
+			// 启用 CSS 代码分割
+			cssCodeSplit: true,
+			// 设置 chunk 大小警告限制
+			chunkSizeWarningLimit: 500
+		},
+		// CSS 优化
+		css: {
+			devSourcemap: true
+		},
+		// 服务器配置
+		server: {
+			// 端口
+			port: 4321,
+			// 监听所有地址
+			host: true
 		}
 	}
 });

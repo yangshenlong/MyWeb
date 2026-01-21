@@ -1,0 +1,31 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "plugins": ["stylelint-no-unsupported-browser-features"],
+  "rules": {
+    "selector-class-pattern": "^[a-z][a-z0-9-]*$",
+    "no-duplicate-selectors": true,
+    "color-no-invalid-hex": true,
+    "declaration-block-no-duplicate-properties": true,
+    "font-family-no-duplicate-names": true,
+    "font-family-no-missing-generic-family-keyword": true,
+    "function-calc-no-unspaced-operator": true,
+    "selector-type-no-unknown": [
+      true,
+      {
+        "ignoreTypes": ["/^astro/"]
+      }
+    ],
+    "property-no-vendor-prefix": true,
+    "value-no-vendor-prefix": true,
+    "selector-no-vendor-prefix": true,
+    "media-feature-name-no-vendor-prefix": true,
+    "at-rule-no-vendor-prefix": true,
+    "length-zero-no-unit": true,
+    "shorthand-property-no-redundant-values": true,
+    "declaration-block-no-redundant-longhand-properties": true,
+    "alpha-value-notation": "percentage",
+    "color-function-notation": "modern",
+    "custom-property-pattern": "^[a-z][a-z0-9-]*$"
+  },
+  "ignoreFiles": ["dist/**", "node_modules/**", ".astro/**"]
+}

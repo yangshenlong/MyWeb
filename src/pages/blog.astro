@@ -2,20 +2,37 @@
 import HeaderArchitectural from "../components/HeaderArchitectural.astro";
 import GlassCard from "../components/GlassCard.astro";
 import BlogActivityHeatmap from "../components/BlogActivityHeatmap.astro";
+import PinnedPosts from "../components/PinnedPosts.astro";
 import BackToTop from "../components/BackToTop.astro";
 import ScrollProgress from "../components/ScrollProgress.astro";
 import Footer from "../components/Footer.astro";
+import SkipLink from "../components/SkipLink.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import { getCollection } from "astro:content";
+
+// 性能优化：限制每页显示的文章数量
+const POSTS_PER_PAGE = 20;
 
 // 获取所有博客文章
 const allPosts = await getCollection("blog");
 
+// 分离置顶文章和普通文章
+const pinnedPosts = allPosts.filter(post => post.data.pinned);
+const regularPosts = allPosts.filter(post => !post.data.pinned);
+
+// 性能优化：只显示最近的 N 篇文章（置顶文章不受影响）
+const recentPosts = regularPosts.slice(0, POSTS_PER_PAGE);
+
 // 按日期排序
-const sortedPosts = allPosts.sort(
+const sortedPosts = recentPosts.sort(
   (a, b) =>
     Math.floor(new Date(b.data.pubDate).getTime() / 1000) -
     Math.floor(new Date(a.data.pubDate).getTime() / 1000)
+);
+
+// 置顶文章按 pinnedOrder 排序
+const sortedPinnedPosts = pinnedPosts.sort(
+  (a, b) => (a.data.pinnedOrder || 999) - (b.data.pinnedOrder || 999)
 );
 
 // 提取所有唯一标签
@@ -77,13 +94,11 @@ const sortedTags = Array.from(allTags).sort();
         text-decoration: none;
       }
 
-      /* Selection */
       ::selection {
         background: rgba(99, 102, 241, 0.3);
         color: rgba(255, 255, 255, 1);
       }
 
-      /* Scrollbar */
       ::-webkit-scrollbar {
         width: 8px;
       }
@@ -101,7 +116,6 @@ const sortedTags = Array.from(allTags).sort();
         background: rgba(255, 255, 255, 0.2);
       }
 
-      /* Page load animation */
       @keyframes pageFadeIn {
         from {
           opacity: 0;
@@ -119,342 +133,252 @@ const sortedTags = Array.from(allTags).sort();
 
   <body>
     <ScrollProgress />
+    <SkipLink />
     <HeaderArchitectural />
 
-    <!-- Ambient Background Effects -->
-    <div class="ambient-bg">
-      <div class="ambient-glow glow-1"></div>
-      <div class="ambient-glow glow-2"></div>
-      <div class="ambient-glow glow-3"></div>
-      <div class="grid-overlay"></div>
-    </div>
-
-    <!-- Page Header -->
-    <section class="page-header">
-      <div class="header-content">
-        <div class="breadcrumb">
-          <span class="breadcrumb-item">
-            <a href="/">首页</a>
-          </span>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-item current">博客</span>
+    <main id="main-content">
+    <!-- GitHub-style Profile Header -->
+    <section class="profile-header">
+      <div class="profile-container">
+        <!-- Profile Info -->
+        <div class="profile-info">
+          <div class="profile-avatar">
+            <span class="avatar-initials">Y</span>
+          </div>
+          <div class="profile-details">
+            <h1 class="profile-name">杨慎龙</h1>
+            <p class="profile-bio">Technical Artist | Shader开发 | 渲染技术 | 工具开发</p>
+            <div class="profile-meta">
+              <span class="meta-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>
+                <span>加入于 2024</span>
+              </span>
+              <span class="meta-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <span>{sortedPosts.length} 篇文章</span>
+              </span>
+            </div>
+          </div>
         </div>
-        <h1 class="page-title">
-          <span class="title-line">技术文章</span>
-          <span class="title-sub">Technical Articles</span>
-        </h1>
-        <p class="page-description">探索渲染技术、Shader开发和工具优化的深度内容</p>
+
+        <!-- Activity Stats -->
+        <div class="activity-stats">
+          <div class="stat-box">
+            <span class="stat-number">{sortedPosts.length}</span>
+            <span class="stat-label">Posts</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">{allTags.size}</span>
+            <span class="stat-label">Tags</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">{Math.ceil(sortedPosts.length * 1500 / 60 / 60 / 24)}</span>
+            <span class="stat-label">Days Active</span>
+          </div>
+        </div>
       </div>
-      <div class="header-decoration">
-        <span class="deco-number">03</span>
-        <div class="deco-line"></div>
+
+      <!-- Contribution Graph (GitHub-style) -->
+      <div class="contribution-section">
+        <div class="contribution-header">
+          <h2>{sortedPosts.length} contributions in the last year</h2>
+          <div class="contribution-legend">
+            <span>Less</span>
+            <div class="legend-colors">
+              <div class="color-0"></div>
+              <div class="color-1"></div>
+              <div class="color-2"></div>
+              <div class="color-3"></div>
+              <div class="color-4"></div>
+            </div>
+            <span>More</span>
+          </div>
+        </div>
+        <BlogActivityHeatmap
+          collection="blog"
+          weeks={26}
+          showStats={false}
+          includeUpdates={true}
+          theme="dark"
+          class="github-style-heatmap"
+        />
       </div>
     </section>
 
-    <!-- Blog Grid -->
-    <section class="blog-section">
-      <div class="blog-container">
-        <!-- 搜索和过滤 -->
-        <aside class="sidebar">
-          <!-- Activity Heatmap Card -->
-          <GlassCard class="activity-card" hover={true}>
-            <div class="card-header">
-              <div class="header-icon">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                >
-                  <path d="M3 3v18h18" stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path d="M7 16l4-4 4 4 5-6" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-              </div>
-              <h3>Activity</h3>
-            </div>
-            <BlogActivityHeatmap
-              collection="blog"
-              weeks={52}
-              showStats={true}
-              includeUpdates={true}
-              theme="dark"
-            />
-          </GlassCard>
+    <!-- Pinned Posts Section -->
+    {sortedPinnedPosts.length > 0 && (
+      <section class="pinned-wrapper">
+        <div class="pinned-container">
+          <PinnedPosts
+            posts={sortedPinnedPosts.map(post => ({
+              slug: post.slug,
+              title: post.data.title,
+              description: post.data.description,
+              pubDate: post.data.pubDate,
+              tags: post.data.tags || [],
+              category: post.data.category,
+              pinnedOrder: post.data.pinnedOrder
+            }))}
+            maxDisplay={5}
+            collapsible={true}
+          />
+        </div>
+      </section>
+    )}
 
+    <!-- Main Content -->
+    <section class="main-content">
+      <div class="content-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" aria-label="文章筛选和搜索">
           <!-- Search Card -->
-          <GlassCard class="search-card" hover={true}>
-            <div class="search-header">
-              <div class="header-icon">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                >
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="M21 21l-4.35-4.35"></path>
-                </svg>
-              </div>
-              <h3>搜索文章</h3>
+          <GlassCard class="sidebar-card" hover={true}>
+            <div class="card-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="M21 21l-4.35-4.35"></path>
+              </svg>
+              <h3>搜索</h3>
             </div>
             <div class="search-box">
               <input
                 type="text"
                 id="postSearch"
                 class="search-input"
-                placeholder="搜索标题或内容..."
+                placeholder="搜索文章..."
               />
-              <div class="search-glow"></div>
             </div>
           </GlassCard>
 
-          <!-- Tags Filter Card -->
-          {
-            sortedTags.length > 0 && (
-              <GlassCard class="tags-filter-card" hover={true}>
-                <div class="filter-header">
-                  <div class="header-icon">
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                    >
-                      <path d="M12 2l9 4.5v9L12 20l-9-4.5v-9L12 2z" />
-                      <path d="M12 2v18M5 6.5l7 4.5 7-4.5M5 6.5v9l7 4.5 7-4.5M5 6.5v9" />
-                    </svg>
-                  </div>
-                  <h3>标签过滤</h3>
-                  <a href="/tags" class="view-all-tags">
-                    <span>查看全部</span>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </a>
-                </div>
-                <div class="tags-filter">
-                  <button class="filter-all active" data-filter="all">
-                    <span class="filter-icon">☰</span>
-                    <span class="filter-text">全部文章</span>
-                    <span class="filter-count">{sortedPosts.length}</span>
-                  </button>
-                  {sortedTags.map((tag) => {
-                    const tagCount = allPosts.filter((p) => p.data.tags?.includes(tag)).length;
-                    return (
-                      <button
-                        class={`filter-tag ${tag === "all" ? "active" : ""}`}
-                        data-filter={tag}
-                      >
-                        <span class="filter-dot" />
-                        <span class="filter-text">{tag}</span>
-                        <span class="filter-count">{tagCount}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </GlassCard>
-            )
-          }
-        </aside>
-
-        <!-- 文章列表 -->
-        <div class="posts-wrapper">
-          <div class="posts-header">
-            <div class="posts-count">
-              <span id="postsCount">{sortedPosts.length}</span> 篇文章
-            </div>
-            <div class="view-toggle">
-              <button class="view-btn active" data-view="list" aria-label="列表视图">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                >
-                  <rect x="3" y="3" width="18" height="4" rx="1"></rect>
-                  <rect x="3" y="10" width="18" height="4" rx="1"></rect>
-                  <rect x="3" y="17" width="18" height="4" rx="1"></rect>
+          <!-- Tags Card -->
+          {sortedTags.length > 0 && (
+            <GlassCard class="sidebar-card" hover={true}>
+              <div class="card-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2l9 4.5v9L12 20l-9-4.5v-9L12 2z" />
+                  <path d="M12 2v18M5 6.5l7 4.5 7-4.5M5 6.5v9l7 4.5 7-4.5M5 6.5v9" />
                 </svg>
-              </button>
-              <button class="view-btn" data-view="grid" aria-label="网格视图">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                >
-                  <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-                  <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-                  <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-                  <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-                </svg>
-              </button>
-            </div>
-          </div>
-          {
-            sortedPosts.length > 0 ? (
-              <div class="posts-grid" id="postsGrid">
-                {sortedPosts.map((post, index) => {
-                  const postTags = post.data.tags || [];
-                  const slug = post.id.replace(/\.(md|mdx)$/, "");
-                  const postUrl = `/blog/${slug}`;
+                <h3>标签</h3>
+              </div>
+              <div class="tags-list">
+                <button class="tag-btn active" data-filter="all">
+                  <span class="tag-name">全部</span>
+                  <span class="tag-count">{sortedPosts.length}</span>
+                </button>
+                {sortedTags.map((tag) => {
+                  const count = allPosts.filter((p) => p.data.tags?.includes(tag)).length;
                   return (
-                    <article
-                      class="post-item"
-                      style={`--delay: ${index * 80}ms`}
-                      data-tags={postTags.join(",")}
-                      data-title={post.data.title.toLowerCase()}
-                      data-description={(post.data.description || "").toLowerCase()}
-                    >
-                      <a href={postUrl} class="post-link">
-                        <GlassCard class="post-card" hover={true} delay={index * 80}>
-                          <div class="card-glow" />
-                          <div class="post-meta">
-                            <time class="post-date">
-                              <span class="date-icon">
-                                <svg
-                                  width="14"
-                                  height="14"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="1.5"
-                                >
-                                  <rect x="3" y="4" width="18" height="18" rx="2" />
-                                  <path d="M16 2v4M8 2v4M3 10h18" />
-                                </svg>
-                              </span>
-                              {new Date(post.data.pubDate).toLocaleDateString("zh-CN", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </time>
-                            {post.data.category && (
-                              <span class="post-category">
-                                <span class="category-dot" />
-                                {post.data.category}
-                              </span>
-                            )}
-                          </div>
-                          <h2 class="post-title">
-                            <span class="title-text">{post.data.title}</span>
-                            <span class="title-decoration" />
-                          </h2>
-                          {post.data.description && (
-                            <p class="post-description">{post.data.description}</p>
-                          )}
-                          {postTags.length > 0 && (
-                            <div class="post-tags">
-                              {postTags.slice(0, 3).map((tag: string) => (
-                                <span class="tag">
-                                  <span class="tag-dot" />
-                                  {tag}
-                                </span>
-                              ))}
-                              {postTags.length > 3 && (
-                                <span class="tag tag-more">+{postTags.length - 3}</span>
-                              )}
-                            </div>
-                          )}
-                          <div class="post-footer">
-                            <span class="read-more">
-                              阅读全文
-                              <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                              >
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                              </svg>
-                            </span>
-                          </div>
-                        </GlassCard>
-                      </a>
-                    </article>
+                    <button class="tag-btn" data-filter={tag}>
+                      <span class="tag-dot"></span>
+                      <span class="tag-name">{tag}</span>
+                      <span class="tag-count">{count}</span>
+                    </button>
                   );
                 })}
               </div>
-            ) : (
-              <div class="empty-state">
-                <div class="empty-icon">
-                  <svg
-                    width="64"
-                    height="64"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1"
+            </GlassCard>
+          )}
+        </aside>
+
+        <!-- Posts List -->
+        <div class="posts-section">
+          <div class="posts-header">
+            <h2>文章列表</h2>
+            <span class="posts-count">{sortedPosts.length} 篇</span>
+          </div>
+
+          {sortedPosts.length > 0 ? (
+            <div class="posts-list" id="postsGrid">
+              {sortedPosts.map((post, index) => {
+                const postTags = post.data.tags || [];
+                const slug = post.id.replace(/\.(md|mdx)$/, "");
+                const postUrl = `/blog/${slug}`;
+                return (
+                  <article
+                    class="post-item"
+                    style={`--delay: ${index * 60}ms`}
+                    data-tags={postTags.join(",")}
+                    data-title={post.data.title.toLowerCase()}
+                    data-description={(post.data.description || "").toLowerCase()}
                   >
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
-                  </svg>
-                </div>
-                <div class="empty-message">
-                  <h3>暂无文章</h3>
-                  <p>敬请期待更多技术分享</p>
-                </div>
-              </div>
-            )
-          }
+                    <a href={postUrl} class="post-link">
+                      <div class="post-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+                        </svg>
+                      </div>
+                      <div class="post-content">
+                        <h3 class="post-title">{post.data.title}</h3>
+                        {post.data.description && (
+                          <p class="post-description">{post.data.description}</p>
+                        )}
+                        <div class="post-meta">
+                          <time class="post-date">
+                            {new Date(post.data.pubDate).toLocaleDateString("zh-CN", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
+                          </time>
+                          {postTags.length > 0 && (
+                            <span class="post-tags">
+                              {postTags.slice(0, 3).map((tag: string) => (
+                                <span class="mini-tag">{tag}</span>
+                              ))}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </a>
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <div class="empty-state">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+              </svg>
+              <h3>暂无文章</h3>
+              <p>敬请期待更多技术分享</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
 
-    <!-- Footer -->
     <Footer />
-
     <BackToTop />
 
     <script>
       // 搜索功能
       const searchInput = document.getElementById("postSearch") as HTMLInputElement;
-      const filterButtons = document.querySelectorAll(".filter-all, .filter-tag");
+      const filterButtons = document.querySelectorAll(".tag-btn");
       const postItems = document.querySelectorAll(".post-item");
-      const postsCount = document.getElementById("postsCount") as HTMLElement;
+      const postsCount = document.querySelector(".posts-count") as HTMLElement;
       let currentFilter = "all";
 
-      // 过滤按钮点击事件
       filterButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
-          // 更新按钮状态
           filterButtons.forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
-
-          // 获取过滤标签
           currentFilter = (btn as HTMLElement).dataset.filter || "all";
-
-          // 过滤文章
           filterPosts();
         });
       });
 
-      // 搜索输入事件
       searchInput?.addEventListener("input", () => {
         filterPosts();
       });
 
-      // 过滤文章函数
       function filterPosts() {
         const searchTerm = (searchInput?.value || "").toLowerCase().trim();
         let visibleCount = 0;
@@ -465,14 +389,11 @@ const sortedTags = Array.from(allTags).sort();
           const title = postEl.dataset.title || "";
           const description = postEl.dataset.description || "";
 
-          // 检查搜索词
           const matchesSearch =
             searchTerm === "" || title.includes(searchTerm) || description.includes(searchTerm);
 
-          // 检查标签过滤
           const matchesFilter = currentFilter === "all" || tags.includes(currentFilter);
 
-          // 显示或隐藏
           if (matchesSearch && matchesFilter) {
             postEl.style.display = "";
             visibleCount++;
@@ -481,280 +402,229 @@ const sortedTags = Array.from(allTags).sort();
           }
         });
 
-        // 更新文章数量
         if (postsCount) {
-          postsCount.textContent = visibleCount.toString();
+          postsCount.textContent = `${visibleCount} 篇`;
         }
       }
     </script>
 
     <style>
-      /* Ambient Background */
-      .ambient-bg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        pointer-events: none;
-        z-index: -1;
-        overflow: hidden;
+      /* Profile Header - GitHub Style */
+      .profile-header {
+        background: #0d1117;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: calc(60px + 2rem) 0 2rem 0;
+        position: relative;
+        z-index: 1;
       }
 
-      .ambient-glow {
-        position: absolute;
+      .profile-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      .profile-info {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3));
+        border: 2px solid rgba(255, 255, 255, 0.1);
         border-radius: 50%;
-        filter: blur(100px);
-        opacity: 0.15;
-      }
-
-      .glow-1 {
-        width: 800px;
-        height: 800px;
-        background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
-        top: -200px;
-        right: -200px;
-        animation: float 20s ease-in-out infinite;
-      }
-
-      .glow-2 {
-        width: 600px;
-        height: 600px;
-        background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
-        bottom: -100px;
-        left: -100px;
-        animation: float 25s ease-in-out infinite reverse;
-      }
-
-      .glow-3 {
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(255, 79, 0, 0.2) 0%, transparent 70%);
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        animation: pulse 10s ease-in-out infinite;
-      }
-
-      @keyframes float {
-        0%,
-        100% {
-          transform: translate(0, 0);
-        }
-        50% {
-          transform: translate(30px, -30px);
-        }
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 0.15;
-          transform: translate(-50%, -50%) scale(1);
-        }
-        50% {
-          opacity: 0.25;
-          transform: translate(-50%, -50%) scale(1.1);
-        }
-      }
-
-      .grid-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-image:
-          linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-        background-size: 60px 60px;
-      }
-
-      /* Page Header */
-      .page-header {
-        padding: calc(60px + var(--section-padding-y, 8em)) 4em 6em;
-        background: #050505;
-        position: relative;
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        max-width: 1600px;
-        margin: 0 auto;
-      }
-
-      .header-content {
-        flex: 1;
-        max-width: 800px;
-      }
-
-      .breadcrumb {
-        display: flex;
-        align-items: center;
-        gap: 0.75em;
-        margin-bottom: 2em;
-      }
-
-      .breadcrumb-item {
-        font-size: 0.75em;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.4);
-        transition: all 0.3s ease;
-      }
-
-      .breadcrumb-item:hover {
-        color: rgba(255, 255, 255, 0.8);
-      }
-
-      .breadcrumb-item.current {
-        color: rgba(255, 255, 255, 0.7);
-      }
-
-      .breadcrumb-separator {
-        color: rgba(255, 255, 255, 0.2);
-      }
-
-      .page-title {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25em;
-      }
-
-      .title-line {
-        font-size: clamp(3em, 8vw, 6em);
-        font-weight: 200;
-        letter-spacing: -0.03em;
-        line-height: 1;
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.95) 0%,
-          rgba(255, 255, 255, 0.7) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .title-sub {
-        font-size: clamp(0.9em, 2vw, 1.2em);
-        font-weight: 300;
-        letter-spacing: 0.4em;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.3);
-        font-family: "Space Mono", monospace;
-      }
-
-      .page-description {
-        font-size: 1.1em;
-        line-height: 1.8;
-        color: rgba(255, 255, 255, 0.5);
-        margin: 1.5em 0 0 0;
-        max-width: 500px;
-      }
-
-      .header-decoration {
-        position: relative;
-        display: flex;
-        align-items: flex-start;
-        gap: 2em;
-      }
-
-      .deco-number {
-        font-size: 10em;
-        font-weight: 100;
-        color: rgba(255, 255, 255, 0.03);
-        font-family: "Space Mono", monospace;
-        line-height: 1;
-        letter-spacing: -0.02em;
-      }
-
-      .deco-line {
-        width: 1px;
-        height: 200px;
-        background: linear-gradient(
-          180deg,
-          transparent 0%,
-          rgba(255, 255, 255, 0.1) 50%,
-          transparent 100%
-        );
-        margin-top: 2em;
-      }
-
-      /* Blog Section */
-      .blog-section {
-        padding: 0 4em 8em;
-        background: #050505;
-        max-width: 1600px;
-        margin: 0 auto;
-      }
-
-      .blog-container {
-        display: grid;
-        grid-template-columns: 320px 1fr;
-        gap: 4em;
-        align-items: start;
-      }
-
-      /* Sidebar */
-      .sidebar {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5em;
-        position: sticky;
-        top: 2em;
-      }
-
-      /* Header Icon */
-      .header-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 6px;
+        flex-shrink: 0;
+      }
+
+      .avatar-initials {
+        font-size: 2rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .profile-details {
+        flex: 1;
+      }
+
+      .profile-name {
+        font-size: 2rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.95);
+        margin: 0 0 0.5rem 0;
+      }
+
+      .profile-bio {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0 0 1rem 0;
+        line-height: 1.6;
+      }
+
+      .profile-meta {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
         color: rgba(255, 255, 255, 0.6);
       }
 
-      /* Activity Card */
-      .activity-card {
-        padding: 1.5em;
+      .meta-item svg {
+        color: rgba(255, 255, 255, 0.4);
       }
 
-      .activity-card .card-header {
+      .activity-stats {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        padding: 1rem 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .stat-box {
+        text-align: center;
+      }
+
+      .stat-number {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.95);
+        font-family: "Space Mono", monospace;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      /* Contribution Section - GitHub Style */
+      .contribution-section {
+        background: rgba(13, 17, 23, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        position: relative;
+        z-index: 1;
+      }
+
+      .contribution-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .contribution-header h2 {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.8);
+        margin: 0;
+      }
+
+      .contribution-legend {
         display: flex;
         align-items: center;
-        gap: 0.75em;
-        margin-bottom: 1.25em;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
       }
 
-      .activity-card .card-header h3 {
-        font-size: 0.9em;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.95);
-        margin: 0;
-        letter-spacing: 0.02em;
+      .legend-colors {
+        display: flex;
+        gap: 3px;
       }
 
-      /* Search Card */
-      .search-card {
-        padding: 1.5em;
+      .legend-colors > div {
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
       }
 
-      .search-header {
+      .color-0 { background: #161b22; }
+      .color-1 { background: #0e4429; }
+      .color-2 { background: #006d32; }
+      .color-3 { background: #26a641; }
+      .color-4 { background: #39d353; }
+
+      /* GitHub-style Heatmap Override */
+      .github-style-heatmap {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+      }
+
+      .github-style-heatmap .stats-container {
+        display: none;
+      }
+
+      .github-style-heatmap .heatmap-wrapper {
+        overflow: visible !important;
+      }
+
+      .github-style-heatmap .heatmap-container {
+        min-width: 100% !important;
+        width: 100%;
+      }
+
+      .github-style-heatmap .months-row,
+      .github-style-heatmap .squares-container {
+        width: 100%;
+      }
+
+      /* Main Content */
+      .main-content {
+        padding: 3rem 0;
+        background: #050505;
+      }
+
+      .content-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 3rem;
+      }
+
+      /* Sidebar Cards */
+      .sidebar-card {
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .card-title {
         display: flex;
         align-items: center;
-        gap: 0.75em;
-        margin-bottom: 1.25em;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.875rem;
       }
 
-      .search-header h3 {
-        font-size: 0.9em;
+      .card-title h3 {
+        font-size: 0.875rem;
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.95);
         margin: 0;
-        letter-spacing: 0.02em;
       }
 
       .search-box {
@@ -763,240 +633,112 @@ const sortedTags = Array.from(allTags).sort();
 
       .search-input {
         width: 100%;
-        padding: 0.85em 1em 0.85em 2.75em;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 8px;
-        color: rgba(255, 255, 255, 0.95);
-        font-size: 0.9em;
-        font-family: "Inter", sans-serif;
-        transition: all 0.3s ease;
-      }
-
-      .search-input::placeholder {
-        color: rgba(255, 255, 255, 0.4);
+        padding: 0.6rem 0.75rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.875rem;
+        font-family: inherit;
+        transition: all 0.2s ease;
       }
 
       .search-input:focus {
         outline: none;
         border-color: rgba(99, 102, 241, 0.4);
-        background: rgba(255, 255, 255, 0.05);
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+        background: rgba(255, 255, 255, 0.08);
       }
 
-      .search-glow {
-        position: absolute;
-        left: 0.85em;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 16px;
-        height: 16px;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.5), rgba(168, 85, 247, 0.5));
-        border-radius: 50%;
-        opacity: 0.3;
-        transition: opacity 0.3s ease;
-      }
-
-      .search-input:focus + .search-glow {
-        opacity: 0.6;
-      }
-
-      /* Tags Sidebar */
-      .tags-filter-card {
-        padding: 1.5em;
-      }
-
-      .filter-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5em;
-        padding-bottom: 1em;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      }
-
-      .filter-header h3 {
-        font-size: 0.9em;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.95);
-        margin: 0;
-        letter-spacing: 0.02em;
-      }
-
-      .view-all-tags {
-        display: flex;
-        align-items: center;
-        gap: 0.5em;
-        font-size: 0.75em;
-        color: rgba(255, 255, 255, 0.5);
-        transition: all 0.3s ease;
-      }
-
-      .view-all-tags:hover {
-        color: rgba(255, 255, 255, 0.9);
-      }
-
-      .view-all-tags svg {
-        transition: transform 0.3s ease;
-      }
-
-      .view-all-tags:hover svg {
-        transform: translateX(3px);
-      }
-
-      .tags-filter {
+      .tags-list {
         display: flex;
         flex-direction: column;
-        gap: 0.5em;
+        gap: 0.25rem;
       }
 
-      .filter-all,
-      .filter-tag {
+      .tag-btn {
         display: flex;
         align-items: center;
-        gap: 0.75em;
-        text-align: left;
-        padding: 0.75em 1em;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
         background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        border: none;
+        border-radius: 6px;
         color: rgba(255, 255, 255, 0.6);
-        font-size: 0.85em;
-        font-family: "Inter", sans-serif;
+        font-size: 0.875rem;
         cursor: pointer;
-        transition: all 0.3s ease;
-        border-radius: 8px;
+        transition: all 0.2s ease;
+        text-align: left;
       }
 
-      .filter-icon {
-        font-size: 1em;
-        opacity: 0.7;
-      }
-
-      .filter-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
-      }
-
-      .filter-text {
-        flex: 1;
-      }
-
-      .filter-count {
-        font-size: 0.75em;
-        font-family: "Space Mono", monospace;
-        color: rgba(255, 255, 255, 0.3);
+      .tag-btn:hover {
         background: rgba(255, 255, 255, 0.05);
-        padding: 0.2em 0.6em;
-        border-radius: 4px;
-      }
-
-      .filter-all:hover,
-      .filter-tag:hover {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.12);
         color: rgba(255, 255, 255, 0.9);
       }
 
-      .filter-all:hover .filter-dot,
-      .filter-tag:hover .filter-dot {
-        background: rgba(99, 102, 241, 0.6);
-      }
-
-      .filter-all.active,
-      .filter-tag.active {
-        background: rgba(99, 102, 241, 0.1);
-        border-color: rgba(99, 102, 241, 0.3);
+      .tag-btn.active {
+        background: rgba(99, 102, 241, 0.15);
         color: rgba(255, 255, 255, 0.95);
       }
 
-      .filter-all.active .filter-dot,
-      .filter-tag.active .filter-dot {
+      .tag-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .tag-btn.active .tag-dot {
         background: rgba(99, 102, 241, 0.8);
       }
 
-      .filter-all.active .filter-count,
-      .filter-tag.active .filter-count {
-        background: rgba(99, 102, 241, 0.2);
-        color: rgba(255, 255, 255, 0.8);
+      .tag-name {
+        flex: 1;
       }
 
-      /* Posts Header */
+      .tag-count {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+        font-family: "Space Mono", monospace;
+      }
+
+      /* Posts Section */
       .posts-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2em;
-        padding-bottom: 1.5em;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .posts-header h2 {
+        font-size: 1.25rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.95);
+        margin: 0;
       }
 
       .posts-count {
-        font-size: 0.9em;
+        font-size: 0.875rem;
         color: rgba(255, 255, 255, 0.5);
-      }
-
-      .posts-count span {
         font-family: "Space Mono", monospace;
-        font-size: 1.3em;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.9);
-        margin-right: 0.25em;
       }
 
-      .view-toggle {
-        display: flex;
-        gap: 0.5em;
-      }
-
-      .view-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 8px;
-        color: rgba(255, 255, 255, 0.4);
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .view-btn:hover {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.15);
-        color: rgba(255, 255, 255, 0.7);
-      }
-
-      .view-btn.active {
-        background: rgba(99, 102, 241, 0.1);
-        border-color: rgba(99, 102, 241, 0.3);
-        color: rgba(255, 255, 255, 0.9);
-      }
-
-      /* Posts Wrapper */
-      .posts-wrapper {
-        min-width: 0;
-      }
-
-      .posts-grid {
+      .posts-list {
         display: flex;
         flex-direction: column;
-        gap: 1.5em;
       }
 
       .post-item {
-        animation: fadeInUp 0.6s ease-out backwards;
+        animation: fadeInUp 0.5s ease-out backwards;
         animation-delay: var(--delay);
       }
 
       @keyframes fadeInUp {
         from {
           opacity: 0;
-          transform: translateY(30px);
+          transform: translateY(20px);
         }
         to {
           opacity: 1;
@@ -1005,325 +747,223 @@ const sortedTags = Array.from(allTags).sort();
       }
 
       .post-link {
-        display: block;
-        cursor: pointer;
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 8px;
+        transition: all 0.3s ease;
       }
 
-      .post-card {
-        height: 100%;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      .post-link:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.12);
+        transform: translateX(4px);
       }
 
-      .card-glow {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(
-          135deg,
-          rgba(99, 102, 241, 0.1) 0%,
-          transparent 50%,
-          rgba(168, 85, 247, 0.05) 100%
-        );
-        opacity: 0;
-        transition: opacity 0.4s ease;
-        pointer-events: none;
+      .post-icon {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        border-radius: 8px;
+        color: rgba(99, 102, 241, 0.7);
       }
 
-      .post-card:hover .card-glow {
-        opacity: 1;
+      .post-content {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .post-title {
+        font-size: 1rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.95);
+        margin: 0 0 0.5rem 0;
+        line-height: 1.4;
+      }
+
+      .post-description {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin: 0 0 0.75rem 0;
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
 
       .post-meta {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 1.5em;
-        padding-bottom: 1.25em;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        gap: 1rem;
+        flex-wrap: wrap;
       }
 
       .post-date {
-        display: flex;
-        align-items: center;
-        gap: 0.5em;
-        font-size: 0.8em;
-        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
         font-family: "Space Mono", monospace;
-      }
-
-      .date-icon {
-        display: flex;
-        color: rgba(255, 255, 255, 0.3);
-      }
-
-      .post-category {
-        display: flex;
-        align-items: center;
-        gap: 0.5em;
-        font-size: 0.7em;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.6);
-        padding: 0.35em 0.85em;
-        background: rgba(99, 102, 241, 0.1);
-        border: 1px solid rgba(99, 102, 241, 0.2);
-        border-radius: 4px;
-      }
-
-      .category-dot {
-        width: 4px;
-        height: 4px;
-        border-radius: 50%;
-        background: rgba(99, 102, 241, 0.6);
-      }
-
-      .post-title {
-        font-size: 1.5em;
-        font-weight: 300;
-        letter-spacing: -0.02em;
-        color: rgba(255, 255, 255, 0.95);
-        margin: 0 0 1em 0;
-        line-height: 1.4;
-        position: relative;
-        display: inline-block;
-      }
-
-      .title-text {
-        position: relative;
-        z-index: 1;
-      }
-
-      .title-decoration {
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background: linear-gradient(90deg, rgba(99, 102, 241, 0.6), rgba(168, 85, 247, 0.6));
-        transition: width 0.4s ease;
-      }
-
-      .post-card:hover .title-decoration {
-        width: 100%;
-      }
-
-      .post-description {
-        font-size: 0.95em;
-        line-height: 1.8;
-        color: rgba(255, 255, 255, 0.6);
-        margin: 0 0 1.5em 0;
       }
 
       .post-tags {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.5em;
-        margin-bottom: 1.5em;
+        gap: 0.5rem;
       }
 
-      .tag {
-        display: flex;
-        align-items: center;
-        gap: 0.4em;
-        font-size: 0.75em;
-        letter-spacing: 0.05em;
-        padding: 0.35em 0.75em;
+      .mini-tag {
+        font-size: 0.75rem;
+        padding: 0.15rem 0.5rem;
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.08);
-        color: rgba(255, 255, 255, 0.5);
         border-radius: 4px;
-        transition: all 0.3s ease;
-      }
-
-      .tag-dot {
-        width: 4px;
-        height: 4px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
-        transition: all 0.3s ease;
-      }
-
-      .tag-more {
-        color: rgba(255, 255, 255, 0.4);
-      }
-
-      .post-card:hover .tag {
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.12);
-        color: rgba(255, 255, 255, 0.7);
-      }
-
-      .post-card:hover .tag-dot {
-        background: rgba(99, 102, 241, 0.6);
-      }
-
-      .post-footer {
-        display: flex;
-        justify-content: flex-end;
-        padding-top: 1em;
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
-        margin-top: 0.5em;
-      }
-
-      .read-more {
-        display: flex;
-        align-items: center;
-        gap: 0.5em;
-        font-size: 0.8em;
         color: rgba(255, 255, 255, 0.5);
-        letter-spacing: 0.05em;
-        transition: all 0.3s ease;
-      }
-
-      .read-more svg {
-        transition: transform 0.3s ease;
-      }
-
-      .post-card:hover .read-more {
-        color: rgba(255, 255, 255, 0.9);
-      }
-
-      .post-card:hover .read-more svg {
-        transform: translateX(4px);
       }
 
       /* Empty State */
       .empty-state {
         text-align: center;
-        padding: 8em 0;
+        padding: 4rem 2rem;
+        color: rgba(255, 255, 255, 0.4);
       }
 
-      .empty-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 120px;
-        height: 120px;
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 50%;
-        color: rgba(255, 255, 255, 0.2);
-        margin-bottom: 2em;
+      .empty-state svg {
+        margin-bottom: 1rem;
       }
 
-      .empty-message h3 {
-        font-size: 1.8em;
-        font-weight: 300;
-        color: rgba(255, 255, 255, 0.7);
-        margin-bottom: 0.75em;
+      .empty-state h3 {
+        font-size: 1.25rem;
+        font-weight: 400;
+        margin: 0 0 0.5rem 0;
+        color: rgba(255, 255, 255, 0.6);
       }
 
-      .empty-message p {
-        font-size: 1em;
-        color: rgba(255, 255, 255, 0.5);
+      .empty-state p {
+        font-size: 0.875rem;
+        margin: 0;
       }
 
       /* Responsive */
-      @media (max-width: 1200px) {
-        .blog-container {
-          grid-template-columns: 280px 1fr;
-          gap: 3em;
-        }
-      }
-
       @media (max-width: 1024px) {
-        .page-header,
-        .blog-section {
-          padding-left: 2em;
-          padding-right: 2em;
-        }
-
-        .page-header {
-          flex-direction: column;
-          gap: 3em;
-        }
-
-        .header-decoration {
-          align-self: flex-end;
-        }
-
-        .deco-number {
-          font-size: 6em;
-        }
-
-        .blog-container {
+        .content-container {
           grid-template-columns: 1fr;
         }
 
         .sidebar {
-          position: static;
-          flex-direction: row;
+          display: flex;
+          gap: 1rem;
           flex-wrap: wrap;
         }
 
-        .activity-card,
-        .search-card,
-        .tags-filter-card {
+        .sidebar-card {
           flex: 1;
           min-width: 250px;
+          margin-bottom: 0;
         }
 
-        .tags-filter {
+        .tags-list {
           flex-direction: row;
           flex-wrap: wrap;
         }
 
-        .filter-all,
-        .filter-tag {
+        .tag-btn {
           flex: 0 0 auto;
-        }
-
-        .posts-header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 1em;
         }
       }
 
       @media (max-width: 768px) {
-        .page-header {
-          padding-top: calc(60px + 6em);
-          padding-bottom: 4em;
+        .profile-info {
+          flex-direction: column;
+          text-align: center;
         }
 
-        .title-line {
-          font-size: 2.5em;
+        .profile-meta {
+          justify-content: center;
         }
 
-        .title-sub {
-          font-size: 0.8em;
-          letter-spacing: 0.3em;
+        .activity-stats {
+          justify-content: center;
+        }
+
+        .contribution-header {
+          flex-direction: column;
+          align-items: flex-start;
         }
 
         .sidebar {
           flex-direction: column;
         }
 
-        .activity-card,
-        .search-card,
-        .tags-filter-card {
+        .sidebar-card {
           min-width: 100%;
         }
 
-        .tags-filter {
+        .tags-list {
           flex-direction: column;
         }
 
-        .filter-all,
-        .filter-tag {
+        .tag-btn {
           width: 100%;
         }
+      }
 
-        .post-title {
-          font-size: 1.3em;
+      /* Pinned Posts Wrapper */
+      .pinned-wrapper {
+        background: #050505;
+        padding: 2rem 0 1rem 0;
+      }
+
+      .pinned-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      @media (max-width: 480px) {
+        .profile-container,
+        .content-container {
+          padding-left: 1rem;
+          padding-right: 1rem;
         }
 
-        .posts-grid {
-          gap: 1em;
+        .profile-name {
+          font-size: 1.5rem;
+        }
+
+        .activity-stats {
+          gap: 1rem;
+        }
+
+        .stat-number {
+          font-size: 1.25rem;
+        }
+
+        .contribution-section {
+          padding: 1rem;
+        }
+
+        .github-style-heatmap {
+          font-size: 0.75rem;
+        }
+
+        .github-style-heatmap .heatmap-wrapper {
+          overflow-x: auto;
+          overflow-y: hidden;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .github-style-heatmap .heatmap-container {
+          min-width: max-content !important;
+          width: auto !important;
         }
       }
     </style>
+    </main>
   </body>
 </html>
