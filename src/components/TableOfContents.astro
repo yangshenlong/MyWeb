@@ -67,9 +67,9 @@ const mainHeadings = headings.filter((h) => h.level >= 2 && h.level <= 3);
 
 		// 平滑滚动
 		tocLinks.forEach((link) => {
-			link.addEventListener('click', (e) => {
+			link.addEventListener('click', (e: Event) => {
 				e.preventDefault();
-				const targetId = link.getAttribute('data-heading-id');
+				const targetId = (link as HTMLElement).getAttribute('data-heading-id') ?? '';
 				const target = document.getElementById(targetId);
 
 				if (target) {
@@ -80,26 +80,26 @@ const mainHeadings = headings.filter((h) => h.level >= 2 && h.level <= 3);
 					});
 
 					// Update URL without jumping
-					history.pushState(null, null, `#${targetId}`);
+					history.pushState({}, '', `#${targetId}`);
 				}
 			});
 		});
-
+ 
 		// Intersection Observer for current heading
 		const observerOptions = {
 			rootMargin: '-100px 0px -70% 0px',
 			threshold: 0
 		};
 
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
+		const observer = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
+			entries.forEach((entry: IntersectionObserverEntry) => {
 				if (entry.isIntersecting) {
-					const id = entry.target.id;
+					const id = (entry.target as HTMLElement).id;
 					const activeLink = document.querySelector(`.toc-link[data-heading-id="${id}"]`);
 
 					// Remove active class from all
-					tocLinks.forEach((link) => link.classList.remove('active'));
-					tocItems.forEach((item) => item.classList.remove('active'));
+					tocLinks.forEach((link: HTMLElement) => link.classList.remove('active'));
+					tocItems.forEach((item: HTMLElement) => item.classList.remove('active'));
 
 					// Add active class to current
 					if (activeLink) {
@@ -128,13 +128,13 @@ const mainHeadings = headings.filter((h) => h.level >= 2 && h.level <= 3);
 			const scrolled = window.scrollY;
 			const progress = Math.min((scrolled / documentHeight) * 100, 100);
 
-			if (progressBar) {
+			if (progressBar instanceof HTMLElement) {
 				progressBar.style.width = `${progress}%`;
 			}
 		}
 
 		// 节流函数
-		function throttle(func: Function, limit: number) {
+		function throttle(func: () => void, limit: number) {
 			let inThrottle: boolean;
 			return function() {
 				if (!inThrottle) {

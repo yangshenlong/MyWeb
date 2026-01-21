@@ -43,7 +43,7 @@ const totalContributions = contributionData.reduce((sum, d) => sum + d.count, 0)
 const maxDay = Math.max(...contributionData.map((d) => d.count));
 const activeDays = contributionData.filter((d) => d.count > 0).length;
 const longestStreak = contributionData.reduce((max, d, i, arr) => {
-  let currentStreak = 0;
+  const currentStreak = 0;
   let tempStreak = 0;
   for (let j = 0; j <= i; j++) {
     if (arr[j].count > 0) {
