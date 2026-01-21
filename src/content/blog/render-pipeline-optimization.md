@@ -1,10 +1,9 @@
 ---
-title: 'Unity渲染管线性能优化实战指南'
-description: '分享在实际项目中优化Unity渲染管线的经验，包含Draw Call优化、GPU Instancing、SRP Batcher使用技巧以及性能分析工具的使用。'
-pubDate: 2024-01-08
-heroImage: ../../assets/blog-placeholder-2.jpg
-tags: ['Unity', '性能优化', '渲染管线', 'URP']
-category: '性能优化'
+title: "Unity渲染管线性能优化实战指南"
+description: "分享在实际项目中优化Unity渲染管线的经验，包含Draw Call优化、GPU Instancing、SRP Batcher使用技巧以及性能分析工具的使用。"
+pubDate: "2024-01-08"
+tags: ["Unity", "性能优化", "渲染管线", "URP"]
+category: "性能优化"
 ---
 
 ## 前言
@@ -187,6 +186,7 @@ public class PerformanceMonitor : MonoBehaviour
 ## 总结
 
 渲染优化需要：
+
 1. 准确的性能分析
 2. 合理的优化策略
 3. 持续的监控和调整

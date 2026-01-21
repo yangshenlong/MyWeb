@@ -1,10 +1,9 @@
 ---
-title: '基于Shader的实时水面效果实现'
-description: '深入探讨如何使用Shader Graph和HLSL实现逼真的实时水面渲染效果，包含波浪模拟、反射折射和泡沫效果。'
-pubDate: 2024-01-09
-heroImage: ../../assets/blog-placeholder-1.jpg
-tags: ['Shader', 'Unity', '渲染', 'HLSL']
-category: '渲染技术'
+title: "基于Shader的实时水面效果实现"
+description: "深入探讨如何使用Shader Graph和HLSL实现逼真的实时水面渲染效果，包含波浪模拟、反射折射和泡沫效果。"
+pubDate: "2024-01-09"
+tags: ["Shader", "Unity", "渲染", "HLSL"]
+category: "渲染技术"
 ---
 
 ## 前言

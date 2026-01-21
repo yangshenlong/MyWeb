@@ -1,10 +1,9 @@
 ---
-title: 'Maya Python工具开发：自动UV展开工具'
-description: '详细介绍如何使用Python和PyQt为Maya开发自动化工具，从基础的UI设计到复杂的UV展开算法实现。'
-pubDate: 2024-01-07
-heroImage: ../../assets/blog-placeholder-3.jpg
-tags: ['Maya', 'Python', 'PyQt', '工具开发', 'UV']
-category: '工具开发'
+title: "Maya Python工具开发：自动UV展开工具"
+description: "详细介绍如何使用Python和PyQt为Maya开发自动化工具，从基础的UI设计到复杂的UV展开算法实现。"
+pubDate: "2024-01-07"
+tags: ["Maya", "Python", "PyQt", "工具开发", "UV"]
+category: "工具开发"
 ---
 
 ## 前言
@@ -334,6 +333,7 @@ cmds.shelfButton(parent=shelf,
 ## 总结
 
 开发Maya工具需要：
+
 1. 扎实的Python基础
 2. 良好的UI设计能力
 3. 深入理解DCC API

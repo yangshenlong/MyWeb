@@ -1,12 +1,10 @@
 ---
-title: 'GhisRealisticGrass 草地方案完整技术分析'
-description: '深入解析 GhisRealisticGrass 插件的草地渲染系统、风效交互、材质计算和编辑器工具实现原理'
-pubDate: '2026-01-09'
-heroImage: '../../assets/blog-placeholder-1.jpg'
-tags: ['Unreal Engine', '着色器', 'Niagara', '对马岛之魂', '草地渲染', '技术分析']
-category: '游戏开发'
-author: 'Ralph Wiggum AI Analysis'
-layout: 'BlogPostGrass'
+title: "GhisRealisticGrass 草地方案完整技术分析"
+description: "深入解析 GhisRealisticGrass 插件的草地渲染系统、风效交互、材质计算和编辑器工具实现原理"
+pubDate: "2026-01-09"
+tags: ["Unreal Engine", "着色器", "Niagara", "对马岛之魂", "草地渲染", "技术分析"]
+category: "游戏开发"
+author: "Ralph Wiggum AI Analysis"
 ---
 
 <style>
@@ -41,20 +39,20 @@ pre.ascii-art code {
 
 ### 基本信息
 
-| 属性 | 值 |
-|------|-----|
-| 项目名称 | GhisRealGrass |
-| 引擎版本 | Unreal Engine 5.3 |
+| 属性     | 值                       |
+| -------- | ------------------------ |
+| 项目名称 | GhisRealGrass            |
+| 引擎版本 | Unreal Engine 5.3        |
 | 插件类型 | 实验性真实草地着色器系统 |
-| 作者 | Ghislain GIRARDOT |
-| 总资源数 | 208个资产 |
+| 作者     | Ghislain GIRARDOT        |
+| 总资源数 | 208个资产                |
 
 ### 插件清单
 
-| 插件名称 | 功能描述 |
-|----------|----------|
-| `GhisRealisticGrass01` | 核心草地渲染着色器系统 |
-| `GhisNiagara2DWind` | 2D交互式风场纹理生成系统 |
+| 插件名称               | 功能描述                 |
+| ---------------------- | ------------------------ |
+| `GhisRealisticGrass01` | 核心草地渲染着色器系统   |
+| `GhisNiagara2DWind`    | 2D交互式风场纹理生成系统 |
 
 ---
 
@@ -113,13 +111,13 @@ pre.ascii-art code {
 
 ### 网格资源
 
-| 网格名称 | 文件大小 | 用途 |
-|----------|----------|------|
-| `SM_Grass_A_01` | 310KB | 主草地模型 (最详细) |
-| `SM_Grass_B_01` | 57KB | 变体B (轻量级) |
-| `SM_Grass_C_01` | 76KB | 变体C |
-| `SM_Grass_D_01` | 73KB | 变体D |
-| `SM_Grass_E_01` | 113KB | 变体E |
+| 网格名称        | 文件大小 | 用途                |
+| --------------- | -------- | ------------------- |
+| `SM_Grass_A_01` | 310KB    | 主草地模型 (最详细) |
+| `SM_Grass_B_01` | 57KB     | 变体B (轻量级)      |
+| `SM_Grass_C_01` | 76KB     | 变体C               |
+| `SM_Grass_D_01` | 73KB     | 变体D               |
+| `SM_Grass_E_01` | 113KB    | 变体E               |
 
 ### 材质系统架构
 
@@ -145,21 +143,25 @@ pre.ascii-art code {
 ### 纹理贴图详解
 
 #### 1. 颜色贴图 (T_Grass_Color)
+
 - **分辨率**: 高分辨率 (8.9MB)
 - **通道**: RGB颜色
 - **用途**: 草叶基础颜色
 
 #### 2. 法线贴图 (T_Grass_Normals)
+
 - **分辨率**: 高分辨率 (5.4MB)
 - **格式**: 切线空间法线
 - **用途**: 草叶表面细节
 
 #### 3. DST贴图 (T_Grass_DST)
+
 - **分辨率**: 高分辨率 (5.4MB)
 - **通道组**: D/S/T 多通道
 - **用途**: 细节/粗糙度/透射
 
 #### 4. 参数映射贴图 (T_Grass_ParametersMap)
+
 - **分辨率**: 中等 (121KB)
 - **通道编码**:
   - **R**: 丛聚强度 (Clump)
@@ -188,14 +190,14 @@ pre.ascii-art code {
 
 ### 风效控制组件
 
-| 组件 | 文件 | 功能 |
-|------|------|------|
-| 风效蓝图 | `BP_2DWindSyst` (644KB) | 风场系统主逻辑 |
-| 参数集合 | `MPC_2DWindSyst` (2KB) | 全局风效参数 |
-| 可视化网格 | `SM_WindWidget` (128KB) | 风场可视化 |
-| 可视化材质 | `M_WindWidget` (100KB) | 风场显示着色器 |
-| 预设结构体 | `SBP_2DWindSyst_Preset` (11KB) | 风效配置预设 |
-| UI控件 | `WDG_WindControl` | 风效调节界面 |
+| 组件       | 文件                           | 功能           |
+| ---------- | ------------------------------ | -------------- |
+| 风效蓝图   | `BP_2DWindSyst` (644KB)        | 风场系统主逻辑 |
+| 参数集合   | `MPC_2DWindSyst` (2KB)         | 全局风效参数   |
+| 可视化网格 | `SM_WindWidget` (128KB)        | 风场可视化     |
+| 可视化材质 | `M_WindWidget` (100KB)         | 风场显示着色器 |
+| 预设结构体 | `SBP_2DWindSyst_Preset` (11KB) | 风效配置预设   |
+| UI控件     | `WDG_WindControl`              | 风效调节界面   |
 
 ### 风场数据流
 
@@ -302,11 +304,11 @@ pre.ascii-art code {
 
 ### 1. LOD系统
 
-| LOD级别 | 距离 | 材质实例 | 多边形数 |
-|---------|------|----------|----------|
-| LOD0 | 0-5000 | MI_RealisticGrass_01_LOD0 | 完整细节 |
-| LOD1 | 5000+ | MI_RealisticGrass_01_LOD1 | 简化 |
-| FarGrass | 极远 | M_FarGrass | 极简 |
+| LOD级别  | 距离   | 材质实例                  | 多边形数 |
+| -------- | ------ | ------------------------- | -------- |
+| LOD0     | 0-5000 | MI_RealisticGrass_01_LOD0 | 完整细节 |
+| LOD1     | 5000+  | MI_RealisticGrass_01_LOD1 | 简化     |
+| FarGrass | 极远   | M_FarGrass                | 极简     |
 
 ### 2. 纹理优化
 
@@ -339,6 +341,7 @@ pre.ascii-art code {
 #### 矩阵变换流程
 
 1. **构建变换矩阵** (`MF_3X3Mat`)
+
    ```
    | m11 m12 m13 |
    | m21 m22 m23 |
@@ -374,12 +377,12 @@ Niagara粒子系统模拟2D风场：
 
 参数映射纹理使用4通道编码：
 
-| 通道 | 参数 | 范围 | 描述 |
-|------|------|------|------|
-| R | Clump | 0-1 | 丛聚强度 |
-| G | Scale | 0-1 | 缩放变化 |
-| B | Bend | 0-1 | 弯曲强度 |
-| A | Reserved | - | 预留参数 |
+| 通道 | 参数     | 范围 | 描述     |
+| ---- | -------- | ---- | -------- |
+| R    | Clump    | 0-1  | 丛聚强度 |
+| G    | Scale    | 0-1  | 缩放变化 |
+| B    | Bend     | 0-1  | 弯曲强度 |
+| A    | Reserved | -    | 预留参数 |
 
 ---
 
@@ -388,6 +391,7 @@ Niagara粒子系统模拟2D风场：
 ### 关键资产清单
 
 #### 草地插件资产 (27个)
+
 ```
 Meshes/
 ├── SM_Grass_A_01.uasset
@@ -416,6 +420,7 @@ Textures/
 ```
 
 #### 风效插件资产
+
 ```
 Blueprints/
 ├── BP_2DWindSyst.uasset
@@ -549,15 +554,15 @@ FinalSamplePosition
 
 ### 2.2 纹理采样顺序
 
-| 采样序 | 纹理名称 | 采样坐标 | 输出用途 |
-|--------|----------|----------|----------|
-| 1 | `T_Grass_Color` | UV0 | 基础颜色 |
-| 2 | `T_Grass_Normals` | UV0 | 切线空间法线 |
-| 3 | `T_Grass_DST` | UV0 | 粗糙度+透射 |
-| 4 | `T_Grass_Opacity` | UV0 | Alpha遮罩 |
-| 5 | `T_Grass_ParametersMap` | WorldPosition.XY | 变形参数 |
-| 6 | `T_Grass_LandscapeMask` | WorldPosition.XZ | 地形遮罩 |
-| 7 | `RT_2DWindSystem_RGBA` | WorldPosition.XY | 风场数据 |
+| 采样序 | 纹理名称                | 采样坐标         | 输出用途     |
+| ------ | ----------------------- | ---------------- | ------------ |
+| 1      | `T_Grass_Color`         | UV0              | 基础颜色     |
+| 2      | `T_Grass_Normals`       | UV0              | 切线空间法线 |
+| 3      | `T_Grass_DST`           | UV0              | 粗糙度+透射  |
+| 4      | `T_Grass_Opacity`       | UV0              | Alpha遮罩    |
+| 5      | `T_Grass_ParametersMap` | WorldPosition.XY | 变形参数     |
+| 6      | `T_Grass_LandscapeMask` | WorldPosition.XZ | 地形遮罩     |
+| 7      | `RT_2DWindSystem_RGBA`  | WorldPosition.XY | 风场数据     |
 
 ### 2.3 参数映射纹理采样
 
@@ -575,6 +580,7 @@ ReservedParam = SampledRGBA.a
 ```
 
 **关键参数**：
+
 - `ParameterMapTiling`: 控制参数映射的重复密度
 - `ParameterMapOffset`: 调整参数映射的位置偏移
 - 每个通道值域: [0, 1]
@@ -639,6 +645,7 @@ mat3 InverseMatrix(mat3 M)
 ```
 
 **应用场景**：
+
 - 世界空间 → 局部空间转换
 - 法线空间变换 (需要逆转置矩阵)
 - 切线空间重建
@@ -708,16 +715,16 @@ float CalculateWindDisplacement(VertexPosition P, WindData W)
 
 ### 4.3 风效参数 (MPC_2DWindSyst)
 
-| 参数名称 | 类型 | 默认值 | 描述 |
-|----------|------|--------|------|
-| `WindDirection` | Vector2D | (1, 0) | 主风向 |
-| `WindStrength` | Scalar | 1.0 | 风力强度 |
-| `WindSpeed` | Scalar | 1.0 | 风速变化率 |
-| `WindTiling` | Scalar | 0.1 | 风场纹理平铺 |
-| `WindTurbulence` | Scalar | 0.5 | 湍流强度 |
-| `WindFalloffPower` | Scalar | 2.0 | 高度衰减指数 |
-| `TurbulenceFrequency` | Scalar | 10.0 | 湍流频率 |
-| `TurbulenceSpeed` | Scalar | 5.0 | 湍流速度 |
+| 参数名称              | 类型     | 默认值 | 描述         |
+| --------------------- | -------- | ------ | ------------ |
+| `WindDirection`       | Vector2D | (1, 0) | 主风向       |
+| `WindStrength`        | Scalar   | 1.0    | 风力强度     |
+| `WindSpeed`           | Scalar   | 1.0    | 风速变化率   |
+| `WindTiling`          | Scalar   | 0.1    | 风场纹理平铺 |
+| `WindTurbulence`      | Scalar   | 0.5    | 湍流强度     |
+| `WindFalloffPower`    | Scalar   | 2.0    | 高度衰减指数 |
+| `TurbulenceFrequency` | Scalar   | 10.0   | 湍流频率     |
+| `TurbulenceSpeed`     | Scalar   | 5.0    | 湍流速度     |
 
 ---
 
@@ -906,15 +913,15 @@ DST贴图解码：
 
 ### 8.1 LOD0 vs LOD1 对比
 
-| 特性 | LOD0 | LOD1 |
-|------|------|------|
+| 特性     | LOD0                      | LOD1                      |
+| -------- | ------------------------- | ------------------------- |
 | 材质实例 | MI_RealisticGrass_01_LOD0 | MI_RealisticGrass_01_LOD1 |
-| 文件大小 | 24KB | 20KB |
-| 矩阵计算 | 完整3x3矩阵 | 简化2D矩阵 |
-| 顶点位移 | 完整物理模拟 | 线性简化 |
-| 法线计算 | TBN完整转换 | 简化法线 |
-| 风效 | 完整风场 + 湍流 | 基础风场 |
-| 透射 | 完整SSS | 简化/禁用 |
+| 文件大小 | 24KB                      | 20KB                      |
+| 矩阵计算 | 完整3x3矩阵               | 简化2D矩阵                |
+| 顶点位移 | 完整物理模拟              | 线性简化                  |
+| 法线计算 | TBN完整转换               | 简化法线                  |
+| 风效     | 完整风场 + 湍流           | 基础风场                  |
+| 透射     | 完整SSS                   | 简化/禁用                 |
 
 ### 8.2 LOD优化策略
 
@@ -1019,13 +1026,13 @@ ShaderOutput MainGrassShader(VertexInput Input)
 
 ### 10.1 计算成本分析
 
-| 计算阶段 | 相对成本 | 优化策略 |
-|----------|----------|----------|
-| 纹理采样 (7张) | 高 | 使用纹理数组，合并通道 |
-| 矩阵运算 | 中 | LOD简化，2D近似 |
-| 三角函数 | 低 | 预计算，查找表 |
-| 幂运算 | 中 | 降低精度，近似 |
-| 条件分支 | 高 | 使用lerp/step替代if |
+| 计算阶段       | 相对成本 | 优化策略               |
+| -------------- | -------- | ---------------------- |
+| 纹理采样 (7张) | 高       | 使用纹理数组，合并通道 |
+| 矩阵运算       | 中       | LOD简化，2D近似        |
+| 三角函数       | 低       | 预计算，查找表         |
+| 幂运算         | 中       | 降低精度，近似         |
+| 条件分支       | 高       | 使用lerp/step替代if    |
 
 ### 10.2 纹理采样优化
 
@@ -1058,9 +1065,9 @@ float c3 = combined.b;
 
 ---
 
-*本章节由Ralph Wiggum深度迭代分析生成*
-*迭代次数: #21-30*
-*分析日期: 2026-01-09*
+_本章节由Ralph Wiggum深度迭代分析生成_
+_迭代次数: #21-30_
+_分析日期: 2026-01-09_
 
 ---
 
@@ -1827,13 +1834,13 @@ OutputToRenderTarget(RT_2DWindSystem_RGBA, ParticlePosition, EncodedWindData);
 
 ### 8.1 性能优化
 
-| 优化项 | 当前状态 | 建议改进 |
-|--------|----------|----------|
-| 渲染目标分辨率 | 固定1024x1024 | 可配置+自适应 |
-| 笔刷更新频率 | 实时更新 | 增量更新 |
-| 合成计算 | 每次全量合成 | 缓存+仅更新变化区域 |
-| 预览质量 | 实时全分辨率 | LOD预览 |
-| 撤销/重做 | 未实现 | 历史记录栈 |
+| 优化项         | 当前状态      | 建议改进            |
+| -------------- | ------------- | ------------------- |
+| 渲染目标分辨率 | 固定1024x1024 | 可配置+自适应       |
+| 笔刷更新频率   | 实时更新      | 增量更新            |
+| 合成计算       | 每次全量合成  | 缓存+仅更新变化区域 |
+| 预览质量       | 实时全分辨率  | LOD预览             |
+| 撤销/重做      | 未实现        | 历史记录栈          |
 
 ### 8.2 功能扩展建议
 
@@ -1872,9 +1879,9 @@ OutputToRenderTarget(RT_2DWindSystem_RGBA, ParticlePosition, EncodedWindData);
 
 ---
 
-*本章节由Ralph Wiggum深度迭代分析生成*
-*迭代次数: #31-40*
-*分析日期: 2026-01-09*
+_本章节由Ralph Wiggum深度迭代分析生成_
+_迭代次数: #31-40_
+_分析日期: 2026-01-09_
 
 ---
 
@@ -1955,13 +1962,13 @@ float GrassHeight = VertexDataUV.y;    // 0.0(根部) → 1.0(顶部)
 
 **数据用途表**：
 
-| 数据 | 类型 | 来源 | 用途 |
-|------|------|------|------|
+| 数据            | 类型   | 来源                 | 用途             |
+| --------------- | ------ | -------------------- | ---------------- |
 | `ClumpPosition` | float3 | LocalToWorld平移分量 | 计算实例中心位置 |
-| `PivotLS` | float3 | TexCoord[N] baked | 草叶局部轴心 |
-| `PivotWS` | float3 | 变换后 | 草叶世界轴心 |
-| `GrassRandom` | float | TexCoord[2].x | 随机变化 |
-| `GrassHeight` | float | TexCoord[2].y | 高度遮罩 |
+| `PivotLS`       | float3 | TexCoord[N] baked    | 草叶局部轴心     |
+| `PivotWS`       | float3 | 变换后               | 草叶世界轴心     |
+| `GrassRandom`   | float  | TexCoord[2].x        | 随机变化         |
+| `GrassHeight`   | float  | TexCoord[2].y        | 高度遮罩         |
 
 ### 2.2 参数纹理采样详解
 
@@ -1992,6 +1999,7 @@ float BendTextureVariation = ParameterData.a;  // A: 弯曲变化
 ```
 
 **为什么在Pivot位置采样？**
+
 - 草卡片有多个顶点，如果每个顶点独立采样，参数会不一致
 - 在Pivot位置采样，整株草获得相同的参数值
 - 确保草叶作为一个整体进行变形
@@ -2085,6 +2093,7 @@ return outWPO;  // 弯曲后的局部位置
 ```
 
 **关键特性**：
+
 1. **弧长恒定**：草叶不会因为弯曲而伸缩
 2. **几何精确**：基于圆弧而非简单的线性插值
 3. **风力拉直**：大风时草会被"吹直"，减少弯曲
@@ -2164,6 +2173,7 @@ float3 WindModulatedVector = ModulatedWindVector * WindMultiplier * Mask;
 ```
 
 **调制效果**：
+
 - **根部** (Height=0): 受风力小 (RigidityOffset保护)
 - **顶部** (Height=1): 受风力大
 - **侧面**: 受风力大 (NormalModulation=0)
@@ -2240,14 +2250,14 @@ float3 WindModulatedVector = ModulatedWindVector * WindMultiplier * Mask;
 
 ### 6.1 关键静态开关
 
-| 开关名称 | 默认值 | 功能 | 性能影响 |
-|----------|--------|------|----------|
-| `WPO\|Bend - Use` | true | 启用弯曲计算 | 高 |
-| `WPO\|Clump - Use Grass Layer Mask` | true | 启用丛聚遮罩 | 中 |
-| `WPO\|Scale - Use Fade Amount` | true | 启用距离淡出 | 低 |
-| `WPO\|Scale - Apply Instance Scale` | true | 应用实例缩放 | 低 |
-| `Opacity - Use Plain Shadow` | false | 普通阴影模式 | 低 |
-| `Opacity - Use Dithered Shadow` | true | Dither阴影模式 | 中 |
+| 开关名称                            | 默认值 | 功能           | 性能影响 |
+| ----------------------------------- | ------ | -------------- | -------- |
+| `WPO\|Bend - Use`                   | true   | 启用弯曲计算   | 高       |
+| `WPO\|Clump - Use Grass Layer Mask` | true   | 启用丛聚遮罩   | 中       |
+| `WPO\|Scale - Use Fade Amount`      | true   | 启用距离淡出   | 低       |
+| `WPO\|Scale - Apply Instance Scale` | true   | 应用实例缩放   | 低       |
+| `Opacity - Use Plain Shadow`        | false  | 普通阴影模式   | 低       |
+| `Opacity - Use Dithered Shadow`     | true   | Dither阴影模式 | 中       |
 
 ### 6.2 LOD优化策略
 
@@ -2273,12 +2283,12 @@ float3 WindModulatedVector = ModulatedWindVector * WindMultiplier * Mask;
 
 **LOD差异**：
 
-| 特性 | LOD0 | LOD1 |
-|------|------|------|
-| 弯曲计算 | 完整GrassBend函数 | 禁用 |
-| 法线 | 计算弯曲法线 | 强制向上 |
-| 风效 | 完整风力调制 | 简化 |
-| 性能 | 高开销 | 低开销 |
+| 特性     | LOD0              | LOD1     |
+| -------- | ----------------- | -------- |
+| 弯曲计算 | 完整GrassBend函数 | 禁用     |
+| 法线     | 计算弯曲法线      | 强制向上 |
+| 风效     | 完整风力调制      | 简化     |
+| 性能     | 高开销            | 低开销   |
 
 ---
 
@@ -2383,14 +2393,14 @@ Clump处理
 
 ### 8.1 与之前分析的主要差异
 
-| 方面 | 之前分析 | 手动拆解发现 |
-|------|----------|-------------|
-| 弯曲算法 | 简化悬臂梁模型 | **完整圆弧几何算法** |
-| 风力采样 | 基础逻辑 | **包含上一帧数据** |
-| 数据准备 | 概念性描述 | **详细的Pivot/Random/Height** |
-| 阴影处理 | 未详细分析 | **完整Dither Temporal AA** |
-| 静态开关 | 概念性提及 | **具体的条件分支** |
-| LOD优化 | 简化描述 | **详细的优化实现** |
+| 方面     | 之前分析       | 手动拆解发现                  |
+| -------- | -------------- | ----------------------------- |
+| 弯曲算法 | 简化悬臂梁模型 | **完整圆弧几何算法**          |
+| 风力采样 | 基础逻辑       | **包含上一帧数据**            |
+| 数据准备 | 概念性描述     | **详细的Pivot/Random/Height** |
+| 阴影处理 | 未详细分析     | **完整Dither Temporal AA**    |
+| 静态开关 | 概念性提及     | **具体的条件分支**            |
+| LOD优化  | 简化描述       | **详细的优化实现**            |
 
 ### 8.2 核心发现
 
@@ -2425,33 +2435,33 @@ Clump处理
 
 ### 9.1 纹理通道编码
 
-| 纹理 | 通道 | 数据 | 范围 |
-|------|------|------|------|
-| **Albedo/Roughness** | RGB | 颜色 | [0,1] |
-| | A | 粗糙度 | [0,1] |
-| **DST** | R | 细节 | [0,1] |
-| | G | 高光 | [0,1] |
-| | B | 透射 | [0,1] |
-| | A | AO | [0,1] |
-| **Parameters** | RG | Clump方向 | [-1,1] |
-| | B | 缩放变化 | [0,1] |
-| | A | 弯曲变化 | [0,1] |
-| **WindRT** | RG | 当前风 | [-1,1] |
-| | BA | 上一帧风 | [-1,1] |
-| **LandscapeMask** | R | 草地权重 | [0,1] |
+| 纹理                 | 通道 | 数据      | 范围   |
+| -------------------- | ---- | --------- | ------ |
+| **Albedo/Roughness** | RGB  | 颜色      | [0,1]  |
+|                      | A    | 粗糙度    | [0,1]  |
+| **DST**              | R    | 细节      | [0,1]  |
+|                      | G    | 高光      | [0,1]  |
+|                      | B    | 透射      | [0,1]  |
+|                      | A    | AO        | [0,1]  |
+| **Parameters**       | RG   | Clump方向 | [-1,1] |
+|                      | B    | 缩放变化  | [0,1]  |
+|                      | A    | 弯曲变化  | [0,1]  |
+| **WindRT**           | RG   | 当前风    | [-1,1] |
+|                      | BA   | 上一帧风  | [-1,1] |
+| **LandscapeMask**    | R    | 草地权重  | [0,1]  |
 
 ### 9.2 关键参数默认值
 
-| 参数 | 默认值 | 描述 |
-|------|--------|------|
-| `WPO\|Parameters - Randomness` | 3.0 | 参数采样的随机偏移 |
-| `WPO\|Parameters - Parameter Map Size` | 4000.0 | 参数映射的世界尺寸 |
-| `WPO\|Wind - Randomness` | 3.0 | 风力采样的随机偏移 |
-| `WPO\|Wind - Scale` | 6000.0 | 风场纹理的世界尺寸 |
-| `WPO\|Bend - Min` | 2.0 | 最小弯曲量 |
-| `WPO\|Bend - Max` | -1.5 | 最大弯曲量 |
-| `WPO\|Bend - Wind UnBend Magnitude` | 160000.0 | 风力拉直阈值 |
-| `WPO\|Orientation - Inherit From Clump` | -8.0 | 从Clump继承强度 |
+| 参数                                    | 默认值   | 描述               |
+| --------------------------------------- | -------- | ------------------ |
+| `WPO\|Parameters - Randomness`          | 3.0      | 参数采样的随机偏移 |
+| `WPO\|Parameters - Parameter Map Size`  | 4000.0   | 参数映射的世界尺寸 |
+| `WPO\|Wind - Randomness`                | 3.0      | 风力采样的随机偏移 |
+| `WPO\|Wind - Scale`                     | 6000.0   | 风场纹理的世界尺寸 |
+| `WPO\|Bend - Min`                       | 2.0      | 最小弯曲量         |
+| `WPO\|Bend - Max`                       | -1.5     | 最大弯曲量         |
+| `WPO\|Bend - Wind UnBend Magnitude`     | 160000.0 | 风力拉直阈值       |
+| `WPO\|Orientation - Inherit From Clump` | -8.0     | 从Clump继承强度    |
 
 ---
 
@@ -2459,13 +2469,13 @@ Clump处理
 
 ### 10.1 关键性能点
 
-| 计算阶段 | 相对成本 | 优化策略 |
-|----------|----------|----------|
-| 参数纹理采样 | 高 | 使用Mipmap，降低采样频率 |
-| 弯曲计算 | 高 | LOD1禁用，简化算法 |
-| 风力调制 | 中 | 使用静态开关 |
-| 面向相机 | 中 | 简化2D投影 |
-| Dither阴影 | 低 | 仅在阴影通道启用 |
+| 计算阶段     | 相对成本 | 优化策略                 |
+| ------------ | -------- | ------------------------ |
+| 参数纹理采样 | 高       | 使用Mipmap，降低采样频率 |
+| 弯曲计算     | 高       | LOD1禁用，简化算法       |
+| 风力调制     | 中       | 使用静态开关             |
+| 面向相机     | 中       | 简化2D投影               |
+| Dither阴影   | 低       | 仅在阴影通道启用         |
 
 ### 10.2 实用技巧
 
@@ -2500,10 +2510,10 @@ Clump处理
 
 ---
 
-*本章节由Ralph Wiggum深度迭代分析生成*
-*迭代次数: #51-60*
-*对比来源: 用户手动拆解文档*
-*分析日期: 2026-01-09*
+_本章节由Ralph Wiggum深度迭代分析生成_
+_迭代次数: #51-60_
+_对比来源: 用户手动拆解文档_
+_分析日期: 2026-01-09_
 
 ---
 
@@ -2520,11 +2530,11 @@ Clump处理
 
 ### 1.1 远景草地资产清单
 
-| 资产名称 | 路径 | 大小 | 用途 |
-|----------|------|------|------|
-| `SM_FarGrass` | FarGrass/Meshes/ | 未统计 | 远景草地网格 |
-| `M_FarGrass` | FarGrass/Materials/ | 未统计 | 远景草地材质 |
-| `T_FarGrass_N` | FarGrass/Textures/ | 未统计 | 远景草地法线贴图 |
+| 资产名称       | 路径                | 大小   | 用途             |
+| -------------- | ------------------- | ------ | ---------------- |
+| `SM_FarGrass`  | FarGrass/Meshes/    | 未统计 | 远景草地网格     |
+| `M_FarGrass`   | FarGrass/Materials/ | 未统计 | 远景草地材质     |
+| `T_FarGrass_N` | FarGrass/Textures/  | 未统计 | 远景草地法线贴图 |
 
 ### 1.2 SM_FarGrass 网格设计
 
@@ -2548,6 +2558,7 @@ LOD设置：
 ```
 
 **关键设计思路**：
+
 - **极简几何**：远距离无法看到细节，使用最简化的几何体
 - **单材质**：避免材质切换开销
 - **批处理友好**：适合GPU实例化渲染
@@ -2561,45 +2572,45 @@ MaterialOutput FarGrassShader(VertexInput Input)
 {
     // === 输入采样 ===
     float3 normalSample = Tex2D(T_FarGrass_N, Input.UV).rgb;
-    
+
     // === 简化着色器 ===
-    
+
     // 1. 基础颜色（可能使用程序化或单色）
     float3 baseColor = float3(0.2, 0.35, 0.15);  // 深绿色
-    
+
     // 2. 简化法线（仅用于基础光照）
     float3 worldNormal = normalize(normalSample.rgb * 2.0 - 1.0);
-    
+
     // 3. 固定粗糙度（远距离统一粗糙度）
     float roughness = 0.9;
-    
+
     // 4. 无复杂特效（禁用WPO、Bend、Clump等）
-    
+
     // === 距离淡出 ===
     float distance = length(Input.WorldPosition - CameraPosition);
     float fadeFactor = 1.0 - smoothstep(10000.0, 12000.0, distance);
-    
+
     // === 输出 ===
     MaterialOutput output;
     output.BaseColor = baseColor;
     output.Normal = worldNormal;
     output.Roughness = roughness;
     output.Opacity = fadeFactor;
-    
+
     return output;
 }
 ```
 
 **与近景草地对比**：
 
-| 特性 | 近景草地 (M_RealisticGrass_01) | 远景草地 (M_FarGrass) |
-|------|-------------------------------|------------------------|
-| WPO | 完整实现（弯曲、风效、Clump） | 禁用 |
-| 纹理采样 | 7张纹理（颜色、法线、DST、参数等） | 1张法线贴图 |
-| 顶点计算 | 复杂的矩阵变换和物理模拟 | 简单的基础光照 |
-| 风效交互 | 实时Niagara风场响应 | 可能静态或禁用 |
-| LOD级别 | LOD0/LOD1 | LOD2/LOD3 |
-| 性能开销 | 高（每个实例多次纹理采样） | 低（单次采样） |
+| 特性     | 近景草地 (M_RealisticGrass_01)     | 远景草地 (M_FarGrass) |
+| -------- | ---------------------------------- | --------------------- |
+| WPO      | 完整实现（弯曲、风效、Clump）      | 禁用                  |
+| 纹理采样 | 7张纹理（颜色、法线、DST、参数等） | 1张法线贴图           |
+| 顶点计算 | 复杂的矩阵变换和物理模拟           | 简单的基础光照        |
+| 风效交互 | 实时Niagara风场响应                | 可能静态或禁用        |
+| LOD级别  | LOD0/LOD1                          | LOD2/LOD3             |
+| 性能开销 | 高（每个实例多次纹理采样）         | 低（单次采样）        |
 
 ### 1.4 LOD过渡策略
 
@@ -2631,6 +2642,7 @@ LOD3 (极远/剔除)：
 ```
 
 **过渡优化技巧**：
+
 1. **渐进淡出**：在LOD切换边界使用alpha混合
 2. **密度递减**：远距离自动降低植被实例密度
 3. **批处理合并**：相同LOD级别的实例合并渲染批次
@@ -2706,14 +2718,14 @@ float GrassLayerWeight = LandscapeMask.SampleLevel(MaskSampler, MaskUV, 0).r;
 
 ### 2.3 遮罩参数详解
 
-| 参数 | 默认值 | 描述 | 典型范围 |
-|------|--------|------|----------|
-| `WPO\|Scale - Landscape Randomness` | 未指定 | 采样随机偏移强度 | 0.0-10.0 |
-| `WPO\|Scale - Landscape Mask Offset X/Y` | 未指定 | UV坐标偏移 | -1000-1000 |
-| `WPO\|Scale - Landscape Mask Size` | 未指定 | 遮罩覆盖的世界尺寸 | 1000-10000 |
-| `WPO\|Scale - Landscape Mask Falloff` | 未指定 | 遮罩曲线衰减指数 | 0.5-3.0 |
-| `WPO\|Scale - Landscape Mask Multiplier` | 未指定 | 缩放强度乘数 | 0.0-2.0 |
-| `WPO\|Scale - Landscape Mask Bias` | 未指定 | 基础偏移（保证最小值） | 0.0-1.0 |
+| 参数                                     | 默认值 | 描述                   | 典型范围   |
+| ---------------------------------------- | ------ | ---------------------- | ---------- |
+| `WPO\|Scale - Landscape Randomness`      | 未指定 | 采样随机偏移强度       | 0.0-10.0   |
+| `WPO\|Scale - Landscape Mask Offset X/Y` | 未指定 | UV坐标偏移             | -1000-1000 |
+| `WPO\|Scale - Landscape Mask Size`       | 未指定 | 遮罩覆盖的世界尺寸     | 1000-10000 |
+| `WPO\|Scale - Landscape Mask Falloff`    | 未指定 | 遮罩曲线衰减指数       | 0.5-3.0    |
+| `WPO\|Scale - Landscape Mask Multiplier` | 未指定 | 缩放强度乘数           | 0.0-2.0    |
+| `WPO\|Scale - Landscape Mask Bias`       | 未指定 | 基础偏移（保证最小值） | 0.0-1.0    |
 
 ### 2.4 遮罩应用效果
 
@@ -2803,14 +2815,14 @@ Foliage Type配置参数：
 
 ### 3.3 实例化参数详解
 
-| 参数 | 草地配置 | 鹅卵石配置 | 影响 |
-|------|-----------|-------------|------|
-| Align To Surface | 启用 | 禁用/启用 | 草叶是否沿地形法线生长 |
-| Random Rotation | 启用 | 启用 | 打破视觉重复 |
-| Scale X/Y/Z | 0.8-1.2 | 0.9-1.1 | 草叶大小变化 |
-| Density | 高（5000+） | 低（100-500） | 覆盖密度 |
-| Radius | 100-200 | 50-100 | 覆盖范围 |
-| Minimum Spacing | 10-20 | 30-50 | 最小实例间距 |
+| 参数             | 草地配置    | 鹅卵石配置    | 影响                   |
+| ---------------- | ----------- | ------------- | ---------------------- |
+| Align To Surface | 启用        | 禁用/启用     | 草叶是否沿地形法线生长 |
+| Random Rotation  | 启用        | 启用          | 打破视觉重复           |
+| Scale X/Y/Z      | 0.8-1.2     | 0.9-1.1       | 草叶大小变化           |
+| Density          | 高（5000+） | 低（100-500） | 覆盖密度               |
+| Radius           | 100-200     | 50-100        | 覆盖范围               |
+| Minimum Spacing  | 10-20       | 30-50         | 最小实例间距           |
 
 ### 3.4 性能优化参数
 
@@ -2839,13 +2851,13 @@ Foliage性能优化策略：
 
 ### 4.1 五种草地网格详细对比
 
-| 网格名称 | 文件大小 | 几何复杂度 | 设计特点 | 推荐场景 |
-|----------|----------|------------|----------|----------|
-| `SM_Grass_A_01` | 310KB | 高（最详细） | 主变体，最多顶点 | 近景焦点、特写 |
-| `SM_Grass_B_01` | 57KB | 低（轻量级） | 简化几何，性能优先 | 大面积铺盖、性能敏感场景 |
-| `SM_Grass_C_01` | 76KB | 中等 | 平衡细节与性能 | 中景区域 |
-| `SM_Grass_D_01` | 73KB | 中等 | 中等复杂度 | 中景区域 |
-| `SM_Grass_E_01` | 113KB | 较高 | 较详细变体 | 近景辅助变体 |
+| 网格名称        | 文件大小 | 几何复杂度   | 设计特点           | 推荐场景                 |
+| --------------- | -------- | ------------ | ------------------ | ------------------------ |
+| `SM_Grass_A_01` | 310KB    | 高（最详细） | 主变体，最多顶点   | 近景焦点、特写           |
+| `SM_Grass_B_01` | 57KB     | 低（轻量级） | 简化几何，性能优先 | 大面积铺盖、性能敏感场景 |
+| `SM_Grass_C_01` | 76KB     | 中等         | 平衡细节与性能     | 中景区域                 |
+| `SM_Grass_D_01` | 73KB     | 中等         | 中等复杂度         | 中景区域                 |
+| `SM_Grass_E_01` | 113KB    | 较高         | 较详细变体         | 近景辅助变体             |
 
 ### 4.2 网格设计差异分析
 
@@ -2878,12 +2890,12 @@ SM_Grass_C/D/E（中等）：
 
 ### 4.3 性能与视觉平衡
 
-| 使用场景 | 推荐网格 | 理由 |
-|----------|----------|------|
-| **近景特写** | SM_Grass_A_01 | 最高细节，满足近距离观察 |
-| **性能敏感场景** | SM_Grass_B_01 | 最小开销，适合高密度 |
-| **平衡场景** | SM_Grass_C/D/E_01 | 在性能和细节间平衡 |
-| **远景填充** | SM_FarGrass | 极简几何，远距离优化 |
+| 使用场景         | 推荐网格          | 理由                     |
+| ---------------- | ----------------- | ------------------------ |
+| **近景特写**     | SM_Grass_A_01     | 最高细节，满足近距离观察 |
+| **性能敏感场景** | SM_Grass_B_01     | 最小开销，适合高密度     |
+| **平衡场景**     | SM_Grass_C/D/E_01 | 在性能和细节间平衡       |
+| **远景填充**     | SM_FarGrass       | 极简几何，远距离优化     |
 
 ### 4.4 Foliage混合策略
 
@@ -3015,11 +3027,11 @@ Early Z Pass 深度预通道：
 
 ### 5.5 其他渲染配置
 
-| 配置项 | 值 | 对草地的影响 | 调整建议 |
-|--------|-----|------------|----------|
-| `r.DynamicGlobalIlluminationMethod` | 0 | 禁用Lumen，草地仅用静态光 | 远景可禁用Lumen |
-| `r.ReflectionMethod` | 2 | 草地反射质量 | 可降低远景反射质量 |
-| `r.DefaultFeature.AmbientOcclusionStaticFraction` | True | 草地AO | 可降低远景AO精度 |
+| 配置项                                            | 值   | 对草地的影响              | 调整建议           |
+| ------------------------------------------------- | ---- | ------------------------- | ------------------ |
+| `r.DynamicGlobalIlluminationMethod`               | 0    | 禁用Lumen，草地仅用静态光 | 远景可禁用Lumen    |
+| `r.ReflectionMethod`                              | 2    | 草地反射质量              | 可降低远景反射质量 |
+| `r.DefaultFeature.AmbientOcclusionStaticFraction` | True | 草地AO                    | 可降低远景AO精度   |
 
 ---
 
@@ -3150,15 +3162,15 @@ ApplyWindForce(windDir);
 
 ### 6.5 纹理压缩与格式
 
-| 纹理名称 | 推荐格式 | 压缩 | Mipmap | 流式传输 |
-|----------|----------|--------|--------|----------|
-| T_Grass_Color | BC7（高质量RGBA） | 启用 | 启用 | 启用 |
-| T_Grass_DST | BC5（RG通道） | 启用 | 启用 | 启用 |
-| T_Grass_Normals | BC5（法线压缩） | 启用 | 启用 | 启用 |
-| T_Grass_Opacity | BC4（单通道） | 启用 | 启用 | 启用 |
-| T_Grass_ParametersMap | BC7（高质量RGBA） | 启用 | 启用 | 启用 |
-| T_Grass_LandscapeMask | BC4（单通道） | 启用 | 启用 | 启用 |
-| RT_2DWindSystem_RGBA | RGBA8（无压缩） | 禁用 | 禁用 | 禁用 |
+| 纹理名称              | 推荐格式          | 压缩 | Mipmap | 流式传输 |
+| --------------------- | ----------------- | ---- | ------ | -------- |
+| T_Grass_Color         | BC7（高质量RGBA） | 启用 | 启用   | 启用     |
+| T_Grass_DST           | BC5（RG通道）     | 启用 | 启用   | 启用     |
+| T_Grass_Normals       | BC5（法线压缩）   | 启用 | 启用   | 启用     |
+| T_Grass_Opacity       | BC4（单通道）     | 启用 | 启用   | 启用     |
+| T_Grass_ParametersMap | BC7（高质量RGBA） | 启用 | 启用   | 启用     |
+| T_Grass_LandscapeMask | BC4（单通道）     | 启用 | 启用   | 启用     |
+| RT_2DWindSystem_RGBA  | RGBA8（无压缩）   | 禁用 | 禁用   | 禁用     |
 
 ---
 
@@ -3168,20 +3180,21 @@ ApplyWindForce(windDir);
 
 ```json
 {
-    "FileVersion": 3,
-    "Version": "1.0",
-    "VersionName": "1.0",
-    "FriendlyName": "GhisRealisticGrass01",
-    "Description": "Experimental realistic grass shader",
-    "Category": "Other",
-    "CreatedBy": "Ghislain GIRARDOT",
-    "CanContainContent": true,
-    "IsBetaVersion": false,
-    "IsExperimentalVersion": false
+  "FileVersion": 3,
+  "Version": "1.0",
+  "VersionName": "1.0",
+  "FriendlyName": "GhisRealisticGrass01",
+  "Description": "Experimental realistic grass shader",
+  "Category": "Other",
+  "CreatedBy": "Ghislain GIRARDOT",
+  "CanContainContent": true,
+  "IsBetaVersion": false,
+  "IsExperimentalVersion": false
 }
 ```
 
 **核心特性**：
+
 - 实验性着色器系统
 - 完整的WPO实现
 - 多LOD支持
@@ -3191,20 +3204,21 @@ ApplyWindForce(windDir);
 
 ```json
 {
-    "FileVersion": 3,
-    "Version": "1.0",
-    "VersionName": "1.0",
-    "FriendlyName": "GhisNiagara2DWind",
-    "Description": "Experimental system that generates an interactive 2D tileable animated wind texture",
-    "Category": "Other",
-    "CreatedBy": "Ghislain GIRARDOT",
-    "CanContainContent": true,
-    "IsBetaVersion": false,
-    "IsExperimentalVersion": false
+  "FileVersion": 3,
+  "Version": "1.0",
+  "VersionName": "1.0",
+  "FriendlyName": "GhisNiagara2DWind",
+  "Description": "Experimental system that generates an interactive 2D tileable animated wind texture",
+  "Category": "Other",
+  "CreatedBy": "Ghislain GIRARDOT",
+  "CanContainContent": true,
+  "IsBetaVersion": false,
+  "IsExperimentalVersion": false
 }
 ```
 
 **核心特性**：
+
 - 2D平铺风场纹理生成
 - Niagara粒子驱动
 - 交互式风场
@@ -3247,6 +3261,7 @@ GhisRealisticGrass 许可证要点：
 ### 8.1 远景草地系统
 
 FarGrass模块是性能优化的关键组成部分：
+
 - **极简几何**：最小化顶点数，适合远距离
 - **简化材质**：禁用复杂WPO，减少计算开销
 - **LOD集成**：作为LOD2/LOD3，实现平滑过渡
@@ -3255,6 +3270,7 @@ FarGrass模块是性能优化的关键组成部分：
 ### 8.2 地形遮罩集成
 
 地形遮罩系统提供了灵活的草地分布控制：
+
 - **自然过渡**：从草地到裸土的平滑过渡
 - **密度控制**：基于地形图层的动态密度
 - **视觉多样性**：打破重复感，增加自然感
@@ -3263,6 +3279,7 @@ FarGrass模块是性能优化的关键组成部分：
 ### 8.3 Foliage配置策略
 
 合理的Foliage配置平衡了视觉质量与性能：
+
 - **多网格混合**：5种草地变体增加视觉多样性
 - **密度分层**：近景高密，远景稀疏
 - **实例化优化**：GPU实例化渲染，减少Draw Call
@@ -3271,6 +3288,7 @@ FarGrass模块是性能优化的关键组成部分：
 ### 8.4 渲染配置影响
 
 项目级渲染配置对草地性能有显著影响：
+
 - **距离场**：提升阴影质量但增加开销
 - **TAA集成**：解决WPO鬼影问题
 - **EarlyZPass**：大幅减少着色器调用
@@ -3279,6 +3297,7 @@ FarGrass模块是性能优化的关键组成部分：
 ### 8.5 纹理编码优化
 
 高效的纹理编码方案最大化了内存带宽利用率：
+
 - **多通道复用**：单张纹理存储多种属性
 - **合理压缩**：平衡质量与性能
 - **流式传输**：远距离自动降级
@@ -3286,6 +3305,6 @@ FarGrass模块是性能优化的关键组成部分：
 
 ---
 
-*本章节由项目结构分析生成*
-*补充来源: UE 5.3 项目实际资产*
-*分析日期: 2026-01-09*
+_本章节由项目结构分析生成_
+_补充来源: UE 5.3 项目实际资产_
+_分析日期: 2026-01-09_
