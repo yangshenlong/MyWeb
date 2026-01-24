@@ -16,14 +16,13 @@ const POSTS_PER_PAGE = 20;
 // 获取所有博客文章
 const allPosts = await getCollection("blog");
 
-// 分离置顶文章和普通文章
+// 分离置顶文章（用于顶部置顶区域）
 const pinnedPosts = allPosts.filter(post => post.data.pinned);
-const regularPosts = allPosts.filter(post => !post.data.pinned);
 
-// 性能优化：只显示最近的 N 篇文章（置顶文章不受影响）
-const recentPosts = regularPosts.slice(0, POSTS_PER_PAGE);
+// 性能优化：只显示最近的 N 篇文章（包括置顶文章）
+const recentPosts = allPosts.slice(0, POSTS_PER_PAGE);
 
-// 按日期排序
+// 按日期排序（置顶文章也会参与排序）
 const sortedPosts = recentPosts.sort(
   (a, b) =>
     Math.floor(new Date(b.data.pubDate).getTime() / 1000) -
