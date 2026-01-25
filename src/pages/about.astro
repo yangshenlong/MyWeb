@@ -22,17 +22,18 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 		<!-- Page Header -->
 		<section class="page-header-section">
 			<div class="header-container">
-				<div class="header-top">
-					<div class="header-label">
-						<span class="label-line"></span>
-						<span class="label-text">关于</span>
+				<div class="header-content">
+					<div class="header-top">
+						<div class="header-label">
+							<span class="label-line"></span>
+							<span class="label-text">关于</span>
+						</div>
+						<h1 class="page-title">{AUTHOR.name}</h1>
 					</div>
-					<h1 class="page-title">{AUTHOR.name}</h1>
-				</div>
-				<div class="header-bottom">
-					<p class="page-subtitle">技术美术</p>
-					<p class="page-description">{AUTHOR.bio}</p>
-					<div class="contact-links">
+					<div class="header-bottom">
+						<p class="page-subtitle">技术美术</p>
+						<p class="page-description">{AUTHOR.bio}</p>
+						<div class="contact-links">
 						<a href="mailto:xgg000303@163.com" class="contact-link" data-copy="xgg000303@163.com">
 							<span class="contact-label">邮箱</span>
 							<span class="contact-value">xgg000303@163.com</span>
@@ -51,6 +52,10 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 						</div>
 					</div>
 					<div class="copy-toast" id="copyToast">已复制</div>
+				</div>
+				</div>
+				<div class="header-photo">
+					<img src="/images/profile-photo.jpg" alt="个人照片" />
 				</div>
 			</div>
 			<div class="header-decoration">
@@ -295,6 +300,28 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				display: flex;
 				flex-direction: column;
 				gap: 0.5em;
+			}
+
+			.header-content {
+				display: flex;
+				flex-direction: column;
+				gap: 0.5em;
+			}
+
+			.header-photo {
+				width: 280px;
+				height: 280px;
+				border-radius: 50%;
+				overflow: hidden;
+				border: 3px solid rgba(255, 255, 255, 0.1);
+				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+				flex-shrink: 0;
+			}
+
+			.header-photo img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
 			}
 
 			.page-subtitle {
@@ -580,6 +607,15 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				.header-container {
 					grid-template-columns: 1fr;
 					gap: 2em;
+				}
+
+				.header-content {
+					align-items: center;
+					text-align: center;
+				}
+
+				.header-photo {
+					margin: 0 auto;
 				}
 
 				.header-decoration {
