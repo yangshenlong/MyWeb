@@ -10,17 +10,33 @@ import PageLoader from '../components/PageLoader.astro';
 import PageTransition from '../components/PageTransition.astro';
 import SkipLink from '../components/SkipLink.astro';
 import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import FormattedDate from '../components/FormattedDate.astro';
+
+// Get featured posts
+const allPosts = await getCollection('blog');
+const featuredPosts = allPosts.slice(0, 3);
 
 // Featured projects
 const featuredProjects = [
 	{
-		title: 'Water Shader System',
-		category: 'Shader Development',
-		year: '2024',
-		description: '基于Gerstner波的实时水面渲染系统，支持波浪模拟、反射折射和泡沫效果。',
-		tags: ['HLSL', 'Unity', 'URP', 'Water Simulation'],
-		link: '/projects'
+		title: '对马岛之魂草地渲染复刻',
+		category: 'Real-time Rendering',
+		year: '2025',
+		description: '使用UE复刻《对马岛之魂》开场震撼草地场景，包含Niagara风场系统、WPO弯曲系统和完整的程序化植被实现。',
+		tags: ['Unreal Engine', 'Niagara', 'WPO', '植被渲染'],
+		link: 'https://www.bilibili.com/video/BV1VLz1B7ERq/',
+		image: '/images/grass/Camera.0237.png'
+	},
+	{
+		title: 'B站个人作品集',
+		category: 'Portfolio',
+		year: '2025',
+		description: '个人作品视频展示，包含多个实时渲染和技术美术项目演示视频。',
+		tags: ['Portfolio', 'Bilibili', '视频展示'],
+		link: 'https://www.bilibili.com/video/BV18Yq5BmE3f/',
+		image: '/images/bilibili-video-cover.png'
 	},
 	{
 		title: 'Maya Auto UV Tool',
@@ -28,22 +44,6 @@ const featuredProjects = [
 		year: '2024',
 		description: '使用Python和PyQt开发的Maya自动化工具，智能UV展开算法，效率提升80%。',
 		tags: ['Python', 'Maya API', 'PyQt', 'UV Unwrap'],
-		link: '/projects'
-	},
-	{
-		title: 'Volumetric GI System',
-		category: 'Rendering',
-		year: '2023',
-		description: '基于Voxel Cone Tracing的实时全局光照解决方案，支持动态光源。',
-		tags: ['Compute Shader', 'GI', 'Unity', 'Optimization'],
-		link: '/projects'
-	},
-	{
-		title: 'Custom Render Pipeline',
-		category: 'Pipeline',
-		year: '2023',
-		description: '定制的渲染管线，包含Deferred Rendering、SSAO、SSR和体积光。',
-		tags: ['Render Pipeline', 'Deferred', 'Post-Processing'],
 		link: '/projects'
 	}
 ];
@@ -97,6 +97,45 @@ const services = [
 
 		<!-- Projects Section -->
 		<ProjectGridArchitectural projects={featuredProjects} />
+
+		<!-- Featured Posts Section -->
+		<section class="featured-posts-section">
+			<div class="section-header">
+				<div class="section-label">
+					<span class="label-line"></span>
+					<span class="label-text">Insights</span>
+				</div>
+				<h2 class="section-title">精选文章</h2>
+				<p class="section-subtitle">最新技术分享与思考</p>
+			</div>
+			<div class="posts-grid">
+				{featuredPosts.map((post, index) => (
+					<a
+						href={`/blog/${post.slug}`}
+						class="post-card"
+						style={`animation-delay: ${index * 100}ms`}
+					>
+						<div class="post-meta">
+							<span class="post-category">{post.data.category}</span>
+							<span class="post-date">
+								<FormattedDate date={post.data.pubDate} />
+							</span>
+						</div>
+						<h3 class="post-title">{post.data.title}</h3>
+						<p class="post-description">{post.data.description}</p>
+						<div class="post-tags">
+							{post.data.tags?.slice(0, 3).map(tag => (
+								<span class="tag">{tag}</span>
+							))}
+						</div>
+					</a>
+				))}
+			</div>
+			<a href="/blog" class="view-all-link">
+				<span>查看全部文章</span>
+				<span class="link-arrow">→</span>
+			</a>
+		</section>
 
 		<!-- About Section -->
 		<section class="about-section">
@@ -222,6 +261,199 @@ const services = [
 				line-height: 1.8;
 				color: var(--color-text-tertiary);
 				margin: 0;
+			}
+
+			/* Featured Posts Section */
+			.featured-posts-section {
+				padding: 8em 4em;
+				background: var(--color-bg-primary);
+				position: relative;
+			}
+
+			.section-header {
+				text-align: center;
+				max-width: 600px;
+				margin: 0 auto 4em;
+			}
+
+			.section-title {
+				font-size: clamp(2em, 4vw, 3em);
+				font-weight: 300;
+				letter-spacing: -0.02em;
+				color: var(--color-text-primary);
+				margin: 0.5em 0 0.5em 0;
+			}
+
+			.section-subtitle {
+				font-size: 0.9em;
+				color: var(--color-text-tertiary);
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				margin: 0;
+			}
+
+			.posts-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 2em;
+				max-width: 1400px;
+				margin: 0 auto 3em;
+			}
+
+			.post-card {
+				background: rgba(255, 255, 255, var(--glass-opacity-bg));
+				border: 1px solid rgba(255, 255, 255, 0.06);
+				border-radius: 16px;
+				padding: 2em;
+				display: flex;
+				flex-direction: column;
+				gap: 1em;
+				text-decoration: none;
+				color: inherit;
+				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+				position: relative;
+				overflow: hidden;
+				animation: fadeInUp 0.6s ease-out forwards;
+				opacity: 0;
+			}
+
+			@keyframes fadeInUp {
+				from {
+					opacity: 0;
+					transform: translateY(20px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			.post-card::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 2px;
+				background: linear-gradient(
+					90deg,
+					transparent 0%,
+					rgba(99, 102, 241, 0.5) 50%,
+					transparent 100%
+				);
+				opacity: 0;
+				transition: opacity 0.4s ease;
+			}
+
+			.post-card:hover {
+				transform: translateY(-4px);
+				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
+				border-color: rgba(99, 102, 241, 0.2);
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+			}
+
+			.post-card:hover::before {
+				opacity: 1;
+			}
+
+			.post-meta {
+				display: flex;
+				align-items: center;
+				gap: 1em;
+				font-size: 0.75em;
+			}
+
+			.post-category {
+				padding: 0.3em 0.8em;
+				background: rgba(99, 102, 241, 0.15);
+				border: 1px solid rgba(99, 102, 241, 0.25);
+				border-radius: 20px;
+				color: rgba(167, 139, 250, 0.9);
+				font-weight: 500;
+				letter-spacing: 0.05em;
+			}
+
+			.post-date {
+				color: var(--color-text-muted);
+				font-family: 'Space Mono', monospace;
+			}
+
+			.post-title {
+				font-size: 1.2em;
+				font-weight: 500;
+				color: var(--color-text-primary);
+				margin: 0;
+				line-height: 1.4;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+			}
+
+			.post-description {
+				font-size: 0.9em;
+				line-height: 1.7;
+				color: var(--color-text-tertiary);
+				margin: 0;
+				display: -webkit-box;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+				flex-grow: 1;
+			}
+
+			.post-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5em;
+				margin-top: auto;
+			}
+
+			.post-tags .tag {
+				font-size: 0.75em;
+				padding: 0.25em 0.6em;
+				background: rgba(255, 255, 255, 0.04);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 4px;
+				color: var(--color-text-muted);
+				transition: all 0.3s ease;
+			}
+
+			.post-card:hover .tag {
+				background: rgba(99, 102, 241, 0.1);
+				border-color: rgba(99, 102, 241, 0.2);
+				color: rgba(167, 139, 250, 0.8);
+			}
+
+			.view-all-link {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 0.75em;
+				margin: 0 auto;
+				padding: 1em 2.5em;
+				background: transparent;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 30px;
+				color: var(--color-text-secondary);
+				font-size: 0.85em;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				transition: all 0.3s ease;
+			}
+
+			.view-all-link:hover {
+				background: rgba(99, 102, 241, 0.1);
+				border-color: rgba(99, 102, 241, 0.3);
+				color: var(--color-text-primary);
+			}
+
+			.view-all-link .link-arrow {
+				transition: transform 0.3s ease;
+			}
+
+			.view-all-link:hover .link-arrow {
+				transform: translateX(5px);
 			}
 
 			/* About Section */
@@ -470,8 +702,15 @@ const services = [
 			}
 
 			/* Responsive */
+			@media (max-width: 1200px) {
+				.posts-grid {
+					grid-template-columns: repeat(2, 1fr);
+				}
+			}
+
 			@media (max-width: 1024px) {
 				.services-section,
+				.featured-posts-section,
 				.about-section,
 				.contact-cta,
 				.arch-footer {
@@ -482,6 +721,10 @@ const services = [
 				.about-content {
 					grid-template-columns: 1fr;
 					gap: 4em;
+				}
+
+				.posts-grid {
+					grid-template-columns: 1fr;
 				}
 			}
 
