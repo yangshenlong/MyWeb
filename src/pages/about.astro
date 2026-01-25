@@ -134,69 +134,6 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			</div>
 		</section>
 
-		<!-- Experience Section -->
-		<section class="experience-section">
-			<div class="experience-container">
-				<div class="section-header">
-					<div class="header-label">
-						<span class="label-line"></span>
-						<span class="label-text">经历</span>
-					</div>
-					<h2 class="section-title">工作经历</h2>
-				</div>
-
-				<div class="timeline">
-					<div class="timeline-item">
-						<div class="timeline-marker">
-							<span class="marker-year">2022</span>
-						</div>
-						<div class="timeline-content">
-							<GlassCard class="timeline-card">
-								<div class="card-header">
-									<h3 class="card-title">Technical Artist</h3>
-									<span class="card-company">某游戏公司</span>
-									<span class="card-period">2022 - Present</span>
-								</div>
-								<p class="card-description">
-									负责实时渲染项目的技术美术工作，包括Shader开发、渲染管线优化和工具链开发。
-									主导多个核心系统的技术实现，大幅提升团队生产效率。
-								</p>
-								<div class="card-tags">
-									<span class="tag">Unity</span>
-									<span class="tag">HLSL</span>
-									<span class="tag">Python</span>
-								</div>
-							</GlassCard>
-						</div>
-					</div>
-
-					<div class="timeline-item">
-						<div class="timeline-marker">
-							<span class="marker-year">2021</span>
-						</div>
-						<div class="timeline-content">
-							<GlassCard class="timeline-card">
-								<div class="card-header">
-									<h3 class="card-title">Technical Artist Intern</h3>
-									<span class="card-company">某创业公司</span>
-									<span class="card-period">2021 - 2022</span>
-								</div>
-								<p class="card-description">
-									参与多个项目的美术技术支持工作，协助建立标准化工作流程，
-									开发自动化工具提升团队效率。
-								</p>
-								<div class="card-tags">
-									<span class="tag">Maya</span>
-									<span class="tag">Pipeline</span>
-									<span class="tag">Tools</span>
-								</div>
-							</GlassCard>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
 		<!-- Footer -->
 		<footer class="arch-footer">
 			<div class="footer-content">
@@ -489,117 +426,12 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				color: rgba(255, 255, 255, 0.2);
 			}
 
-			/* Experience Section */
-			.experience-section {
-				padding: 6em 4em;
-				background: linear-gradient(
-					180deg,
-					var(--color-bg-primary) 0%,
-					#0a0a0a 50%,
-					var(--color-bg-primary) 100%
-				);
-			}
-
-			.experience-container {
-				max-width: 900px;
-				margin: 0 auto;
-			}
-
-			.timeline {
-				position: relative;
-				padding-left: 2em;
-			}
-
-			.timeline::before {
-				content: '';
-				position: absolute;
-				left: 0;
-				top: 0;
-				bottom: 0;
-				width: 1px;
-				background: var(--border-hover);
-			}
-
-			.timeline-item {
-				position: relative;
-				padding-bottom: 3em;
-			}
-
-			.timeline-marker {
-				position: absolute;
-				left: -2.5em;
-				top: 0;
-				width: auto;
-			}
-
-			.marker-year {
-				font-size: 0.8em;
-				font-weight: 500;
-				color: var(--color-text-tertiary);
-				font-family: 'Space Mono', monospace;
-			}
-
-			.timeline-content {
-				position: relative;
-			}
-
-			.timeline-card {
-				width: 100%;
-			}
-
-			.card-header {
-				display: flex;
-				flex-direction: column;
-				gap: 0.25em;
-				margin-bottom: 1em;
-			}
-
-			.card-title {
-				font-size: 1.3em;
-				font-weight: 400;
-				color: var(--color-text-primary);
-				margin: 0;
-			}
-
-			.card-company {
-				font-size: 0.9em;
-				color: rgba(255, 255, 255, 0.6);
-			}
-
-			.card-period {
-				font-size: 0.8em;
-				color: rgba(255, 255, 255, 0.4);
-				font-family: 'Space Mono', monospace;
-			}
-
-			.card-description {
-				font-size: 0.95em;
-				line-height: 1.7;
-				color: rgba(255, 255, 255, 0.6);
-				margin-bottom: 1.5em;
-			}
-
-			.card-tags {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.5em;
-			}
-
-			.tag {
-				font-size: 0.75em;
-				padding: 0.3em 0.8em;
-				background: rgba(255, 255, 255, var(--glass-opacity-bg-hover));
-				border: 1px solid var(--border-hover);
-				color: rgba(255, 255, 255, 0.6);
-			}
-
 			/* Footer styles moved to Footer.astro component */
 
 			/* Responsive */
 			@media (max-width: 1024px) {
 				.page-header-section,
-				.skills-section,
-				.experience-section {
+				.skills-section {
 					padding-left: 2em;
 					padding-right: 2em;
 				}
