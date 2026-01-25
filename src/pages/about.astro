@@ -5,6 +5,7 @@ import GlassCard from '../components/GlassCard.astro';
 import BackToTop from '../components/BackToTop.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
 import SkipLink from '../components/SkipLink.astro';
+import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 ---
 
@@ -31,7 +32,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 						<h1 class="page-title">{AUTHOR.name}</h1>
 					</div>
 					<div class="header-bottom">
-						<p class="page-subtitle">技术美术</p>
+						<p class="page-subtitle">技术美术 | 应届生</p>
 						<p class="page-description">{AUTHOR.bio}</p>
 						<div class="contact-links">
 						<a href="mailto:xgg000303@163.com" class="contact-link" data-copy="xgg000303@163.com">
@@ -63,9 +64,151 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			</div>
 		</section>
 
+		<!-- Education Section -->
+		<section class="content-section">
+			<div class="section-container">
+				<div class="section-header">
+					<div class="header-label">
+						<span class="label-line"></span>
+						<span class="label-text">教育经历</span>
+					</div>
+					<h2 class="section-title">教育背景</h2>
+				</div>
+
+				<div class="education-grid">
+					<GlassCard class="education-card">
+						<div class="education-header">
+							<div class="education-main">
+								<h3 class="school-name">南京工业大学</h3>
+								<span class="education-degree">建筑学 · 硕士</span>
+							</div>
+							<div class="education-period">
+								<span class="period-text">2023.06 - 2027.06</span>
+								<span class="period-location">南京</span>
+							</div>
+						</div>
+						<div class="education-details">
+							<div class="education-college">建筑学院</div>
+							<div class="education-achievements">
+								<span class="achievement-tag">新生奖学金</span>
+								<span class="achievement-tag">多次学业奖学金</span>
+							</div>
+						</div>
+					</GlassCard>
+
+					<GlassCard class="education-card">
+						<div class="education-header">
+							<div class="education-main">
+								<h3 class="school-name">东北林业大学</h3>
+								<span class="education-degree">设计学 · 本科</span>
+							</div>
+							<div class="education-period">
+								<span class="period-text">2017.09 - 2021.06</span>
+								<span class="period-location">哈尔滨</span>
+							</div>
+						</div>
+						<div class="education-details">
+							<div class="education-college">园林学院</div>
+							<div class="education-achievements">
+								<span class="achievement-tag">多次个人奖学金</span>
+								<span class="achievement-tag">211 工程</span>
+							</div>
+						</div>
+					</GlassCard>
+				</div>
+			</div>
+		</section>
+
+		<!-- Projects Section -->
+		<section class="content-section alt-bg">
+			<div class="section-container">
+				<div class="section-header">
+					<div class="header-label">
+						<span class="label-line"></span>
+						<span class="label-text">项目经历</span>
+					</div>
+					<h2 class="section-title">精选项目</h2>
+				</div>
+
+				<div class="projects-timeline">
+					<div class="timeline-item">
+						<div class="timeline-marker">
+							<span class="marker-dot"></span>
+						</div>
+						<div class="timeline-content">
+							<GlassCard class="project-card">
+								<div class="project-header">
+									<h3 class="project-title">对马岛之魂场景实现</h3>
+									<div class="project-tech">
+										<span class="tech-tag">Blender</span>
+										<span class="tech-tag">UE5</span>
+										<span class="tech-tag">Niagara</span>
+									</div>
+								</div>
+								<ul class="project-list">
+									<li>深入分析并逆向拆解 <strong>Ultra Dynamic Sky (UDS)</strong> 插件架构，重构了一套轻量级的动态天气系统，通过全局变量控制</li>
+									<li>搭建端到端植被生产管线，编写 <strong>Blender Python</strong> 脚本自动烘焙 Pivot 与随机数据至 UV 通道，结合 <strong>Mip Flooding</strong> 算法优化贴图显存与低 mipmap 闪烁</li>
+									<li>基于 Niagara 与 HLSL 实现四方连续（Seamless Tiling）的低成本动态风场 RT，解决风向变化时远距离 WPO 抖动问题</li>
+									<li>基于 Niagara 与 WPO 顶点动画开发高性能远景鸟群系统，通过自定义 Module 编写盘旋、俯冲及侧翻等状态机逻辑</li>
+								</ul>
+							</GlassCard>
+						</div>
+					</div>
+
+					<div class="timeline-item">
+						<div class="timeline-marker">
+							<span class="marker-dot"></span>
+						</div>
+						<div class="timeline-content">
+							<GlassCard class="project-card">
+								<div class="project-header">
+									<h3 class="project-title">热带风格化场景开发</h3>
+									<div class="project-tech">
+										<span class="tech-tag">UE5</span>
+										<span class="tech-tag">PCG</span>
+										<span class="tech-tag">HLSL</span>
+									</div>
+								</div>
+								<ul class="project-list">
+									<li>独立负责场景的地形编辑、材质制作及光照渲染</li>
+									<li>基于 HLSL 编写自定义水体 Shader，实现了预烘焙水面算法，结合距离场 SDF 与折射模拟制作风格化水面</li>
+									<li>设计并实现基于 <strong>PCG (Procedural Content Generation)</strong> 的植被散布系统，通过采样地形高度与坡度数据，自动化生成低矮植被与碎石分布</li>
+									<li>使用 Runtime Virtual Texture (RVT) 优化地表材质混合，统一地形与静态网格物体的底色</li>
+									<li>阅读 UE 单层水材质源码，制作符合美术逻辑的单层水选色器</li>
+								</ul>
+							</GlassCard>
+						</div>
+					</div>
+
+					<div class="timeline-item">
+						<div class="timeline-marker">
+							<span class="marker-dot"></span>
+						</div>
+						<div class="timeline-content">
+							<GlassCard class="project-card">
+								<div class="project-header">
+									<h3 class="project-title">Niagara 与群体模拟研究</h3>
+									<div class="project-tech">
+										<span class="tech-tag">Niagara</span>
+										<span class="tech-tag">HLSL</span>
+										<span class="tech-tag">Boids</span>
+									</div>
+								</div>
+								<ul class="project-list">
+									<li>基于 <strong>Boids (鸟群算法)</strong> 与 Niagara 粒子行为实现复杂群体行为模拟</li>
+									<li>使用 <strong>NeighborGrid3D</strong> 优化粒子碰撞检测，在高数量级单位下保持帧率稳定</li>
+									<li>撰写个人博客记录实现过程与技术分析，运用费曼学习法沉淀技术细节</li>
+								</ul>
+							</GlassCard>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
 		<!-- Skills Section -->
-		<section class="skills-section">
-			<div class="skills-container">
+		<section class="content-section">
+			<div class="section-container">
 				<div class="section-header">
 					<div class="header-label">
 						<span class="label-line"></span>
@@ -77,78 +220,90 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				<div class="skills-grid">
 					<GlassCard class="skill-card">
 						<div class="skill-header">
-							<span class="skill-icon">▣</span>
-							<h3 class="skill-title">Shader Development</h3>
+							<span class="skill-icon">🎮</span>
+							<h3 class="skill-title">Engine</h3>
 						</div>
 						<ul class="skill-list">
-							<li>HLSL / GLSL</li>
-							<li>Unity URP / HDRP</li>
-							<li>Shader Graph</li>
-							<li>Compute Shader</li>
-							<li>Post Processing</li>
+							<li>Unreal Engine 5 (熟悉)</li>
+							<li>Unity (熟悉 URP 管线)</li>
+						</ul>
+					</GlassCard>
+
+					<GlassCard class="skill-card">
+						<div class="skill-header">
+							<span class="skill-icon">💻</span>
+							<h3 class="skill-title">Programming</h3>
+						</div>
+						<ul class="skill-list">
+							<li>C++ (简单光追渲染器)</li>
+							<li>HLSL (Shader 编写)</li>
+							<li>Python (简单脚本编写)</li>
+							<li>了解 OpenGL</li>
+						</ul>
+					</GlassCard>
+
+					<GlassCard class="skill-card">
+						<div class="skill-header">
+							<span class="skill-icon">🛠️</span>
+							<h3 class="skill-title">Art Tools</h3>
+						</div>
+						<ul class="skill-list">
+							<li>Blender</li>
+							<li>Substance Designer</li>
+							<li>PhotoShop</li>
+							<li>ComfyUI</li>
 						</ul>
 					</GlassCard>
 
 					<GlassCard class="skill-card">
 						<div class="skill-header">
 							<span class="skill-icon">⚡</span>
-							<h3 class="skill-title">Rendering</h3>
+							<h3 class="skill-title">Core</h3>
 						</div>
 						<ul class="skill-list">
 							<li>PBR Rendering</li>
-							<li>Deferred / Forward</li>
-							<li>Real-time GI</li>
-							<li>Lighting Systems</li>
-							<li>Performance Opt</li>
-						</ul>
-					</GlassCard>
-
-					<GlassCard class="skill-card">
-						<div class="skill-header">
-							<span class="skill-icon">🔧</span>
-							<h3 class="skill-title">Tools & Pipeline</h3>
-						</div>
-						<ul class="skill-list">
-							<li>Python / PyQt</li>
-							<li>C# / .NET</li>
-							<li>Maya / Houdini</li>
-							<li>Blender API</li>
-							<li>Workflow Design</li>
-						</ul>
-					</GlassCard>
-
-					<GlassCard class="skill-card">
-						<div class="skill-header">
-							<span class="skill-icon">🎨</span>
-							<h3 class="skill-title">Creative</h3>
-						</div>
-						<ul class="skill-list">
-							<li>Visual Design</li>
-							<li>VFX Creation</li>
-							<li>Art Direction</li>
-							<li>3D Modeling</li>
-							<li>Texturing</li>
+							<li>PCG (程序化内容生成)</li>
+							<li>Material/Shader Logic</li>
+							<li>Graph Pipeline</li>
 						</ul>
 					</GlassCard>
 				</div>
 			</div>
 		</section>
 
-		<!-- Footer -->
-		<footer class="arch-footer">
-			<div class="footer-content">
-				<div class="footer-left">
-					<span class="footer-text">© 2024 杨慎龙</span>
-					<span class="footer-divider">·</span>
-					<span class="footer-text">Technical Artist</span>
+		<!-- Experience Section -->
+		<section class="content-section alt-bg">
+			<div class="section-container">
+				<div class="section-header">
+					<div class="header-label">
+						<span class="label-line"></span>
+						<span class="label-text">其他经历</span>
+					</div>
+					<h2 class="section-title">活动与竞赛</h2>
 				</div>
-				<div class="footer-right">
-					<a href="https://github.com/yangshenlong" target="_blank" class="footer-link">GitHub</a>
-					<a href="#" target="_blank" class="footer-link">Bilibili</a>
-					<a href="#" target="_blank" class="footer-link">知乎</a>
+
+				<div class="experience-grid">
+					<GlassCard class="experience-card">
+						<div class="experience-header">
+							<h3 class="experience-title">TapTap 2025 聚光灯 Gamejam</h3>
+							<span class="experience-role">程序 · 策划</span>
+						</div>
+						<div class="experience-meta">
+							<div class="meta-item">
+								<span class="meta-label">技术栈</span>
+								<span class="meta-value">Unity · Git · Figma</span>
+							</div>
+						</div>
+						<p class="experience-description">
+							与五名队友合作，完成 21 天简易平台跳跃游戏《本能游戏》开发，负责美术资源控制、角色状态机与后处理特效的开发。
+						</p>
+					</GlassCard>
 				</div>
 			</div>
-		</footer>
+		</section>
+
+		<!-- Footer -->
+		<Footer />
 
 		<BackToTop />
 
@@ -184,6 +339,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 		</script>
 
 		<style>
+			/* --- Page Header --- */
 			.page-header-section {
 				padding: calc(60px + var(--section-padding-y, 8em)) 4em 6em;
 				background: var(--color-bg-primary);
@@ -288,6 +444,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				align-items: center;
 				gap: 1em;
 				transition: all 0.3s ease;
+				cursor: pointer;
 			}
 
 			.contact-link:hover {
@@ -312,10 +469,6 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 
 			.contact-link:hover .contact-value {
 				color: rgba(255, 255, 255, 1);
-			}
-
-			.contact-link {
-				cursor: pointer;
 			}
 
 			.copy-toast {
@@ -352,13 +505,17 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				line-height: 1;
 			}
 
-			/* Skills Section */
-			.skills-section {
+			/* --- Content Section --- */
+			.content-section {
 				padding: 6em 4em;
 				background: var(--color-bg-primary);
 			}
 
-			.skills-container {
+			.content-section.alt-bg {
+				background: rgba(255, 255, 255, 0.015);
+			}
+
+			.section-container {
 				max-width: 1200px;
 				margin: 0 auto;
 			}
@@ -375,6 +532,178 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				margin: 0.5em 0 0 0;
 			}
 
+			/* --- Education Grid --- */
+			.education-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+				gap: 1.5em;
+			}
+
+			.education-card {
+				min-height: auto;
+			}
+
+			.education-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+				margin-bottom: 1em;
+				gap: 1.5em;
+			}
+
+			.education-main {
+				display: flex;
+				flex-direction: column;
+				gap: 0.25em;
+			}
+
+			.school-name {
+				font-size: 1.2em;
+				font-weight: 500;
+				color: var(--color-text-primary);
+				margin: 0;
+			}
+
+			.education-degree {
+				font-size: 0.95em;
+				color: var(--color-primary);
+			}
+
+			.education-period {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-end;
+				gap: 0.25em;
+			}
+
+			.period-text {
+				font-family: 'Space Mono', monospace;
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.7);
+			}
+
+			.period-location {
+				font-size: 0.8em;
+				color: rgba(255, 255, 255, 0.5);
+			}
+
+			.education-details {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.education-college {
+				font-size: 0.9em;
+				color: rgba(255, 255, 255, 0.6);
+			}
+
+			.education-achievements {
+				display: flex;
+				gap: 0.5em;
+				flex-wrap: wrap;
+			}
+
+			.achievement-tag {
+				padding: 0.25em 0.75em;
+				background: rgba(99, 102, 241, 0.15);
+				border: 1px solid rgba(99, 102, 241, 0.3);
+				border-radius: 4px;
+				font-size: 0.75em;
+				color: rgba(167, 139, 250, 0.9);
+			}
+
+			/* --- Projects Timeline --- */
+			.projects-timeline {
+				display: flex;
+				flex-direction: column;
+				gap: 2em;
+			}
+
+			.timeline-item {
+				display: flex;
+				gap: 1.5em;
+			}
+
+			.timeline-marker {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+
+			.marker-dot {
+				width: 12px;
+				height: 12px;
+				background: var(--color-primary);
+				border-radius: 50%;
+				margin-top: 0.5em;
+				box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+			}
+
+			.timeline-content {
+				flex: 1;
+			}
+
+			.project-card {
+				min-height: auto;
+			}
+
+			.project-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+				margin-bottom: 1em;
+				gap: 1.5em;
+			}
+
+			.project-title {
+				font-size: 1.15em;
+				font-weight: 500;
+				color: var(--color-text-primary);
+				margin: 0;
+			}
+
+			.project-tech {
+				display: flex;
+				gap: 0.5em;
+				flex-wrap: wrap;
+			}
+
+			.tech-tag {
+				padding: 0.3em 0.75em;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 4px;
+				font-size: 0.75em;
+				font-family: 'Space Mono', monospace;
+				color: rgba(255, 255, 255, 0.7);
+			}
+
+			.project-list {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0.75em;
+			}
+
+			.project-list li {
+				font-size: 0.9em;
+				line-height: 1.6;
+				color: rgba(255, 255, 255, 0.7);
+				padding-left: 1.25em;
+				position: relative;
+			}
+
+			.project-list li::before {
+				content: '→';
+				position: absolute;
+				left: 0;
+				color: var(--color-primary);
+			}
+
+			/* --- Skills Grid --- */
 			.skills-grid {
 				display: grid;
 				grid-template-columns: repeat(4, 1fr);
@@ -382,7 +711,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 			}
 
 			.skill-card {
-				min-height: 250px;
+				min-height: 200px;
 			}
 
 			.skill-header {
@@ -426,12 +755,74 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 				color: rgba(255, 255, 255, 0.2);
 			}
 
-			/* Footer styles moved to Footer.astro component */
+			/* --- Experience --- */
+			.experience-grid {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5em;
+			}
 
-			/* Responsive */
+			.experience-card {
+				min-height: auto;
+			}
+
+			.experience-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+				margin-bottom: 1em;
+				gap: 1.5em;
+			}
+
+			.experience-title {
+				font-size: 1.1em;
+				font-weight: 500;
+				color: var(--color-text-primary);
+				margin: 0;
+			}
+
+			.experience-role {
+				padding: 0.3em 0.75em;
+				background: rgba(99, 102, 241, 0.15);
+				border: 1px solid rgba(99, 102, 241, 0.3);
+				border-radius: 4px;
+				font-size: 0.8em;
+				color: rgba(167, 139, 250, 0.9);
+			}
+
+			.experience-meta {
+				display: flex;
+				gap: 2em;
+				margin-bottom: 1em;
+			}
+
+			.meta-item {
+				display: flex;
+				gap: 0.5em;
+			}
+
+			.meta-label {
+				font-size: 0.75em;
+				color: rgba(255, 255, 255, 0.4);
+				text-transform: uppercase;
+			}
+
+			.meta-value {
+				font-size: 0.85em;
+				color: rgba(255, 255, 255, 0.7);
+			}
+
+			.experience-description {
+				font-size: 0.9em;
+				line-height: 1.6;
+				color: rgba(255, 255, 255, 0.7);
+				margin: 0;
+			}
+
+			/* --- Responsive --- */
 			@media (max-width: 1024px) {
 				.page-header-section,
-				.skills-section {
+				.content-section {
 					padding-left: 2em;
 					padding-right: 2em;
 				}
@@ -458,29 +849,28 @@ import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 					font-size: 4em;
 				}
 
+				.education-grid,
 				.skills-grid {
 					grid-template-columns: repeat(2, 1fr);
 				}
 			}
 
 			@media (max-width: 768px) {
+				.education-grid,
 				.skills-grid {
 					grid-template-columns: 1fr;
 				}
 
-				.footer-content {
+				.education-header,
+				.project-header,
+				.experience-header {
 					flex-direction: column;
-					gap: 1.5em;
-					text-align: center;
+					gap: 0.75em;
 				}
 
-				.footer-left {
-					flex-direction: column;
-					gap: 0.5em;
-				}
-
-				.footer-right {
-					gap: 1.5em;
+				.education-period,
+				.project-tech {
+					align-items: flex-start;
 				}
 			}
 		</style>

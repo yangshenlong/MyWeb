@@ -31,7 +31,14 @@
       "Bash(npm run preview:*)",
       "Bash(git checkout:*)",
       "Bash(git merge:*)",
-      "WebFetch(domain:zhuanlan.zhihu.com)"
+      "WebFetch(domain:zhuanlan.zhihu.com)",
+      "WebSearch",
+      "Bash(node:*)",
+      "Bash(uvx --help:*)",
+      "Bash(uvx mcp_pdf_reader:*)",
+      "Bash(uvx:*)",
+      "Bash(npx -y @extraxi/mcp-pdf-reader:*)",
+      "Bash(python:*)"
     ]
   }
 }
