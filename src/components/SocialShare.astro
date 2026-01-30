@@ -85,7 +85,7 @@ const platforms = [
 						<span class="button-label">{platform.name}</span>
 					)}
 				</button>
-			) : (
+			) : platform.getShareUrl ? (
 				<a
 					href={platform.getShareUrl(shareUrl, title, description)}
 					class="share-button"
@@ -101,7 +101,7 @@ const platforms = [
 						<span class="button-label">{platform.name}</span>
 					)}
 				</a>
-			)
+			) : null
 		))}
 	</div>
 </div>

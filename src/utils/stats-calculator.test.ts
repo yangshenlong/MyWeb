@@ -15,7 +15,7 @@ describe("stats-calculator", () => {
 
     it("should calculate stats correctly for single day", () => {
       const activityMap = new Map([
-        ["2026-01-15", { count: 5, publications: 3, updates: 2, posts: [] }],
+        ["2026-01-15", { date: "2026-01-15", count: 5, publications: 3, updates: 2, posts: [] }],
       ]);
       const result = calculateBlogStats(activityMap);
       expect(result.totalPosts).toBe(3);
@@ -26,9 +26,9 @@ describe("stats-calculator", () => {
 
     it("should calculate consecutive streak correctly", () => {
       const activityMap = new Map([
-        ["2026-01-15", { count: 5, publications: 3, updates: 2, posts: [] }],
-        ["2026-01-14", { count: 3, publications: 2, updates: 1, posts: [] }],
-        ["2026-01-13", { count: 2, publications: 1, updates: 1, posts: [] }],
+        ["2026-01-15", { date: "2026-01-15", count: 5, publications: 3, updates: 2, posts: [] }],
+        ["2026-01-14", { date: "2026-01-14", count: 3, publications: 2, updates: 1, posts: [] }],
+        ["2026-01-13", { date: "2026-01-13", count: 2, publications: 1, updates: 1, posts: [] }],
       ]);
       const result = calculateBlogStats(activityMap);
       expect(result.currentStreak).toBe(3);
@@ -38,9 +38,9 @@ describe("stats-calculator", () => {
 
     it("should handle gaps in activities", () => {
       const activityMap = new Map([
-        ["2026-01-15", { count: 5, publications: 3, updates: 2, posts: [] }],
-        ["2026-01-13", { count: 2, publications: 1, updates: 1, posts: [] }],
-        ["2026-01-12", { count: 1, publications: 1, updates: 0, posts: [] }],
+        ["2026-01-15", { date: "2026-01-15", count: 5, publications: 3, updates: 2, posts: [] }],
+        ["2026-01-13", { date: "2026-01-13", count: 2, publications: 1, updates: 1, posts: [] }],
+        ["2026-01-12", { date: "2026-01-12", count: 1, publications: 1, updates: 0, posts: [] }],
       ]);
       const result = calculateBlogStats(activityMap);
       expect(result.currentStreak).toBe(1);
@@ -49,11 +49,11 @@ describe("stats-calculator", () => {
 
     it("should calculate weekly average correctly", () => {
       const activityMap = new Map([
-        ["2026-01-15", { count: 5, publications: 3, updates: 2, posts: [] }],
-        ["2026-01-14", { count: 3, publications: 2, updates: 1, posts: [] }],
-        ["2026-01-13", { count: 2, publications: 1, updates: 1, posts: [] }],
-        ["2026-01-08", { count: 4, publications: 2, updates: 2, posts: [] }],
-        ["2026-01-07", { count: 2, publications: 1, updates: 1, posts: [] }],
+        ["2026-01-15", { date: "2026-01-15", count: 5, publications: 3, updates: 2, posts: [] }],
+        ["2026-01-14", { date: "2026-01-14", count: 3, publications: 2, updates: 1, posts: [] }],
+        ["2026-01-13", { date: "2026-01-13", count: 2, publications: 1, updates: 1, posts: [] }],
+        ["2026-01-08", { date: "2026-01-08", count: 4, publications: 2, updates: 2, posts: [] }],
+        ["2026-01-07", { date: "2026-01-07", count: 2, publications: 1, updates: 1, posts: [] }],
       ]);
       const result = calculateBlogStats(activityMap);
       expect(result.averagePostsPerWeek).toBeGreaterThan(0);

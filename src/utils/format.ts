@@ -34,28 +34,30 @@ export function formatDate(
     return formatRelativeDate(dateObj);
   }
 
-  const options: Intl.DateTimeFormatOptions = {
-    full: {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      weekday: 'long'
-    },
-    long: {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    },
-    medium: {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    },
-    short: {
-      month: '2-digit',
-      day: '2-digit'
-    }
-  }[format];
+  const options: Intl.DateTimeFormatOptions = (
+    {
+      full: {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long'
+      },
+      long: {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      },
+      medium: {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      },
+      short: {
+        month: '2-digit',
+        day: '2-digit'
+      }
+    } as const
+  )[format] as Intl.DateTimeFormatOptions;
 
   return dateObj.toLocaleDateString(locale, options);
 }

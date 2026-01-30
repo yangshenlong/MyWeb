@@ -127,13 +127,13 @@
 	const searchModal = document.getElementById('searchModal');
 	const searchBackdrop = document.getElementById('searchBackdrop');
 	const searchClose = document.getElementById('searchClose');
-	const searchInput = document.getElementById('searchInput');
+	const searchInput = document.getElementById('searchInput') as HTMLInputElement | null;
 	const searchClear = document.getElementById('searchClear');
 	const searchResults = document.getElementById('searchResults');
 	const searchStatus = document.getElementById('searchStatus');
 	const searchEmpty = document.getElementById('searchEmpty');
 
-	let searchTimeout: number;
+	let searchTimeout: ReturnType<typeof setTimeout>;
 	let selectedIndex = -1;
 	let currentResults: any[] = [];
 
@@ -271,13 +271,14 @@
 		if (!items) return;
 
 		items.forEach((item, index) => {
+			const el = item as HTMLElement;
 			if (index === selectedIndex) {
-				item.classList.add('selected');
-				item.tabIndex = 0;
-				(item as HTMLElement).focus();
+				el.classList.add('selected');
+				el.tabIndex = 0;
+				el.focus();
 			} else {
-				item.classList.remove('selected');
-				item.tabIndex = -1;
+				el.classList.remove('selected');
+				el.tabIndex = -1;
 			}
 		});
 	}

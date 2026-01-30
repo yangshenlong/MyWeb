@@ -29,7 +29,7 @@ function generateContributionData(weeksCount: number): { date: string; count: nu
     date.setDate(startDate.getDate() + i);
     const count = Math.random() > 0.6 ? Math.floor(Math.random() * 10) : 0;
     data.push({
-      date: date.toISOString().split("T")[0],
+      date: date.toISOString().split("T")[0] ?? '',
       count,
     });
   }
@@ -46,7 +46,7 @@ const longestStreak = contributionData.reduce((max, d, i, arr) => {
   const currentStreak = 0;
   let tempStreak = 0;
   for (let j = 0; j <= i; j++) {
-    if (arr[j].count > 0) {
+    if (arr[j]?.count ?? 0 > 0) {
       tempStreak++;
     } else {
       tempStreak = 0;
@@ -83,7 +83,7 @@ const weekMonths = getWeekMonths(weeks);
 const dayLabels = ["", "Mon", "", "Wed", "", "Fri", ""];
 ---
 
-<div class={`contribution-graph contribution-graph-${theme}`} theme={theme}>
+<div class={`contribution-graph contribution-graph-${theme}`} data-theme={theme}>
   {/* 自定义Tooltip */}
   <div class="custom-tooltip" id="tooltip"></div>
 
@@ -738,8 +738,9 @@ const dayLabels = ["", "Mon", "", "Wed", "", "Fri", ""];
       square.addEventListener("mousemove", (e) => {
         if (!tooltip.classList.contains("show")) return;
 
-        const x = e.clientX;
-        const y = e.clientY;
+        const mouseEvent = e as MouseEvent;
+        const x = mouseEvent.clientX;
+        const y = mouseEvent.clientY;
         const tooltipRect = tooltip.getBoundingClientRect();
 
         // 计算位置，确保不会超出屏幕
@@ -771,9 +772,10 @@ const dayLabels = ["", "Mon", "", "Wed", "", "Fri", ""];
             if (entry.isIntersecting) {
               const statValues = document.querySelectorAll(".stat-value");
               statValues.forEach((el) => {
-                const targetValue = parseInt(el.dataset.value || "0");
+                const element = el as HTMLElement;
+                const targetValue = parseInt(element.dataset.value || "0");
                 if (targetValue > 0) {
-                  animateNumber(el as HTMLElement, 0, targetValue, 1000);
+                  animateNumber(element, 0, targetValue, 1000);
                 }
               });
               observer.disconnect();

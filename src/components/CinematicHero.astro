@@ -77,7 +77,7 @@ const { title = "MY BLOG", subtitle = "探索 · 发现 · 记录", backgroundTe
 
 <script>
   const typeAnimation = () => {
-    const typingText = document.querySelector(".typing-text");
+    const typingText = document.querySelector(".typing-text") as HTMLElement | null;
     if (typingText) {
       const text = typingText.textContent;
       typingText.textContent = "";

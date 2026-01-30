@@ -254,7 +254,7 @@ export class LongPressGesture {
 
   private handleTouchStart = (event: TouchEvent): void => {
     if (event.touches.length === 1) {
-      const touch = event.touches[0];
+      const touch = event.touches[0]!;
       this.startPoint = { x: touch.clientX, y: touch.clientY };
 
       this.timeoutId = setTimeout(() => {
@@ -267,7 +267,7 @@ export class LongPressGesture {
   private handleTouchMove = (event: TouchEvent): void => {
     if (!this.startPoint || !this.timeoutId) return;
 
-    const touch = event.touches[0];
+    const touch = event.touches[0]!;
     const deltaX = Math.abs(touch.clientX - this.startPoint.x);
     const deltaY = Math.abs(touch.clientY - this.startPoint.y);
 

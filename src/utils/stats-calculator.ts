@@ -1,17 +1,6 @@
-import type { BlogStats } from "../types/activity";
+import type { BlogStats, BlogActivitySummary } from "../types/activity";
 
-interface ActivityData {
-  count: number;
-  publications: number;
-  updates: number;
-  posts: Array<{
-    title: string;
-    slug: string;
-    pubDate: Date;
-  }>;
-}
-
-export function calculateBlogStats(activityMap: Map<string, ActivityData>): BlogStats {
+export function calculateBlogStats(activityMap: Map<string, BlogActivitySummary>): BlogStats {
   const entries = Array.from(activityMap.entries())
     .filter(([_, data]) => data.count > 0)
     .sort((a, b) => a[0].localeCompare(b[0]));
@@ -43,7 +32,7 @@ export function calculateBlogStats(activityMap: Map<string, ActivityData>): Blog
   };
 }
 
-function calculateStreaks(entries: [string, ActivityData][]): {
+function calculateStreaks(entries: [string, BlogActivitySummary][]): {
   currentStreak: number;
   longestStreak: number;
 } {
@@ -59,8 +48,11 @@ function calculateStreaks(entries: [string, ActivityData][]): {
     if (i === 0) {
       tempStreak = 1;
     } else {
-      const prevDate = new Date(entries[i - 1][0]);
-      const currDate = new Date(entries[i][0]);
+      const prevEntry = entries[i - 1];
+      const currEntry = entries[i];
+      if (!prevEntry || !currEntry) continue;
+      const prevDate = new Date(prevEntry[0]);
+      const currDate = new Date(currEntry[0]);
       const diffDays = Math.floor(
         (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)
       );

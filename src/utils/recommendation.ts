@@ -82,8 +82,8 @@ export function getRelatedPosts(
 	const threshold = 50; // 分数阈值
 	let i = 0;
 	while (i < scores.length - 1) {
-		const current = scores[i];
-		const next = scores[i + 1];
+		const current = scores[i]!;
+		const next = scores[i + 1]!;
 
 		// 如果相邻文章分数接近（相差小于10分），随机交换顺序
 		if (
@@ -91,7 +91,7 @@ export function getRelatedPosts(
 			current.score > threshold
 		) {
 			if (Math.random() > 0.5) {
-				[scores[i], scores[i + 1]] = [scores[i + 1], scores[i]];
+				[scores[i], scores[i + 1]] = [scores[i + 1]!, scores[i]!];
 			}
 		}
 		i++;

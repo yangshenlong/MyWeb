@@ -104,18 +104,18 @@ const domainPositions: Record<string, number> = {
       <div class="grid-lines">
         {
           categories.map((_, i) => (
-            <div class="grid-line vertical" style:left={`${(i + 1) * 20}%`} />
+            <div class="grid-line vertical" style={`left: ${(i + 1) * 20}%`} />
           ))
         }
-        {domains.map((_, i) => <div class="grid-line horizontal" style:top={`${(i + 1) * 20}%`} />)}
+        {domains.map((_, i) => <div class="grid-line horizontal" style={`top: ${(i + 1) * 20}%`} />)}
       </div>
 
       <!-- Skill points -->
       <div class="skill-points">
         {
           skillTags.map((skill) => {
-            const x = categoryPositions[skill.category] * 20 + 10;
-            const y = domainPositions[skill.domain] * 20 + 10;
+            const x = (categoryPositions[skill.category] ?? 0) * 20 + 10;
+            const y = (domainPositions[skill.domain] ?? 0) * 20 + 10;
             return (
               <a
                 href={`/tags/${skill.name}`}

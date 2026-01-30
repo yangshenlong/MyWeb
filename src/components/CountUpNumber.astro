@@ -23,13 +23,14 @@ const { target, duration = 2000, suffix = '' } = Astro.props;
 
 <script>
 	document.querySelectorAll('.count-up').forEach(el => {
-		const target = parseFloat(el.dataset.target || '0');
-		const duration = parseInt(el.dataset.duration || '2000');
-		const suffix = el.dataset.suffix || '';
+		const element = el as HTMLElement;
+		const target = parseFloat(element.dataset.target || '0');
+		const duration = parseInt(element.dataset.duration || '2000');
+		const suffix = element.dataset.suffix || '';
 		const startTime = performance.now();
 		const startValue = 0;
 
-		function update(currentTime) {
+		function update(currentTime: number) {
 			const elapsed = currentTime - startTime;
 			const progress = Math.min(elapsed / duration, 1);
 

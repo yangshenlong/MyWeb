@@ -184,9 +184,10 @@ function formatDisplayDate(dateStr: string): string {
           if (entry.isIntersecting) {
             const statValues = document.querySelectorAll('.stat-value');
             statValues.forEach(el => {
-              const targetValue = parseInt(el.dataset.value || '0');
+              const element = el as HTMLElement;
+              const targetValue = parseInt(element.dataset.value || '0');
               if (targetValue > 0) {
-                animateNumber(el as HTMLElement, 0, targetValue, 1000);
+                animateNumber(element, 0, targetValue, 1000);
               }
             });
             observer.disconnect();

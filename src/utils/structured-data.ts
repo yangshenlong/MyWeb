@@ -3,7 +3,12 @@
  * 用于生成 Schema.org 标准的结构化数据
  */
 
-import type { ImageMetadata } from 'astro:assets';
+interface ImageMetadata {
+  src: string;
+  width: number;
+  height: number;
+  format: string;
+}
 
 export interface BreadcrumbItem {
 	name: string;

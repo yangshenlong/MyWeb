@@ -194,7 +194,7 @@ const isConfigured = repo && repoId && categoryId;
 		const giscusTheme = theme === 'light' ? 'light' : 'transparent_dark';
 
 		try {
-			const contentWindow = giscusFrame.contentWindow;
+			const contentWindow = (giscusFrame as HTMLIFrameElement).contentWindow;
 			if (contentWindow) {
 				contentWindow.postMessage(
 					{

@@ -6,6 +6,7 @@ export interface ActivityAggregatorOptions {
   endDate?: Date;
   includeUpdates?: boolean;
   timezone?: string;
+  weeks?: number;
 }
 
 export async function aggregateBlogActivity(

@@ -46,18 +46,20 @@ import HeaderLink from './HeaderLink.astro';
 	const mobileToggle = document.getElementById('mobileToggle');
 	const navLinks = document.getElementById('navLinks');
 
-	mobileToggle.addEventListener('click', () => {
-		mobileToggle.classList.toggle('active');
-		navLinks.classList.toggle('active');
-	});
-
-	// 点击链接后关闭菜单
-	navLinks.querySelectorAll('a').forEach(link => {
-		link.addEventListener('click', () => {
-			mobileToggle.classList.remove('active');
-			navLinks.classList.remove('active');
+	if (mobileToggle && navLinks) {
+		mobileToggle.addEventListener('click', () => {
+			mobileToggle.classList.toggle('active');
+			navLinks.classList.toggle('active');
 		});
-	});
+
+		// 点击链接后关闭菜单
+		navLinks.querySelectorAll('a').forEach(link => {
+			link.addEventListener('click', () => {
+				mobileToggle.classList.remove('active');
+				navLinks.classList.remove('active');
+			});
+		});
+	}
 </script>
 <style>
 	header {

@@ -3,7 +3,7 @@
  * 统一管理所有动画参数
  */
 
-import type { AnimationConfig, AnimationPreset } from '@types/index.js';
+import type { AnimationConfig, AnimationPreset } from '../types/index.js';
 
 /**
  * 动画时长配置

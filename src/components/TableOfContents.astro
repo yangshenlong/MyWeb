@@ -98,8 +98,8 @@ const mainHeadings = headings.filter((h) => h.level >= 2 && h.level <= 3);
 					const activeLink = document.querySelector(`.toc-link[data-heading-id="${id}"]`);
 
 					// Remove active class from all
-					tocLinks.forEach((link: HTMLElement) => link.classList.remove('active'));
-					tocItems.forEach((item: HTMLElement) => item.classList.remove('active'));
+					tocLinks.forEach((link) => (link as HTMLElement).classList.remove('active'));
+					tocItems.forEach((item) => (item as HTMLElement).classList.remove('active'));
 
 					// Add active class to current
 					if (activeLink) {

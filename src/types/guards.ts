@@ -323,8 +323,8 @@ export function isArrayLike(value: unknown): value is ArrayLike<unknown> {
   return (
     isObject(value) &&
     'length' in value &&
-    isNumber((value as ArrayLike<unknown>).length) &&
-    (value as ArrayLike<unknown>).length >= 0
+    isNumber((value as Record<string, unknown>)['length']) &&
+    (value as Record<string, unknown>)['length'] as number >= 0
   );
 }
 
