@@ -1,0 +1,89 @@
+/* Syntax Highlighting - Minimal Dark Theme */
+
+/* Code block container */
+pre[data-language]::before {
+	content: attr(data-language);
+	display: block;
+	font-size: 0.75rem;
+	color: var(--text-tertiary, rgba(255, 255, 255, 0.45));
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	margin-bottom: 0.75rem;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.03));
+}
+
+/* Syntax Tokens - Subtle Color Palette */
+.token-comment,
+.token-prolog,
+.token-doctype,
+.token-cdata {
+	color: var(--text-muted, rgba(255, 255, 255, 0.25));
+}
+
+.token-punctuation {
+	color: var(--text-secondary, rgba(255, 255, 255, 0.65));
+}
+
+.token-property,
+.token-tag,
+.token-boolean,
+.token-number,
+.token-constant,
+.token-symbol,
+.token-deleted {
+	color: #d4a5a5; /* Muted red */
+}
+
+.token-selector,
+.token-attr-name,
+.token-string,
+.token-char,
+.token-builtin,
+.token-inserted {
+	color: #a3b8a0; /* Muted green */
+}
+
+.token-operator,
+.token-entity,
+.token-url,
+.language-css .token-string,
+.style .token-string {
+	color: var(--text-secondary, rgba(255, 255, 255, 0.65));
+}
+
+.token-atrule,
+.token-attr-value,
+.token-keyword {
+	color: #9b8ec9; /* Muted purple */
+}
+
+.token-function,
+.token-class-name {
+	color: var(--text-primary, rgba(255, 255, 255, 0.92));
+}
+
+.token-regex,
+.token-important,
+.token-variable {
+	color: #c9b896; /* Muted yellow */
+}
+
+/* Line Numbers (optional) */
+.line-numbers {
+	position: relative;
+	padding-left: 3.5rem;
+}
+
+.line-numbers .line-numbers-rows {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 3rem;
+	border-right: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.03));
+	padding-right: 0.5rem;
+	text-align: right;
+	color: var(--text-muted, rgba(255, 255, 255, 0.25));
+	font-size: 0.9em;
+	line-height: 1.6;
+}
