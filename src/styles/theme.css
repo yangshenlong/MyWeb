@@ -2,33 +2,69 @@
 
 /* 默认根变量（暗色主题） */
 :root {
-  /* 背景色 */
-  --color-bg-primary: #050505;
-  --color-bg-secondary: #0a0a0a;
-  --color-bg-tertiary: #101010;
+  /* 背景层次 */
+  --bg-primary: #050505;
+  --bg-secondary: #0a0a0a;
+  --bg-tertiary: #0f0f0f;
+  --bg-hover: #141414;
 
-  /* 文本色 */
-  --color-text-primary: rgba(255, 255, 255, 0.95);
-  --color-text-secondary: rgba(255, 255, 255, 0.7);
-  --color-text-tertiary: rgba(255, 255, 255, 0.5);
-  --color-text-muted: rgba(255, 255, 255, 0.3);
+  /* 文字层次 - 4级透明度系统 */
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --text-tertiary: rgba(255, 255, 255, 0.45);
+  --text-muted: rgba(255, 255, 255, 0.25);
 
   /* 边框色 */
-  --border-standard: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.12);
-  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-subtle: rgba(255, 255, 255, 0.03);
+  --border-standard: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.1);
 
-  /* 玻璃态效果 */
+  /* 强调色 - 低饱和紫 */
+  --accent: #7c6fae;
+  --accent-hover: #9b8ec9;
+  --accent-subtle: rgba(124, 111, 174, 0.15);
+
+  /* 字体 - 系统字体栈 */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
+
+  /* 字号层级 */
+  --text-hero: 2.5rem;
+  --text-h1: 2rem;
+  --text-h2: 1.5rem;
+  --text-h3: 1.25rem;
+  --text-body: 1.125rem;
+  --text-small: 0.875rem;
+  --text-xs: 0.75rem;
+
+  /* 布局 */
+  --content-width: 820px;
+  --content-padding: 1.5rem;
+
+  /* 过渡 */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* 兼容旧变量 */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-muted: var(--text-muted);
+  --color-primary: var(--accent);
+  --color-primary-hover: var(--accent-hover);
+  --color-primary-muted: var(--accent-subtle);
+
+  /* 玻璃态效果（保留但不使用） */
   --glass-opacity-bg: 0.03;
   --glass-opacity-bg-hover: 0.06;
   --glass-blur: 20px;
 
-  /* 主色调 */
-  --color-primary: rgba(99, 102, 241, 1);
-  --color-primary-hover: rgba(99, 102, 241, 0.8);
-  --color-primary-muted: rgba(99, 102, 241, 0.3);
-
-  /* 次色调 */
+  /* 次色调（兼容） */
   --color-secondary: rgba(168, 85, 247, 1);
   --color-secondary-hover: rgba(168, 85, 247, 0.8);
 
@@ -36,43 +72,47 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
-
-  /* 字体 */
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "Space Mono", "Fira Code", monospace;
-
-  /* 过渡 */
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.3s ease;
-  --transition-slow: 0.5s ease;
 }
 
 /* 亮色主题 */
 [data-theme="light"] {
-  /* 背景色 */
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8f9fa;
-  --color-bg-tertiary: #f1f3f5;
+  /* 背景层次 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #f1f3f5;
+  --bg-hover: #e9ecef;
 
-  /* 文本色 */
-  --color-text-primary: rgba(0, 0, 0, 0.9);
-  --color-text-secondary: rgba(0, 0, 0, 0.7);
-  --color-text-tertiary: rgba(0, 0, 0, 0.5);
-  --color-text-muted: rgba(0, 0, 0, 0.3);
+  /* 文字层次 */
+  --text-primary: rgba(0, 0, 0, 0.9);
+  --text-secondary: rgba(0, 0, 0, 0.65);
+  --text-tertiary: rgba(0, 0, 0, 0.45);
+  --text-muted: rgba(0, 0, 0, 0.25);
 
   /* 边框色 */
-  --border-standard: rgba(0, 0, 0, 0.1);
-  --border-hover: rgba(0, 0, 0, 0.15);
-  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-subtle: rgba(0, 0, 0, 0.04);
+  --border-standard: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.12);
+
+  /* 强调色 - 稍深以在亮色背景可见 */
+  --accent: #6b5fa0;
+  --accent-hover: #5a4f8a;
+  --accent-subtle: rgba(107, 95, 160, 0.12);
 
   /* 玻璃态效果 */
   --glass-opacity-bg: 0.6;
   --glass-opacity-bg-hover: 0.8;
 
-  /* 主色调 - 稍深一点以在亮色背景上可见 */
-  --color-primary: rgb(79, 70, 229);
-  --color-primary-hover: rgb(67, 56, 202);
-  --color-primary-muted: rgba(79, 70, 229, 0.15);
+  /* 兼容旧变量 */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-muted: var(--text-muted);
+  --color-primary: var(--accent);
+  --color-primary-hover: var(--accent-hover);
+  --color-primary-muted: var(--accent-subtle);
 
   /* 次色调 */
   --color-secondary: rgb(147, 51, 234);
@@ -87,25 +127,37 @@
 /* 自动主题（跟随系统） */
 @media (prefers-color-scheme: light) {
   [data-theme="auto"] {
-    --color-bg-primary: #ffffff;
-    --color-bg-secondary: #f8f9fa;
-    --color-bg-tertiary: #f1f3f5;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #f1f3f5;
+    --bg-hover: #e9ecef;
 
-    --color-text-primary: rgba(0, 0, 0, 0.9);
-    --color-text-secondary: rgba(0, 0, 0, 0.7);
-    --color-text-tertiary: rgba(0, 0, 0, 0.5);
-    --color-text-muted: rgba(0, 0, 0, 0.3);
+    --text-primary: rgba(0, 0, 0, 0.9);
+    --text-secondary: rgba(0, 0, 0, 0.65);
+    --text-tertiary: rgba(0, 0, 0, 0.45);
+    --text-muted: rgba(0, 0, 0, 0.25);
 
-    --border-standard: rgba(0, 0, 0, 0.1);
-    --border-hover: rgba(0, 0, 0, 0.15);
-    --border-subtle: rgba(0, 0, 0, 0.06);
+    --border-subtle: rgba(0, 0, 0, 0.04);
+    --border-standard: rgba(0, 0, 0, 0.08);
+    --border-hover: rgba(0, 0, 0, 0.12);
+
+    --accent: #6b5fa0;
+    --accent-hover: #5a4f8a;
+    --accent-subtle: rgba(107, 95, 160, 0.12);
 
     --glass-opacity-bg: 0.6;
     --glass-opacity-bg-hover: 0.8;
 
-    --color-primary: rgb(79, 70, 229);
-    --color-primary-hover: rgb(67, 56, 202);
-    --color-primary-muted: rgba(79, 70, 229, 0.15);
+    --color-bg-primary: var(--bg-primary);
+    --color-bg-secondary: var(--bg-secondary);
+    --color-bg-tertiary: var(--bg-tertiary);
+    --color-text-primary: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --color-text-tertiary: var(--text-tertiary);
+    --color-text-muted: var(--text-muted);
+    --color-primary: var(--accent);
+    --color-primary-hover: var(--accent-hover);
+    --color-primary-muted: var(--accent-subtle);
 
     --color-secondary: rgb(147, 51, 234);
     --color-secondary-hover: rgb(126, 34, 206);
@@ -116,26 +168,18 @@
   }
 }
 
-/* 主题过渡动画 */
-body {
-  transition:
-    background-color var(--transition-base),
-    color var(--transition-base);
-}
-
-/* 确保所有元素都有平滑过渡 */
+/* 全局过渡 */
 * {
-  transition-property:
-    background-color,
-    border-color,
-    color,
-    box-shadow,
-    opacity;
-  transition-duration: var(--transition-base);
-  transition-timing-function: ease;
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 
-/* 防止某些元素过渡 */
+/* 聚焦状态 */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 防止媒体元素过渡 */
 img,
 video,
 iframe,
