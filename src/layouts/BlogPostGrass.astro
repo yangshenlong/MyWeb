@@ -9,6 +9,7 @@ import CursorGlow from "../components/CursorGlow.astro";
 import GradientText from "../components/GradientText.astro";
 import StarButton from "../components/StarButton.astro";
 import { SITE_TITLE } from "../consts";
+import { formatDate } from "../utils/format";
 
 type Props = CollectionEntry<"blog">["data"] & {
   heroImage?: ImageMetadata | string;
@@ -17,16 +18,8 @@ type Props = CollectionEntry<"blog">["data"] & {
 
 const { title, description, pubDate, updatedDate, heroImage, tags, category, author, postSlug = '' } = Astro.props;
 
-const formatDate = (date: Date) => {
-  return new Date(date).toLocaleDateString("zh-CN", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-};
-
-const formattedDate = formatDate(pubDate);
-const updatedText = updatedDate ? formatDate(updatedDate) : "";
+const formattedDate = formatDate(pubDate, 'zh-CN', 'medium');
+const updatedText = updatedDate ? formatDate(updatedDate, 'zh-CN', 'medium') : "";
 ---
 
 <!doctype html>
@@ -1133,11 +1126,8 @@ const updatedText = updatedDate ? formatDate(updatedDate) : "";
         const articleContent = document.getElementById("article-content");
         const tocNav = document.getElementById("toc");
 
-        console.log("TOC Script Running:", { articleContent, tocNav });
-
         if (articleContent && tocNav) {
           const headings = articleContent.querySelectorAll("h2, h3");
-          console.log("Found headings:", headings.length);
 
           if (headings.length === 0) {
             const p = document.createElement("p");
@@ -1191,10 +1181,6 @@ const updatedText = updatedDate ? formatDate(updatedDate) : "";
               observer.observe(heading);
             }
           });
-
-          console.log("TOC generated successfully");
-        } else {
-          console.error("TOC elements not found:", { articleContent, tocNav });
         }
       });
     </script>

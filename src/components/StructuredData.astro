@@ -20,15 +20,21 @@ import {
 	generateOrganizationSchema,
 } from '../utils/structured-data';
 
+// 基础数据结构类型
+type SchemaData =
+	| { name: string; description: string; url: string; [key: string]: unknown }
+	| { title: string; description: string; url: string; dateModified?: string; [key: string]: unknown }
+	| Record<string, unknown>;
+
 interface Props {
 	type?: 'website' | 'webpage' | 'blog' | 'breadcrumb' | 'person' | 'organization';
-	data?: any;
+	data?: SchemaData;
 }
 
-const { type = 'webpage', data } = Astro.props;
+const { type = 'webpage', data = {} } = Astro.props;
 
 // 根据类型生成相应的结构化数据
-let schema: any = {};
+let schema: Record<string, unknown> = {};
 
 switch (type) {
 	case 'website':

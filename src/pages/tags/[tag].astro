@@ -6,6 +6,7 @@ import BackToTop from "../../components/BackToTop.astro";
 import ScrollProgress from "../../components/ScrollProgress.astro";
 import { getCollection } from "astro:content";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
+import { formatDate } from "../../utils/format";
 
 // 获取所有标签用于生成静态路由
 export async function getStaticPaths() {
@@ -81,11 +82,7 @@ const sortedPosts = taggedPosts.sort(
                       <GlassCard class="post-card">
                         <div class="post-meta">
                           <time class="post-date">
-                            {new Date(post.data.pubDate).toLocaleDateString("zh-CN", {
-                              year: "numeric",
-                              month: "2-digit",
-                              day: "2-digit",
-                            })}
+                            {formatDate(post.data.pubDate, 'zh-CN', 'medium')}
                           </time>
                           {post.data.category && (
                             <span class="post-category">{post.data.category}</span>

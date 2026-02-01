@@ -227,6 +227,8 @@ const { position = 'top-right', maxToasts = 5 } = Astro.props;
 </style>
 
 <script define:vars={{ position, maxToasts }}>
+  type ToastType = 'success' | 'error' | 'info' | 'warning';
+
   interface ToastItem {
     id: string;
     type: ToastType;

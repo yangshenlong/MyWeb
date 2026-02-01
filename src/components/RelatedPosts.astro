@@ -6,6 +6,7 @@
 
 import type { CollectionEntry } from 'astro:content';
 import { getRelatedPosts } from '../utils/recommendation';
+import { formatDate } from '../utils/format';
 import GlassCard from './GlassCard.astro';
 
 interface Props {
@@ -42,11 +43,7 @@ if (relatedPosts.length === 0) {
 			const postTags = post.data.tags || [];
 			const slug = post.id.replace(/\.(md|mdx)$/, '');
 			const postUrl = `/blog/${slug}`;
-			const formattedDate = new Date(post.data.pubDate).toLocaleDateString('zh-CN', {
-				year: 'numeric',
-				month: 'short',
-				day: 'numeric',
-			});
+			const formattedDate = formatDate(post.data.pubDate, 'zh-CN', 'short');
 
 			return (
 				<article class="related-post" style={`--delay: ${index * 100}ms`}>

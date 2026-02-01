@@ -20,6 +20,53 @@ interface Props {
   category?: string;
 }
 
+// JSON-LD 结构化数据类型
+type JsonLd =
+  | {
+      "@context": string;
+      "@type": string;
+      headline?: string;
+      description?: string;
+      image?: string;
+      datePublished?: string;
+      dateModified?: string;
+      url?: string;
+      keywords?: string;
+      articleSection?: string;
+      author?: {
+        "@type": string;
+        name: string;
+        url: string;
+      };
+      publisher?: {
+        "@type": string;
+        name: string;
+        logo: {
+          "@type": string;
+          url: string;
+        };
+      };
+      mainEntityOfPage?: {
+        "@type": string;
+        "@id": string;
+      };
+      inLanguage?: string;
+      name?: string;
+      isPartOf?: {
+        "@type": string;
+        url: string;
+        name: string;
+      };
+    }
+  | {
+      "@context": string;
+      "@graph": Array<{
+        "@context"?: string;
+        "@type": string;
+        [key: string]: unknown;
+      }>;
+    };
+
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const {
@@ -38,7 +85,7 @@ const siteUrl = Astro.site?.href || "";
 const imageUrl = new URL(image.src, siteUrl).href;
 
 // 生成结构化数据
-let jsonLd: any = {};
+let jsonLd: JsonLd = { "@context": "", "@type": "" };
 
 if (type === "article") {
   // 博客文章结构化数据
@@ -133,19 +180,24 @@ if (breadcrumb && breadcrumb.length > 0) {
   href={new URL("rss.xml", siteUrl)}
 />
 <meta name="generator" content={Astro.generator} />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 
 <!-- Resource hints -->
+<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+<link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+<link rel="dns-prefetch" href="https://giscus.app" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://giscus.app" />
 
-<!-- Font preloads with font-display: swap -->
+<!-- Font preloads -->
 <link
   rel="preload"
   href="/fonts/atkinson-regular.woff"
   as="font"
   type="font/woff"
   crossorigin
-  onload="this.onload=null;this.rel='stylesheet'"
 />
 <link
   rel="preload"
@@ -153,7 +205,6 @@ if (breadcrumb && breadcrumb.length > 0) {
   as="font"
   type="font/woff"
   crossorigin
-  onload="this.onload=null;this.rel='stylesheet'"
 />
 
 <!-- Service Worker registration -->

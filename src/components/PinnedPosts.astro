@@ -5,6 +5,7 @@
  */
 
 import type { ComponentProps } from '../types/index.js';
+import { formatDate } from '../utils/format';
 
 interface Props extends ComponentProps {
   /** 置顶文章数据 */
@@ -57,11 +58,7 @@ const displayPosts = sortedPosts.slice(0, maxDisplay);
     <div class="pinned-posts-list">
       {displayPosts.map((post, index) => {
         const postUrl = `/blog/${post.slug}`;
-        const formattedDate = new Date(post.pubDate).toLocaleDateString('zh-CN', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        });
+        const formattedDate = formatDate(post.pubDate, 'zh-CN', 'long');
 
         return (
           <a

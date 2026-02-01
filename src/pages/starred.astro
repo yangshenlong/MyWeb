@@ -163,6 +163,12 @@ const sortedPosts = postsData.sort(
       // Posts data from server
       const postsData = sortedPosts;
 
+      // 格式化日期为中文格式
+      function formatDate(date) {
+        const d = new Date(date);
+        return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+      }
+
       // Get starred posts from localStorage
       function getStarredSlugs() {
         try {
@@ -204,11 +210,7 @@ const sortedPosts = postsData.sort(
 
         postsGrid.innerHTML = starredPosts.map((post, index) => {
           const postUrl = `/blog/${post.slug}`;
-          const formattedDate = new Date(post.pubDate).toLocaleDateString('zh-CN', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          });
+          const formattedDate = formatDate(post.pubDate);
 
           return `
             <article class="post-card" style="--delay: ${index * 60}ms">

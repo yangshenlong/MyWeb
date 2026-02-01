@@ -9,6 +9,7 @@ import Footer from "../components/Footer.astro";
 import SkipLink from "../components/SkipLink.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import { getCollection } from "astro:content";
+import { formatDate } from "../utils/format";
 
 // 性能优化：限制每页显示的文章数量
 const POSTS_PER_PAGE = 20;
@@ -320,11 +321,7 @@ const sortedTags = Array.from(allTags).sort();
                         )}
                         <div class="post-meta">
                           <time class="post-date">
-                            {new Date(post.data.pubDate).toLocaleDateString("zh-CN", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            })}
+                            {formatDate(post.data.pubDate, 'zh-CN', 'long')}
                           </time>
                           {postTags.length > 0 && (
                             <span class="post-tags">

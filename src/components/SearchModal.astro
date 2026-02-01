@@ -90,16 +90,39 @@
 </div>
 
 <script>
+	// Pagefind 类型定义
+	interface PagefindResultData {
+		url: string;
+		meta: { title: string };
+		excerpt?: string;
+	}
+
+	interface PagefindResult {
+		id: string;
+		data: () => Promise<PagefindResultData>;
+	}
+
+	interface PagefindInstance {
+		search: (query: string) => Promise<{ results: PagefindResult[] }>;
+		debouncedSearch: (query: string) => Promise<{ results: PagefindResult[] }>;
+	}
+
+	declare global {
+		interface Window {
+			pagefind?: PagefindInstance;
+		}
+	}
+
 	// Pagefind 搜索集成
-	let pagefind: any = null;
+	let pagefind: PagefindInstance | null = null;
 
 	// 初始化 Pagefind - 使用脚本标签动态加载避免 Vite 静态分析错误
 	async function initPagefind() {
 		if (pagefind) return pagefind;
 
 		// 检查是否已经加载
-		if ((window as any).pagefind) {
-			pagefind = (window as any).pagefind;
+		if (window.pagefind) {
+			pagefind = window.pagefind;
 			return pagefind;
 		}
 
@@ -109,7 +132,7 @@
 			script.async = true;
 
 			script.onload = () => {
-				pagefind = (window as any).pagefind;
+				pagefind = window.pagefind ?? null;
 				resolve(pagefind);
 			};
 
@@ -135,7 +158,7 @@
 
 	let searchTimeout: ReturnType<typeof setTimeout>;
 	let selectedIndex = -1;
-	let currentResults: any[] = [];
+	let currentResults: PagefindResult[] = [];
 
 	// 打开搜索
 	function openSearch() {
@@ -198,7 +221,7 @@
 	}
 
 	// 显示结果
-	async function displayResults(results: any[], query: string) {
+	async function displayResults(results: PagefindResult[], query: string) {
 		if (!searchResults) return;
 
 		searchResults.innerHTML = '';

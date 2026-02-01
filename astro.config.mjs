@@ -3,6 +3,7 @@
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // Get site URL from environment variable or use default
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://yourname.github.io';
@@ -60,7 +61,16 @@ export default defineConfig({
 					}
 				},
 				// 排除 Pagefind 模块
-				external: ['/pagefind/pagefind.js']
+				external: ['/pagefind/pagefind.js'],
+				// 包分析插件（仅在 ANALYZE=true 时启用）
+				plugins: process.env.ANALYZE === 'true' ? [
+					visualizer({
+						open: true,
+						gzipSize: true,
+						brotliSize: true,
+						filename: 'dist/stats.html'
+					})
+				] : []
 			},
 			// 启用 CSS 代码分割
 			cssCodeSplit: true,

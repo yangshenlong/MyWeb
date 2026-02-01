@@ -38,7 +38,21 @@
       "Bash(uvx mcp_pdf_reader:*)",
       "Bash(uvx:*)",
       "Bash(npx -y @extraxi/mcp-pdf-reader:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "WebFetch(domain:linear.app)",
+      "WebFetch(domain:rauno.me)",
+      "WebFetch(domain:brianlovin.com)",
+      "Bash(npx stylelint:*)",
+      "Bash(npm run stylelint:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx astro check:*)",
+      "Bash(dir /b:*)",
+      "Bash(wc -l:*)",
+      "Bash(npx depcheck:*)",
+      "Bash(findstr:*)",
+      "Bash(npm run build:fast:*)",
+      "Bash(npm run lint:*)"
     ]
   }
 }
