@@ -25,7 +25,8 @@
     "declaration-block-no-redundant-longhand-properties": true,
     "alpha-value-notation": "percentage",
     "color-function-notation": "modern",
-    "custom-property-pattern": "^[a-z][a-z0-9-]*$"
+    "custom-property-pattern": "^[a-z][a-z0-9-]*$",
+    "keyframes-name-pattern": null
   },
   "ignoreFiles": ["dist/**", "node_modules/**", ".astro/**"]
 }
