@@ -1,62 +1,36 @@
-# Astro Starter Kit: Blog
+# 杨慎龙 - 个人博客
 
-```sh
-npm create astro@latest -- --template blog
+Technical Artist 个人网站，专注于 Shader 开发、实时渲染和工具链优化。
+
+## 技术栈
+
+- **框架**: Astro 5 + TypeScript
+- **样式**: CSS 自定义属性设计系统 + Glassmorphism
+- **搜索**: Pagefind 静态搜索
+- **内容**: Markdown / MDX
+- **CI**: GitHub Actions + Husky + lint-staged
+
+## 开发
+
+```bash
+npm install       # 安装依赖
+npm run dev       # 开发服务器 http://localhost:4321
+npm run build     # 生产构建
+npm run preview   # 预览构建结果
+npm run lint      # 代码检查
+npm run format    # 格式化代码
+npm run type-check # 类型检查
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 项目结构
 
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+src/
+├── components/    # UI 组件
+├── content/       # 博客文章 (Markdown)
+├── layouts/       # 页面布局
+├── pages/         # 路由页面
+├── styles/        # 全局样式 & 设计令牌
+├── types/         # TypeScript 类型定义
+└── utils/         # 工具函数
+```
